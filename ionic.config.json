@@ -1,0 +1,7 @@
+{
+  "name": "trove",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

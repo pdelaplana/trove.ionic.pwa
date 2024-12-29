@@ -1,0 +1,7 @@
+ion-modal.half-screen {
+  --backdrop-opacity: var(--ion-backdrop-opacity, 0.32) !important;
+
+  --border-radius: 5px;
+  --height: 40%;
+  --width: 55%;
+}

@@ -1,0 +1,70 @@
+/*
+@media (min-width: 700px) {
+  ion-app {
+    max-width: 700px;
+    margin: auto;
+    position: relative;
+    border-style: outset;
+    border-color: var(--ion-color-light-shade);
+    border-width: thin;
+
+  }
+
+  .scroll-content {
+    overflow-y: auto;
+  }
+}
+*/
+
+ion-header {
+  border-bottom-style: inset;
+  border-bottom-color: var(--ion-color-light-shade);
+  border-bottom-width: thin;
+}
+
+/* full screen modal styles */
+ion-modal {
+  --max-height: 100%;
+  --max-width: 100%;
+
+  --border-radius: 5px;
+  --height: 100%;
+  --width: 100%;
+}
+
+.ion-flex {
+  display: flex;
+}
+
+/*
+.ion-outline {
+  border-style: solid;
+  border-color: var(--ion-color-light-shade);
+  border-width: thin;
+}
+*/
+
+ion-list.ion-outline ion-item {
+  border-style: solid;
+  border-color: var(--ion-color-light-shade);
+  border-width: thin;
+  border-bottom: none; /* Remove the bottom border for all items */
+}
+
+ion-list.ion-outline ion-item:last-of-type {
+  border-bottom-style: solid;
+  border-bottom-color: var(--ion-color-light-shade);
+  border-bottom-width: thin;
+}
+
+ion-list.ion-outline ion-item.no-border:last-of-type {
+  border-left: none !important;
+  border-bottom: none !important;
+  border-right: none !important;
+}
+
+ion-item.ion-no-border {
+  border-left: none !important;
+  border-bottom: none !important;
+  border-right: none !important;
+}
