@@ -8,27 +8,25 @@ import {
   IonIcon,
   IonLabel,
 } from '@ionic/react';
-import { ellipsisHorizontalOutline, homeOutline } from 'ionicons/icons';
+import {
+  ellipsisHorizontalOutline,
+  homeOutline,
+  peopleOutline,
+} from 'ionicons/icons';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import BusinessOnboardingPage from './onboarding/BusinessOnboardingPage';
 import { BusinessProvider } from '@src/features/business/BusinessProvider';
 import BusinessDashboardPage from './dashboard/BusinessDashboardPage';
-import BusinessSettingsRoutes from './settings/BusinessSettingsRoutes';
+import BusinessSettingsRoutes from './management/ManagementRoutes';
 
 interface BusinessRoutesProps {}
-
-interface BusinessSetupState {
-  isSetup: boolean | null;
-  isLoading: boolean;
-  error: Error | null;
-}
 
 const TabRoutes = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
         <Switch>
-          <ProtectedRoute path='/settings'>
+          <ProtectedRoute path='/manage'>
             <BusinessSettingsRoutes />
           </ProtectedRoute>
           <ProtectedRoute path='/dashboard' exact>
@@ -42,9 +40,9 @@ const TabRoutes = () => {
           <IonLabel>Home</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab='settings' href='/settings'>
+        <IonTabButton tab='manage' href='/manage'>
           <IonIcon aria-hidden='true' icon={ellipsisHorizontalOutline} />
-          <IonLabel>Settings</IonLabel>
+          <IonLabel>Manage</IonLabel>
         </IonTabButton>
       </IonTabBar>
     </IonTabs>

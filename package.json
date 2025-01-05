@@ -10,7 +10,9 @@
     "test.e2e": "cypress run",
     "test.unit": "vitest",
     "lint": "eslint",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "git.submodules.update": "git submodule update --init --recursive",
+    "git.submodules.pull": "git submodule foreach git pull origin main"
   },
   "dependencies": {
     "@capacitor/app": "6.0.2",
@@ -27,6 +29,7 @@
     "@tanstack/react-query-devtools": "^5.62.8",
     "@types/react-router": "^5.1.20",
     "@types/react-router-dom": "^5.3.3",
+    "date-fns": "^4.1.0",
     "firebase": "^11.1.0",
     "firebase-tools": "^13.29.1",
     "i18next": "^24.2.0",

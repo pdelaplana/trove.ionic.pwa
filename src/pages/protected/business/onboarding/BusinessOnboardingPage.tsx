@@ -13,7 +13,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import { defaultOperatingHours } from '@src/features/business/defaultValues';
-import useUpsertBusiness from '@src/features/business/mutations/useUpsertBusiness';
+import useUpsertBusiness from '@src/features/mutations/useUpsertBusiness';
 import BusinessInformationForm from '../components/BusinessInformationForm';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import NiceButton from '@src/pages/components/ui/NiceButton';
@@ -75,6 +75,8 @@ const BusinessOnboardingPage: React.FC = () => {
         postCode: '',
       },
       operatingHours: defaultOperatingHours,
+      currency: '',
+      loyaltyPrograms: [],
     });
     setProfileData({ key: 'businessId', value: business.id });
   };

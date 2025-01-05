@@ -1,18 +1,22 @@
-import { OperatingHours, Business } from '@src/domain';
+import { OperatingHours, Business, LoyaltyCard, Customer } from '@src/domain';
 import { createContext, ReactNode, useContext } from 'react';
-import useFetchBusinessById from './queries/useFetchBusinessById';
-import useUpsertBusiness from './mutations/useUpsertBusiness';
+import useFetchBusinessById from '../queries/useFetchBusinessById';
+import useUpsertBusiness from '../mutations/useUpsertBusiness';
 import {
   LoyaltyProgram,
   LoyaltyProgramMilestone,
   LoyaltyProgramTier,
 } from '@src/domain/entities/loyaltyProgram';
 
+import { useUniqueNumberGenerator } from '@src/pages/components/hooks/useUniqueNumberGenerator';
+import useFetchAllLoyaltyPrograms from '../queries/useFetchAllLoyaltyPrograms';
+
 type BusinessContextType = {
   business?: Business;
   isLoading: boolean;
   updatePending: boolean;
   status: 'idle' | 'loading' | 'pending' | 'success' | 'error';
+
   upsertAsync: (business: Business) => void;
 
   upsertOperatingHours: (operatingHours: OperatingHours) => void;
@@ -53,6 +57,8 @@ export const BusinessProvider: React.FC<{
     refetch,
   } = useFetchBusinessById(businessId);
 
+  const { data: loyaltyPrograms } = useFetchAllLoyaltyPrograms();
+
   const {
     mutateAsync: upsertBusinessAsync,
     error,
@@ -61,6 +67,8 @@ export const BusinessProvider: React.FC<{
     status,
     reset,
   } = useUpsertBusiness();
+
+  const { generateUniqueNumber } = useUniqueNumberGenerator();
 
   const upsertAsync = async (business: Business) => {
     await upsertBusinessAsync(business);
@@ -94,13 +102,22 @@ export const BusinessProvider: React.FC<{
   };
 
   const upsertLoyaltyProgram = async (loyaltyProgram: LoyaltyProgram) => {
+    if (
+      loyaltyProgram.uniqueCode === undefined ||
+      loyaltyProgram.uniqueCode === ''
+    ) {
+      const usedNumbers = new Set(
+        loyaltyPrograms?.map((program) => program.uniqueCode)
+      );
+      loyaltyProgram.uniqueCode = generateUniqueNumber(6, usedNumbers);
+    }
     await upsertAsync({
       ...business!,
       loyaltyPrograms: !business?.loyaltyPrograms
         ? [loyaltyProgram]
         : business.loyaltyPrograms.some((b) => b.id === loyaltyProgram.id)
           ? business.loyaltyPrograms.map((b) =>
-              b.id === loyaltyProgram.id ? loyaltyProgram : b
+              b.id === loyaltyProgram.id ? { ...b, ...loyaltyProgram } : b
             )
           : [...business.loyaltyPrograms, loyaltyProgram],
     });
@@ -187,6 +204,7 @@ export const BusinessProvider: React.FC<{
         isLoading,
         updatePending: isPending,
         status: isLoading ? 'loading' : status,
+
         upsertAsync,
 
         upsertOperatingHours,

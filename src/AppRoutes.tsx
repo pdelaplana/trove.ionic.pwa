@@ -71,8 +71,6 @@ const AppRoutes: React.FC = () => {
         return <BusinessRoutes />;
       case 'customer':
         return <UnderConstructionPage />;
-      case 'businessStaff':
-        return <Redirect to='/courier' />;
       default:
         console.warn('No valid role, redirecting to landing');
         return <Redirect to='/landing' />;
