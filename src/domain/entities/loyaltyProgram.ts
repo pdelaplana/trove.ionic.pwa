@@ -13,6 +13,7 @@ export type LoyaltyProgramTierPerkType =
 
 export interface LoyaltyProgram {
   id: string;
+  uniqueCode: string;
   name: string;
   type: LoyaltyProgramType;
   description: string;
@@ -71,6 +72,9 @@ export const useLoyaltyProgramValidationRules = () => ({
       value: 500,
       message: 'Description must be less than 500 characters',
     },
+  },
+  uniqueCode: {
+    required: 'Unique code is required',
   },
   pointsPerSpend: {
     required: 'Points per spend is required',
