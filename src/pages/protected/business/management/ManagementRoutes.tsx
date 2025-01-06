@@ -13,6 +13,7 @@ import CustomerEnrollmentPage from './customers/enrollment/CustomerEnrollmentPag
 import BusinessHoursPage from './business/businessHours/BusinessHoursPage';
 import CustomersListPage from './customers/customersList/CustomersListPage';
 import CustomerDetailsPage from './customers/details/CustomerDetailsPage';
+import CustomerTransactionsListPage from './customers/transactions/CustomerTransactionsListPage';
 
 const ManagementRoutes: React.FC = () => {
   return (
@@ -58,6 +59,12 @@ const ManagementRoutes: React.FC = () => {
       </ProtectedRoute>
       <ProtectedRoute path='/manage/customers/details/:id' exact>
         <CustomerDetailsPage />
+      </ProtectedRoute>
+      <ProtectedRoute
+        path='/manage/customers/details/:id/transactions/:customerId'
+        exact
+      >
+        <CustomerTransactionsListPage />
       </ProtectedRoute>
       <ProtectedRoute path='/manage/customers' exact>
         <CustomersListPage />

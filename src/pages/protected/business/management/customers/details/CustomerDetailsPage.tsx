@@ -1,8 +1,17 @@
-import { IonList, IonItem, IonLabel, useIonRouter } from '@ionic/react';
-import { Customer, LoyaltyCard, LoyaltyProgram } from '@src/domain';
+import {
+  IonList,
+  IonItem,
+  IonLabel,
+  useIonRouter,
+  IonCard,
+  IonCardHeader,
+  IonCardContent,
+  IonCardSubtitle,
+  IonCardTitle,
+} from '@ionic/react';
+import { Customer, LoyaltyProgram } from '@src/domain';
 import { useBusiness } from '@src/features/business/BusinessProvider';
 import useBatchDeleteDocument from '@src/features/mutations/useBatchDeleteDocument';
-import useDeleteDocument from '@src/features/mutations/useDeleteDocument';
 import useUpsertDocument from '@src/features/mutations/useUpsertDocument';
 import useFetchLoyaltyCardWithCustomerInfoById from '@src/features/queries/useFetchLoyaltyCardWithCustomerInfoById';
 import { InputFormField, SelectFormField } from '@src/pages/components/form';
@@ -14,8 +23,7 @@ import ActionSheetButton, {
   ActionOption,
 } from '@src/pages/components/ui/ActionSheetButton';
 import { format } from 'date-fns';
-import { use } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
@@ -33,6 +41,7 @@ interface CustomerDetailsForm {
   businessId: string;
   loyaltyProgramId: string;
   tierId?: string;
+  tierName?: string;
   points: number;
   stamps: number;
   membershipDate: Date;
@@ -116,7 +125,12 @@ const CustomerDetailsPage = () => {
           message: 'Are you sure you want to delete this customer?',
           onConfirm: handleDelete,
         });
+        break;
       case 'transaction-history':
+        push(
+          `/manage/customers/details/${id}/transactions/${getValues('customerId')}`,
+          'forward'
+        );
         break;
     }
   };
@@ -132,7 +146,14 @@ const CustomerDetailsPage = () => {
       const program = business.loyaltyPrograms.find(
         (lp: LoyaltyProgram) => lp.id === data.loyaltyProgramId
       );
-      reset({ ...data, loyaltyProgramName: program?.name ?? '' });
+
+      const tier = program?.tiers.find((t) => t.id === data.tierId);
+
+      reset({
+        ...data,
+        loyaltyProgramName: program?.name ?? '',
+        tierName: tier?.name ?? '',
+      });
     }
   }, [business, data]);
 
@@ -267,6 +288,17 @@ const CustomerDetailsPage = () => {
           <IonItem>
             <IonLabel>
               <InputFormField
+                name='tierName'
+                label='Tier'
+                fill='outline'
+                register={register}
+                readonly={true}
+              />
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <InputFormField
                 name='points'
                 label='Points'
                 fill='outline'
@@ -276,6 +308,21 @@ const CustomerDetailsPage = () => {
             </IonLabel>
           </IonItem>
         </IonList>
+
+        <IonCard className='ion-margin'>
+          <IonCardHeader>
+            <IonCardTitle>{getValues('loyaltyProgramName')}</IonCardTitle>
+            <IonCardSubtitle>{getValues('membershipNumber')}</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <h2>Member Since</h2>
+            <p>
+              {getValues('membershipDate')
+                ? format(new Date(getValues('membershipDate')), 'MMM dd, yyyy')
+                : ''}
+            </p>
+          </IonCardContent>
+        </IonCard>
 
         <ActionButton
           label='Save'
