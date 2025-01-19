@@ -7,6 +7,14 @@
         { "fieldPath": "businessId", "mode": "ASCENDING" },
         { "fieldPath": "membershipDate", "mode": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "loyaltyCardTransactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "customerId", "mode": "ASCENDING" },
+        { "fieldPath": "transactionDate", "mode": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": [
@@ -17,6 +25,26 @@
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "loyaltyCards",
+      "fieldPath": "membershipNumber",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "loyaltyPrograms",
+      "fieldPath": "uniqueCode",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
         }
       ]
     }

@@ -1,14 +1,22 @@
 import { Customer, LoyaltyCard } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
 import { useQuery } from '@tanstack/react-query';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc } from 'firebase/firestore';
+import { getLoyaltyCardsSubcollectionRef } from '../helpers';
 
-const useFetchLoyaltyCardWithCustomerInfoById = (id: string) => {
+const useFetchLoyaltyCardWithCustomerInfoById = (
+  id: string,
+  businessId: string
+) => {
   return useQuery({
     queryKey: ['useFetchLoyaltyCardWithCustomerInfoById', id],
     queryFn: async () => {
-      const loyaltyCardsRef = doc(db, 'loyaltyCards', id);
-      const loyaltyCardSnapshot = await getDoc(loyaltyCardsRef);
+      const loyaltyCardsSubcollectionRef =
+        getLoyaltyCardsSubcollectionRef(businessId);
+
+      const loyaltyCardSnapshot = await getDoc(
+        doc(loyaltyCardsSubcollectionRef, id)
+      );
 
       if (loyaltyCardSnapshot.exists()) {
         const loyaltyCard = {

@@ -1,33 +1,23 @@
-import {
-  IonList,
-  IonItem,
-  IonLabel,
-  useIonRouter,
-  IonCard,
-  IonCardHeader,
-  IonCardContent,
-  IonCardSubtitle,
-  IonCardTitle,
-} from '@ionic/react';
-import { Customer, LoyaltyProgram } from '@src/domain';
+import { IonList, IonItem, IonLabel, useIonRouter } from '@ionic/react';
+import { LoyaltyProgram } from '@src/domain';
 import { useBusiness } from '@src/features/business/BusinessProvider';
 import useBatchDeleteDocument from '@src/features/mutations/useBatchDeleteDocument';
-import useUpsertDocument from '@src/features/mutations/useUpsertDocument';
-import useFetchLoyaltyCardWithCustomerInfoById from '@src/features/queries/useFetchLoyaltyCardWithCustomerInfoById';
-import { InputFormField, SelectFormField } from '@src/pages/components/form';
+import {
+  useFetchLoyaltyCardWithCustomerInfoById,
+  useFetchLoyaltyProgramsByBusinessId,
+} from '@src/features/queries';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
+import useFormatters from '@src/pages/components/hooks/useFormatters';
 import { usePrompt } from '@src/pages/components/hooks/usePrompt';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
-import ActionButton from '@src/pages/components/ui/ActionButton';
 import ActionSheetButton, {
   ActionOption,
 } from '@src/pages/components/ui/ActionSheetButton';
 import { format } from 'date-fns';
-import { useEffect } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-interface CustomerDetailsForm {
+interface CustomerDetailsPageValues {
   firstName: string;
   lastName: string;
   email: string;
@@ -47,19 +37,23 @@ interface CustomerDetailsForm {
   membershipDate: Date;
   expiryDate?: Date;
 
-  loyaltyProgramName: string;
+  loyaltyProgramName?: string;
 }
 
 const CustomerDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const { business } = useBusiness();
-  const { data, refetch } = useFetchLoyaltyCardWithCustomerInfoById(id);
-  const {
-    mutate: upsertCustomer,
-    isSuccess,
-    isError,
-    isPending,
-  } = useUpsertDocument<Customer>('customers');
+  const { data: loyaltyPrograms } = useFetchLoyaltyProgramsByBusinessId(
+    business?.id ?? ''
+  );
+  const { data } = useFetchLoyaltyCardWithCustomerInfoById(
+    id,
+    business?.id ?? ''
+  );
+
+  const [customerDetailsPageValues, setCustomerDetailsPageValues] =
+    useState<CustomerDetailsPageValues>();
+
   const {
     mutate: batchDelete,
     isSuccess: isDeleteSuccess,
@@ -70,40 +64,18 @@ const CustomerDetailsPage = () => {
   const { push } = useIonRouter();
   const { showConfirmPrompt } = usePrompt();
   const { showNotification, showErrorNotification } = useAppNotifications();
-
-  const {
-    register,
-    setValue,
-    getValues,
-    handleSubmit,
-    watch,
-    formState: { errors, isDirty, isSubmitting },
-    reset,
-  } = useForm<CustomerDetailsForm>({
-    defaultValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-    },
-  });
-
-  const onSubmit: SubmitHandler<CustomerDetailsForm> = async (formData) => {
-    if (formData) {
-      upsertCustomer({
-        id: formData.customerId,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        gender: formData.gender,
-      });
-    }
-  };
+  const { formatNumber, formatDate } = useFormatters();
 
   const handleDelete = () => {
     const itemsToDelete = [
-      { id: getValues('id'), collectionName: 'loyaltyCards' },
-      { id: getValues('customerId'), collectionName: 'customers' },
+      {
+        id: customerDetailsPageValues!.id,
+        collectionName: `businesses/${business?.id}/loyaltyCards`,
+      },
+      {
+        id: customerDetailsPageValues!.customerId,
+        collectionName: 'customers',
+      },
     ];
 
     batchDelete(itemsToDelete, {
@@ -126,9 +98,15 @@ const CustomerDetailsPage = () => {
           onConfirm: handleDelete,
         });
         break;
+      case 'edit':
+        push(
+          `/manage/customers/${id}/edit/${customerDetailsPageValues?.customerId}`,
+          'forward'
+        );
+        break;
       case 'transaction-history':
         push(
-          `/manage/customers/details/${id}/transactions/${getValues('customerId')}`,
+          `/manage/customers/${id}/transactions/${customerDetailsPageValues?.customerId}`,
           'forward'
         );
         break;
@@ -137,37 +115,28 @@ const CustomerDetailsPage = () => {
 
   useEffect(() => {
     if (data) {
-      reset({ ...data });
+      setCustomerDetailsPageValues((prevData) => ({ ...prevData, ...data }));
     }
   }, [data]);
 
   useEffect(() => {
     if (business && data) {
-      const program = business.loyaltyPrograms.find(
+      const program = loyaltyPrograms?.find(
         (lp: LoyaltyProgram) => lp.id === data.loyaltyProgramId
       );
 
       const tier = program?.tiers.find((t) => t.id === data.tierId);
 
-      reset({
-        ...data,
-        loyaltyProgramName: program?.name ?? '',
-        tierName: tier?.name ?? '',
-      });
+      setCustomerDetailsPageValues(
+        (prevData) =>
+          ({
+            ...prevData,
+            loyaltyProgramName: program?.name,
+            tierName: tier?.name,
+          }) as CustomerDetailsPageValues
+      );
     }
   }, [business, data]);
-
-  useEffect(() => {
-    const updateEffect = async () => {
-      if (!isPending && isSuccess) {
-        showNotification('Customer details updated successfully');
-        await refetch();
-      } else if (!isPending && isError) {
-        showNotification('Failed to update customer details');
-      }
-    };
-    updateEffect();
-  }, [isSuccess, isError, isPending]);
 
   useEffect(() => {
     if (!isDeletePending && isDeleteSuccess) {
@@ -181,169 +150,78 @@ const CustomerDetailsPage = () => {
   return (
     <BasePageLayout title='Details' defaultBackButtonHref='/manage/customers'>
       <CenterContainer>
-        <div className='ion-margin'>Customer Details</div>
-        <IonList lines='none'>
+        <div className='ion-margin'>Membership Information</div>
+
+        <IonList lines='full' className='ion-margin'>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='firstName'
-                label='First Name'
-                fill='outline'
-                register={register}
-                setValue={setValue}
-              />
+              <h2>Member Name</h2>
+              <p>{`${data?.firstName} ${data?.lastName}`}</p>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='lastName'
-                label='Last Name'
-                fill='outline'
-                register={register}
-                setValue={setValue}
-              />
+              <h2>Membership No</h2>
+              <p>{data?.membershipNumber}</p>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='email'
-                label='Email'
-                fill='outline'
-                register={register}
-                setValue={setValue}
-              />
+              <h2>Member Since</h2>
+              <p>{formatDate(data?.membershipDate)}</p>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='phone'
-                label='Phone'
-                fill='outline'
-                register={register}
-                setValue={setValue}
-              />
+              <h2>Loyalty Program</h2>
+              <p>{customerDetailsPageValues?.loyaltyProgramName}</p>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              <SelectFormField
-                name='gender'
-                label='Gender'
-                fill='outline'
-                register={register}
-                setValue={setValue}
-                getValues={getValues}
-                optionsList={[
-                  { value: 'male', label: 'Male' },
-                  { value: 'female', label: 'Female' },
-                  { value: 'preferNotToSay', label: 'Prefer Not to Say' },
-                ]}
-              />
+              <h2>Tier</h2>
+              <p>{customerDetailsPageValues?.tierName}</p>
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <h2>Points</h2>
+              <p>{formatNumber(customerDetailsPageValues?.points ?? 0)}</p>
             </IonLabel>
           </IonItem>
         </IonList>
 
-        <div className='ion-margin'>Card Details</div>
-        <IonList lines='none'>
+        <div className='ion-margin'>Contact Information</div>
+        <IonList lines='full' className='ion-margin'>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='membershipNumber'
-                label='Membership No (Generated)'
-                fill='outline'
-                register={register}
-                readonly={true}
-              />
+              <h2>Email</h2>
+              <p>{customerDetailsPageValues?.email}</p>
             </IonLabel>
           </IonItem>
           <IonItem>
             <IonLabel>
-              <InputFormField
-                name='membershipDate'
-                label='Member Since (Generated)'
-                fill='outline'
-                register={register}
-                getValues={getValues}
-                transformValue={(value) =>
-                  value ? format(new Date(value), 'MMM dd, yyyy') : ''
-                }
-                readonly={true}
-              />
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonLabel>
-              <InputFormField
-                name='loyaltyProgramName'
-                label='Loyalty Program'
-                fill='outline'
-                register={register}
-                readonly={true}
-              />
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonLabel>
-              <InputFormField
-                name='tierName'
-                label='Tier'
-                fill='outline'
-                register={register}
-                readonly={true}
-              />
-            </IonLabel>
-          </IonItem>
-          <IonItem>
-            <IonLabel>
-              <InputFormField
-                name='points'
-                label='Points'
-                fill='outline'
-                register={register}
-                readonly={true}
-              />
+              <h2>Phone</h2>
+              <p>{customerDetailsPageValues?.phone}</p>
             </IonLabel>
           </IonItem>
         </IonList>
-
-        <IonCard className='ion-margin'>
-          <IonCardHeader>
-            <IonCardTitle>{getValues('loyaltyProgramName')}</IonCardTitle>
-            <IonCardSubtitle>{getValues('membershipNumber')}</IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <h2>Member Since</h2>
-            <p>
-              {getValues('membershipDate')
-                ? format(new Date(getValues('membershipDate')), 'MMM dd, yyyy')
-                : ''}
-            </p>
-          </IonCardContent>
-        </IonCard>
-
-        <ActionButton
-          label='Save'
-          type='submit'
-          expand='full'
-          className='ion-margin'
-          isLoading={isSubmitting}
-          isDisabled={!isDirty}
-          onClick={handleSubmit(onSubmit)}
-        />
 
         <ActionSheetButton
-          buttonLabel={'More...'}
-          sheetTitle='More...'
+          buttonLabel={'Options...'}
+          sheetTitle='Options...'
           expand='full'
           fill='clear'
           options={[
             {
-              text: 'Delete Customer',
+              text: 'Delete Card and Customer',
               role: 'destructive',
               data: 'delete',
+            },
+            {
+              text: 'Edit Customer',
+              role: 'destructive',
+              data: 'edit',
             },
             {
               text: 'Transaction History',

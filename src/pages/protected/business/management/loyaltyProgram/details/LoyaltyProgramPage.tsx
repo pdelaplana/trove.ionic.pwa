@@ -1,39 +1,62 @@
-import { IonBadge, IonIcon, IonItem, IonLabel, IonList } from '@ionic/react';
-import { LoyaltyProgram } from '@src/domain/entities/loyaltyProgram';
+import {
+  IonBadge,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  useIonRouter,
+} from '@ionic/react';
 import getCurrency from '@src/domain/valueTypes/currency';
 import { useBusiness } from '@src/features/business/BusinessProvider';
+import { useLoyaltyProgram } from '@src/features/loyaltyProgram/LoyaltyProgramProvider';
 
 import useDescriptionGenerators from '@src/pages/components/hooks/useDescriptionGenerators';
+import { usePrompt } from '@src/pages/components/hooks/usePrompt';
 import {
   BasePageLayout,
   CenterContainer,
   ContentSection,
 } from '@src/pages/components/layouts';
+import ActionSheetButton, {
+  ActionOption,
+} from '@src/pages/components/ui/ActionSheetButton';
 import { addCircleOutline } from 'ionicons/icons';
-import { useEffect, useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 
 interface LoyaltyProgramPageProps {}
 
 const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
   const { t } = useTranslation();
-  const { id } = useParams<{ id: string }>();
-
   const { business } = useBusiness();
-
-  const [loyaltyProgram, setLoyaltyProgram] = useState<LoyaltyProgram | null>();
-
+  const { loyaltyProgram } = useLoyaltyProgram();
   const { generateRewardDescription, generatePerkDescription } =
     useDescriptionGenerators();
+  const { showConfirmPrompt } = usePrompt();
+  const { push } = useIonRouter();
 
-  useEffect(() => {
-    if (business) {
-      const program = business.loyaltyPrograms.find((p) => p.id === id);
-      setLoyaltyProgram(program ?? null);
+  const handleDelete = () => {};
+
+  const handleActionComplete = (action: ActionOption) => {
+    switch (action.data) {
+      case 'delete':
+        showConfirmPrompt({
+          title: 'Delete Customer',
+          message: 'Are you sure you want to delete this customer?',
+          onConfirm: handleDelete,
+        });
+        break;
+      case 'edit':
+        push(`/manage/loyalty/${loyaltyProgram?.id}/edit`, 'forward');
+        break;
+      case 'add-tier':
+        push(`/manage/loyalty/${loyaltyProgram?.id}/tiers/new`, 'forward');
+        break;
+      case 'add-milestone':
+        push(`/manage/loyalty/${loyaltyProgram?.id}/milestones/new`, 'forward');
+        break;
     }
-  }, [id, business]);
+  };
 
   return (
     <BasePageLayout
@@ -43,15 +66,15 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
     >
       <CenterContainer>
         <div className='ion-padding'>Information</div>
-        <IonList className='ion-outline'>
-          <IonItem
-            lines='none'
-            button
-            detail
-            routerLink={`/manage/loyalty/${loyaltyProgram?.id}/edit`}
-          >
+        <IonList className='ion-outline' lines='none'>
+          <IonItem lines='none'>
             <IonLabel>
-              <h1>{loyaltyProgram?.name}</h1>
+              <h2>{loyaltyProgram?.name}</h2>
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <h2>{loyaltyProgram?.type}</h2>
               <p>
                 {`Earn ${loyaltyProgram?.pointsPerSpend} ${t(
                   `types.loyaltyProgramType.${loyaltyProgram?.type ?? 'pointsPerSpend'}`,
@@ -60,6 +83,11 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
                   }
                 )}`}
               </p>
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <h2>Description</h2>
               <p>{loyaltyProgram?.description}</p>
             </IonLabel>
           </IonItem>
@@ -166,6 +194,33 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
             </IonItem>
           </IonList>
         </ContentSection>
+        <ActionSheetButton
+          buttonLabel={'Options...'}
+          sheetTitle='Options...'
+          expand='full'
+          fill='clear'
+          options={[
+            {
+              text: 'Delete Program',
+              role: 'destructive',
+              data: 'delete',
+            },
+            {
+              text: 'Edit Program',
+              role: 'destructive',
+              data: 'edit',
+            },
+            {
+              text: 'Add Reward Tier',
+              data: 'add-tier',
+            },
+            {
+              text: 'Add Reward Milestone',
+              data: 'add-milestone',
+            },
+          ]}
+          onActionComplete={handleActionComplete}
+        />
       </CenterContainer>
     </BasePageLayout>
   );

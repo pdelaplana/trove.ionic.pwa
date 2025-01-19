@@ -1,13 +1,13 @@
 import { Business, LoyaltyProgram } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
 import { useQuery } from '@tanstack/react-query';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, collectionGroup, getDocs } from 'firebase/firestore';
 
 const useFetchAllLoyaltyPrograms = () => {
   return useQuery({
     queryKey: ['allLoyaltyPrograms'],
     queryFn: async () => {
-      const snapshot = await getDocs(collection(db, 'businesses'));
+      const snapshot = await getDocs(collectionGroup(db, 'loyaltyPrograms'));
 
       const allPrograms: LoyaltyProgram[] = snapshot.docs
         .map((doc) => {

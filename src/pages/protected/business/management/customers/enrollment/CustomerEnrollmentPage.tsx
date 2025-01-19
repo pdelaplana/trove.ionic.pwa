@@ -2,6 +2,10 @@ import { IonList, IonItem, IonLabel, useIonRouter } from '@ionic/react';
 import { LoyaltyProgram } from '@src/domain';
 import { useBusiness } from '@src/features/business/BusinessProvider';
 import useEnrollCustomerFunction from '@src/features/cloudFunctions/useEnrollCustomerFunction';
+import {
+  useFetchAllLoyaltyPrograms,
+  useFetchLoyaltyProgramsByBusinessId,
+} from '@src/features/queries';
 import { InputFormField, SelectFormField } from '@src/pages/components/form';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
@@ -17,6 +21,9 @@ interface CustomerEnrollmentForm {
 }
 const CustomerEnrollmentPage: React.FC = () => {
   const { business } = useBusiness();
+  const { data: loyaltyPrograms } = useFetchLoyaltyProgramsByBusinessId(
+    business?.id ?? ''
+  );
   const {
     register,
     setValue,
@@ -44,12 +51,12 @@ const CustomerEnrollmentPage: React.FC = () => {
 
   const loyaltyProgramOptions = useMemo(() => {
     return (
-      business?.loyaltyPrograms.map((lp: LoyaltyProgram) => ({
+      loyaltyPrograms?.map((lp: LoyaltyProgram) => ({
         value: lp.uniqueCode,
         label: lp.name,
       })) ?? []
     );
-  }, [business]);
+  }, [business, loyaltyPrograms]);
 
   const onSubmit: SubmitHandler<CustomerEnrollmentForm> = async (formData) => {
     enrollCustomer({
@@ -173,3 +180,6 @@ const CustomerEnrollmentPage: React.FC = () => {
 };
 
 export default CustomerEnrollmentPage;
+function fetchLoyaltyProgramsByBusinessId(arg0: string) {
+  throw new Error('Function not implemented.');
+}

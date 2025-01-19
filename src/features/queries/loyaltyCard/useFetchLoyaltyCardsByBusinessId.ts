@@ -1,10 +1,8 @@
-import { Business, Customer, LoyaltyCard } from '@src/domain';
+import { Customer, LoyaltyCard } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   getDocs,
-  collection,
-  where,
   query,
   limit,
   orderBy,
@@ -12,6 +10,7 @@ import {
   getDoc,
   doc,
 } from 'firebase/firestore';
+import { getLoyaltyCardsSubcollectionRef } from '../helpers';
 
 const CARDS_PER_PAGE = 20;
 
@@ -25,10 +24,10 @@ const useFetchLoyaltyCardsByBusinessId = (businessId: string) => {
     queryKey: ['useFetchLoyaltyCardsByBusinessId', businessId],
     initialPageParam: null,
     queryFn: async ({ pageParam = null }) => {
-      const cardsRef = collection(db, 'loyaltyCards');
+      const cardsRef = getLoyaltyCardsSubcollectionRef(businessId);
+
       let q = query(
         cardsRef,
-        where('businessId', '==', businessId),
         orderBy('membershipDate', 'desc'),
         limit(CARDS_PER_PAGE)
       );
@@ -36,6 +35,7 @@ const useFetchLoyaltyCardsByBusinessId = (businessId: string) => {
         q = query(q, startAfter(pageParam));
       }
       const snapshot = await getDocs(q);
+
       // Fetch customer data for each card
       const cardsWithCustomers = await Promise.all(
         snapshot.docs.map(async (loyaltyCardDoc) => {

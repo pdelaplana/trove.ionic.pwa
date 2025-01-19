@@ -15,6 +15,8 @@ const ProtectedRoute: React.FC<IProtectedRouteProps> = ({
   fallbackPath = '/signin',
   ...rest
 }) => {
+  console.log('ProtectedRoute', rest.path);
+
   const { isAuthenticated, authStateLoading } = useAuth();
 
   if (authStateLoading) {

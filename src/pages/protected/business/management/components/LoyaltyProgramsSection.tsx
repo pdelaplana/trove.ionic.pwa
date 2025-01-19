@@ -1,14 +1,18 @@
 import { IonList, IonItem, IonIcon, IonLabel } from '@ionic/react';
 import { useBusiness } from '@src/features/business/BusinessProvider';
+import { useFetchLoyaltyProgramsByBusinessId } from '@src/features/queries';
 import { ribbonOutline, addCircleOutline } from 'ionicons/icons';
 
 const LoyaltyProgramsSection = () => {
   const { business } = useBusiness();
+  const { data: loyaltyPrograms } = useFetchLoyaltyProgramsByBusinessId(
+    business?.id ?? ''
+  );
   return (
     <>
       <div className='ion-padding'>Loyalty Programs</div>
       <IonList className='ion-outline'>
-        {business?.loyaltyPrograms.map((program) => (
+        {loyaltyPrograms?.map((program) => (
           <IonItem
             key={program.id}
             button={true}

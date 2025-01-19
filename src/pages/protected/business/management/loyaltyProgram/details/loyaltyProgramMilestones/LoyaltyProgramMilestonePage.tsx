@@ -23,6 +23,7 @@ import {
   LoyaltyProgramMilestone,
   LoyaltyProgramTier,
 } from '@src/domain';
+import { useLoyaltyProgram } from '@src/features/loyaltyProgram/LoyaltyProgramProvider';
 
 interface LoyaltyProgramMilestoneForm {
   id: string;
@@ -35,32 +36,31 @@ interface LoyaltyProgramMilestoneForm {
 const LoyaltyProgramMilestonePage: React.FC = () => {
   const { t } = useTranslation();
 
-  const { id, milestoneId } = useParams<{ id: string; milestoneId: string }>();
+  const { milestoneId } = useParams<{ milestoneId: string }>();
+  const { business } = useBusiness();
+
   const {
-    business,
+    loyaltyProgram,
     upsertLoyaltyProgramMilestone,
     deleteLoyaltyProgramMilestone,
-  } = useBusiness();
+  } = useLoyaltyProgram();
 
   const router = useIonRouter();
   const { showNotification } = useAppNotifications();
 
   const tiersSelectOptions = useMemo(() => {
-    const program = business?.loyaltyPrograms?.find(
-      (l: LoyaltyProgram) => l.id === id
-    );
     let tiers = [{ label: 'No Tier', value: '' }];
-    if (program) {
+    if (loyaltyProgram) {
       tiers = [
         ...tiers,
-        ...program.tiers.map((t: LoyaltyProgramTier) => ({
+        ...loyaltyProgram.tiers.map((t: LoyaltyProgramTier) => ({
           label: t.name,
           value: t.id,
         })),
       ];
     }
     return tiers;
-  }, [id, business]);
+  }, [loyaltyProgram]);
 
   const rewardTypesSelectOptions = useMemo(() => {
     return [
@@ -104,26 +104,23 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
     formData
   ) => {
     if (!formData.id) formData.id = uuidv4();
-    upsertLoyaltyProgramMilestone(id, { ...formData });
+    upsertLoyaltyProgramMilestone({ ...formData });
     showNotification('Loyalty program saved successfully');
-    router.push(`/manage/loyalty/${id}`, 'back', 'pop');
+    router.push(`/manage/loyalty/${loyaltyProgram?.id}`, 'back', 'pop');
   };
 
   const onDelete = () => {
     if (getValues('id')) {
-      deleteLoyaltyProgramMilestone(id, getValues('id'));
+      deleteLoyaltyProgramMilestone(getValues('id'));
       showNotification('Loyalty program milestone deleted successfully');
-      router.push(`/manage/loyalty/${id}`, 'back', 'pop');
+      router.push(`/manage/loyalty/${loyaltyProgram?.id}`, 'back', 'pop');
     }
   };
 
   useEffect(() => {
-    if (milestoneId) {
-      const program = business?.loyaltyPrograms?.find(
-        (l: LoyaltyProgram) => l.id === id
-      );
-      if (program) {
-        const foundMilestone = program.milestones.find(
+    if (milestoneId && milestoneId !== 'new') {
+      if (loyaltyProgram) {
+        const foundMilestone = loyaltyProgram.milestones.find(
           (m: LoyaltyProgramMilestone) => m.id === milestoneId
         );
         foundMilestone && reset({ ...foundMilestone });
@@ -137,12 +134,12 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
         reward: undefined,
       });
     }
-  }, [id, milestoneId, business]);
+  }, [milestoneId, loyaltyProgram]);
 
   return (
     <BasePageLayout
       title='Reward Milestones'
-      defaultBackButtonHref={`/manage/loyalty/${id}`}
+      defaultBackButtonHref={`/manage/loyalty/${loyaltyProgram?.id}`}
     >
       <CenterContainer>
         <ContentSection className='ion-margin'>

@@ -22,6 +22,7 @@ import LoyaltyProgramTierPerksList from './components/LoyaltyProgramTierPerksLis
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
 import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
+import { useLoyaltyProgram } from '@src/features/loyaltyProgram/LoyaltyProgramProvider';
 
 interface LoyaltyProgramTierForm {
   id: string;
@@ -31,9 +32,10 @@ interface LoyaltyProgramTierForm {
 }
 
 const LoyaltyProgramTierPage: React.FC = () => {
-  const { id, tierId } = useParams<{ id: string; tierId: string }>();
-  const { business, upsertLoyaltyProgramTier, deleteLoyaltyProgramTier } =
-    useBusiness();
+  const { tierId } = useParams<{ id: string; tierId: string }>();
+  const { business } = useBusiness();
+  const { loyaltyProgram, upsertLoyaltyProgramTier, deleteLoyaltyProgramTier } =
+    useLoyaltyProgram();
 
   const {
     register,
@@ -91,9 +93,9 @@ const LoyaltyProgramTierPage: React.FC = () => {
 
   const onDelete = () => {
     if (getValues('id')) {
-      deleteLoyaltyProgramTier(id, getValues('id'));
+      deleteLoyaltyProgramTier(getValues('id'));
       showNotification('Loyalty program tier deleted successfully');
-      router.push(`/manage/loyalty/${id}`);
+      router.push(`/manage/loyalty/${loyaltyProgram?.id}`, 'back', 'pop');
     }
   };
 
@@ -102,16 +104,15 @@ const LoyaltyProgramTierPage: React.FC = () => {
     const loyaltyProgramTier: LoyaltyProgramTier = {
       ...formData,
     };
-    upsertLoyaltyProgramTier(id, loyaltyProgramTier);
+    upsertLoyaltyProgramTier(loyaltyProgramTier);
     showNotification('Loyalty program milestone saved successfully');
-    router.push(`/manage/loyalty/${id}`, 'back', 'pop');
+    router.push(`/manage/loyalty/${loyaltyProgram?.id}`, 'back', 'pop');
   };
 
   useEffect(() => {
-    if (tierId) {
-      const program = business?.loyaltyPrograms?.find((l) => l.id === id);
-      if (program) {
-        const foundTier = program.tiers.find((t) => t.id === tierId);
+    if (tierId && tierId !== 'new') {
+      if (loyaltyProgram) {
+        const foundTier = loyaltyProgram.tiers.find((t) => t.id === tierId);
         reset({ ...foundTier });
       }
     } else {
@@ -122,12 +123,12 @@ const LoyaltyProgramTierPage: React.FC = () => {
         perks: [],
       });
     }
-  }, [id, tierId, business]);
+  }, [tierId, business]);
 
   return (
     <BasePageLayout
-      title='Loyalty Program Tier'
-      defaultBackButtonHref={`/manage/loyalty/${id}`}
+      title='Reward Tier'
+      defaultBackButtonHref={`/manage/loyalty/${loyaltyProgram?.id}`}
     >
       <CenterContainer>
         <div className='ion-margin'>
@@ -171,32 +172,31 @@ const LoyaltyProgramTierPage: React.FC = () => {
               </IonLabel>
             </IonItem>
           </IonList>
-        </form>
 
-        <LoyaltyProgramTierPerksList
-          perks={perks || []}
-          onAddUpdateDeletePerk={onAddUpdateDeletePerk}
-        />
-
-        <ActionButton
-          label='Save'
-          type='submit'
-          color='primary'
-          isLoading={isSubmitting}
-          isDisabled={!isDirty}
-          className='ion-margin'
-          expand='full'
-          form={'loyaltyProgramTierForm'}
-        />
-        {getValues('id') && (
-          <DestructiveButton
-            label='Delete'
-            prompt='Delete this tier?'
-            expand='full'
-            className='ion-margin'
-            onClick={() => onDelete()}
+          <LoyaltyProgramTierPerksList
+            perks={perks || []}
+            onAddUpdateDeletePerk={onAddUpdateDeletePerk}
           />
-        )}
+
+          <ActionButton
+            label='Save'
+            type='submit'
+            color='primary'
+            isLoading={isSubmitting}
+            isDisabled={!isDirty}
+            className='ion-margin'
+            expand='full'
+          />
+          {getValues('id') && (
+            <DestructiveButton
+              label='Delete'
+              prompt='Delete this tier?'
+              expand='full'
+              className='ion-margin'
+              onClick={() => onDelete()}
+            />
+          )}
+        </form>
       </CenterContainer>
     </BasePageLayout>
   );

@@ -1,15 +1,14 @@
-import { OperatingHours, Business, LoyaltyCard, Customer } from '@src/domain';
+import { OperatingHours, Business } from '@src/domain';
 import { createContext, ReactNode, useContext } from 'react';
 import useFetchBusinessById from '../queries/useFetchBusinessById';
 import useUpsertBusiness from '../mutations/useUpsertBusiness';
-import {
-  LoyaltyProgram,
-  LoyaltyProgramMilestone,
-  LoyaltyProgramTier,
-} from '@src/domain/entities/loyaltyProgram';
+import { LoyaltyProgram } from '@src/domain/entities/loyaltyProgram';
 
 import { useUniqueNumberGenerator } from '@src/pages/components/hooks/useUniqueNumberGenerator';
-import useFetchAllLoyaltyPrograms from '../queries/useFetchAllLoyaltyPrograms';
+import {
+  useFetchAllLoyaltyPrograms,
+  useFetchLoyaltyCardsByBusinessId,
+} from '../queries';
 
 type BusinessContextType = {
   business?: Business;
@@ -23,24 +22,6 @@ type BusinessContextType = {
   deleteOperatingHours: (operatingHours: OperatingHours) => void;
 
   upsertLoyaltyProgram: (loyaltyProgram: LoyaltyProgram) => void;
-  upsertLoyaltyProgramTier: (
-    loyaltyProgramId: string,
-    loyaltyProgramTier: LoyaltyProgramTier
-  ) => void;
-
-  deleteLoyaltyProgramTier: (
-    loyaltyProgramId: string,
-    loyaltyProgramTierId: string
-  ) => void;
-
-  upsertLoyaltyProgramMilestone: (
-    loyaltyProgramId: string,
-    loyaltyProgramMilestone: LoyaltyProgramMilestone
-  ) => void;
-  deleteLoyaltyProgramMilestone: (
-    loyaltyProgramId: string,
-    loyaltyProgramMilestoneId: string
-  ) => void;
 };
 
 const BusinessContext = createContext<BusinessContextType | undefined>(
@@ -123,80 +104,6 @@ export const BusinessProvider: React.FC<{
     });
   };
 
-  const upsertLoyaltyProgramTier = async (
-    loyaltyProgramId: string,
-    loyaltyProgramTier: LoyaltyProgramTier
-  ) => {
-    const loyaltyProgram = business?.loyaltyPrograms?.find(
-      (p) => p.id === loyaltyProgramId
-    );
-    if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        tiers: loyaltyProgram.tiers?.some((t) => t.id === loyaltyProgramTier.id)
-          ? loyaltyProgram.tiers.map((t) =>
-              t.id === loyaltyProgramTier.id ? loyaltyProgramTier : t
-            )
-          : [...(loyaltyProgram.tiers || []), loyaltyProgramTier],
-      });
-    }
-  };
-
-  const deleteLoyaltyProgramTier = async (
-    loyaltyProgramId: string,
-    loyaltyProgramTierId: string
-  ) => {
-    const loyaltyProgram = business?.loyaltyPrograms?.find(
-      (p) => p.id === loyaltyProgramId
-    );
-    if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        tiers: loyaltyProgram.tiers.filter(
-          (t) => t.id !== loyaltyProgramTierId
-        ),
-      });
-    }
-  };
-
-  const upsertLoyaltyProgramMilestone = async (
-    loyaltyProgramId: string,
-    loyaltyProgramMilestone: LoyaltyProgramMilestone
-  ) => {
-    const loyaltyProgram = business?.loyaltyPrograms?.find(
-      (p) => p.id === loyaltyProgramId
-    );
-    if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        milestones: loyaltyProgram.milestones?.some(
-          (m) => m.id === loyaltyProgramMilestone.id
-        )
-          ? loyaltyProgram.milestones.map((m) =>
-              m.id === loyaltyProgramMilestone.id ? loyaltyProgramMilestone : m
-            )
-          : [...(loyaltyProgram.milestones || []), loyaltyProgramMilestone],
-      });
-    }
-  };
-
-  const deleteLoyaltyProgramMilestone = async (
-    loyaltyProgramId: string,
-    loyaltyProgramMilestoneId: string
-  ) => {
-    const loyaltyProgram = business?.loyaltyPrograms?.find(
-      (p) => p.id === loyaltyProgramId
-    );
-    if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        milestones: loyaltyProgram.milestones.filter(
-          (m) => m.id !== loyaltyProgramMilestoneId
-        ),
-      });
-    }
-  };
-
   return (
     <BusinessContext.Provider
       value={{
@@ -211,12 +118,6 @@ export const BusinessProvider: React.FC<{
         deleteOperatingHours,
 
         upsertLoyaltyProgram,
-
-        upsertLoyaltyProgramTier,
-        deleteLoyaltyProgramTier,
-
-        upsertLoyaltyProgramMilestone,
-        deleteLoyaltyProgramMilestone,
       }}
     >
       {children}

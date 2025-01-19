@@ -1,10 +1,8 @@
 import { LoyaltyCard, Customer, LoyaltyCardTransaction } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   collection,
-  doc,
-  getDoc,
   getDocs,
   limit,
   orderBy,
@@ -12,6 +10,7 @@ import {
   startAfter,
   where,
 } from 'firebase/firestore';
+import { getLoyaltyCardTransactionsSubcollectionRef } from '../helpers';
 
 const TRANSACTIONS_PER_PAGE = 20;
 
@@ -20,7 +19,10 @@ export type LoyaltyCardPage = {
   lastVisible: any;
 };
 
-const useFetchLoyaltyCardTransactionsByCustomerId = (customerId: string) => {
+const useFetchLoyaltyCardTransactionsByCustomerId = (
+  customerId: string,
+  businessId: string
+) => {
   return useInfiniteQuery<{
     transactions: Array<LoyaltyCardTransaction>;
     lastVisible: any;
@@ -28,11 +30,12 @@ const useFetchLoyaltyCardTransactionsByCustomerId = (customerId: string) => {
     queryKey: ['useFetchLoyaltyCardTransactionsByCustomerId', customerId],
     initialPageParam: null,
     queryFn: async ({ pageParam = null }) => {
-      const transanctionsRef = collection(db, 'loyaltyCardTransactions');
+      const transactionsRef =
+        getLoyaltyCardTransactionsSubcollectionRef(businessId);
       let q = query(
-        transanctionsRef,
+        transactionsRef,
         where('customerId', '==', customerId),
-        //orderBy('transactionDate', 'desc'),
+        orderBy('transactionDate', 'desc'),
         limit(TRANSACTIONS_PER_PAGE)
       );
       if (pageParam) {
