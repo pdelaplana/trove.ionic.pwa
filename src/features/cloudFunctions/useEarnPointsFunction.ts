@@ -1,18 +1,14 @@
 import { useMutation } from '@tanstack/react-query';
 
-const useEnrollCustomerFunction = () => {
-  const apiUrl = import.meta.env.VITE_CLOUD_FUNCTIONS_ENROLLCUSTOMER_URL;
+const useEarnPointsFunction = () => {
+  const apiUrl = import.meta.env.VITE_CLOUD_FUNCTIONS_EARNPOINTS_URL;
   return useMutation({
     mutationFn: async ({
-      name,
-      email,
-      phone,
-      loyaltyProgramNumber,
+      membershipNumber,
+      amount,
     }: {
-      name: string;
-      email: string;
-      phone: string;
-      loyaltyProgramNumber: string;
+      membershipNumber: string;
+      amount: number;
     }) => {
       try {
         const response = await fetch(apiUrl, {
@@ -22,10 +18,8 @@ const useEnrollCustomerFunction = () => {
             'x-api-key': import.meta.env.VITE_CLOUD_FUNCTIONS_API_KEY,
           },
           body: JSON.stringify({
-            name,
-            email,
-            phone,
-            loyaltyProgramNumber,
+            membershipNumber,
+            amount,
           }),
         });
         return await response.json();
@@ -40,4 +34,4 @@ const useEnrollCustomerFunction = () => {
   });
 };
 
-export default useEnrollCustomerFunction;
+export default useEarnPointsFunction;
