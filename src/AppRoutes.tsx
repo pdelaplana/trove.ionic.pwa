@@ -11,6 +11,7 @@ import SignupPage from './pages/public/signup/SignupPage';
 import SigninPage from './pages/public/signin/SigninPage';
 import BusinessRoutes from './pages/protected/business/BusinessRoutes';
 import ProfileRoutes from './pages/protected/profile/ProfileRoutes';
+import CustomerRoutes from './pages/protected/customer/CustomerRoutes';
 
 interface AuthState {
   isInitialized: boolean;
@@ -70,7 +71,7 @@ const AppRoutes: React.FC = () => {
       case 'businessStaff':
         return <BusinessRoutes />;
       case 'customer':
-        return <UnderConstructionPage />;
+        return <CustomerRoutes />;
       default:
         console.warn('No valid role, redirecting to landing');
         return <Redirect to='/landing' />;
@@ -95,6 +96,12 @@ const AppRoutes: React.FC = () => {
             exact
             path='/business/signup'
             render={() => <SignupPage role='businessAdmin' />}
+          />
+
+          <Route
+            exact
+            path='/customer/signup'
+            render={() => <SignupPage role='customer' />}
           />
 
           {/* Protected routes */}

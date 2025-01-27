@@ -1,24 +1,19 @@
 import {
-  IonContent,
-  IonPage,
   useIonRouter,
-  useIonToast,
   IonList,
   IonItem,
   IonLabel,
-  IonInput,
-  IonButton,
   IonRouterLink,
   IonListHeader,
   IonText,
 } from '@ionic/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { CenterContainer } from '@pages/components/layouts';
 import { useAuth } from '@features/auth/AuthProvider';
-import ValidationError from '@src/pages/components/form/ValidationError';
-import NiceButton from '@src/pages/components/ui/NiceButton';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
+import PublicPageLayout from '@src/pages/components/layouts/PublicPageLayout';
+import ActionButton from '@src/pages/components/ui/ActionButton';
+import { InputFormField } from '@src/pages/components/form';
 
 interface SignupForm {
   name: string;
@@ -60,7 +55,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty, isLoading },
   } = useForm<SignupForm>();
 
   const { signup, setProfileData } = useAuth();
@@ -90,102 +85,95 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
   const password = watch('password');
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <CenterContainer>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <IonList lines='none'>
-              <IonListHeader>
-                <IonText>
-                  <h1>Sign up</h1>
-                </IonText>
-              </IonListHeader>
-              <IonItem>
-                <IonLabel>
-                  Let’s create or find your account. We’ll send a security code
-                  to verify that it’s really you.
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    placeholder='Name'
-                    label='Name'
-                    labelPlacement='floating'
-                    fill='outline'
-                    {...register('name', validationRules.name)}
-                  />
-                  <ValidationError error={errors.name} />
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    placeholder='Email'
-                    label='Email'
-                    labelPlacement='floating'
-                    fill='outline'
-                    {...register('email', validationRules.email)}
-                  />
-                  <ValidationError error={errors.email} />
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    placeholder='Password'
-                    label='Password'
-                    labelPlacement='floating'
-                    fill='outline'
-                    type={showPassword ? 'text' : 'password'}
-                    {...register('password', validationRules.password)}
-                  />
-                  <ValidationError error={errors.password} />
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    placeholder='Confirm Password'
-                    label='Confirm Password'
-                    labelPlacement='floating'
-                    fill='outline'
-                    type={showPassword ? 'text' : 'password'}
-                    {...register(
-                      'confirmPassword',
-                      validationRules.confirmPassword(password)
-                    )}
-                  />
-                  <ValidationError error={errors.confirmPassword} />
-                </IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonLabel>
-                  <NiceButton
-                    size='default'
-                    expand='full'
-                    type='submit'
-                    className='ion-padding-top ion-padding-bottom'
-                    isLoading={loading}
-                    isDisabled={loading}
-                  >
-                    Sign up
-                  </NiceButton>
-                </IonLabel>
-              </IonItem>
+    <PublicPageLayout title='Sign up'>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <IonList lines='none'>
+          <IonListHeader>
+            <IonText>
+              <h1>Sign up</h1>
+            </IonText>
+          </IonListHeader>
+          <IonItem>
+            <IonLabel>
+              Let’s create or find your account. We’ll send a security code to
+              verify that it’s really you.
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <InputFormField
+                name='name'
+                label='Name'
+                fill='outline'
+                register={register}
+                validationRules={validationRules.name}
+                error={errors.name}
+              />
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <InputFormField
+                name='email'
+                label='Email'
+                fill='outline'
+                type='email'
+                register={register}
+                validationRules={validationRules.email}
+                error={errors.email}
+              />
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <InputFormField
+                name='password'
+                label='Password'
+                fill='outline'
+                type={showPassword ? 'text' : 'password'}
+                register={register}
+                validationRules={validationRules.password}
+                error={errors.password}
+              />
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <InputFormField
+                name='confirmPassword'
+                label='Confrim Password'
+                fill='outline'
+                type={showPassword ? 'text' : 'password'}
+                register={register}
+                validationRules={validationRules.confirmPassword(password)}
+                error={errors.confirmPassword}
+              />
+            </IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>
+              <ActionButton
+                label='Sign up'
+                size='default'
+                expand='full'
+                type='submit'
+                className='ion-padding-top ion-padding-bottom'
+                isLoading={loading}
+                isDisabled={!isDirty}
+              />
+            </IonLabel>
+          </IonItem>
 
-              <IonItem>
-                <IonLabel className='ion-text-center'>
-                  <IonRouterLink href='/signin'>
-                    Have an account? Sign in here
-                  </IonRouterLink>
-                </IonLabel>
-              </IonItem>
-            </IonList>
-          </form>
-        </CenterContainer>
-      </IonContent>
-    </IonPage>
+          <IonItem>
+            <IonLabel className='ion-text-center'>
+              <IonRouterLink href='/signin'>
+                Have an account? Sign in here
+              </IonRouterLink>
+            </IonLabel>
+          </IonItem>
+        </IonList>
+      </form>
+    </PublicPageLayout>
   );
 };
 

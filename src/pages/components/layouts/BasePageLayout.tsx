@@ -12,6 +12,7 @@ import {
 import { useAuth } from '@src/features/auth/AuthProvider';
 import { personOutline, exitOutline } from 'ionicons/icons';
 import { PropsWithChildren } from 'react';
+import HeaderLogo from '../ui/HeaderLogo';
 
 interface BasePageProps extends PropsWithChildren {
   title: string;
@@ -39,7 +40,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
           <IonButtons slot='start'>
             <IonBackButton defaultHref={defaultBackButtonHref} />
           </IonButtons>
-          <IonTitle>{title}</IonTitle>
+          <HeaderLogo />
           <IonButtons slot='end'>
             {showProfileIcon && (
               <IonButton routerLink='/profile'>

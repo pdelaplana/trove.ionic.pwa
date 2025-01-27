@@ -18,6 +18,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { CenterContainer } from '@src/pages/components/layouts';
 import MainLogo from '@src/pages/components/ui/MainLogo';
 import ValidationError from '@src/pages/components/form/ValidationError';
+import PublicPageLayout from '@src/pages/components/layouts/PublicPageLayout';
 
 interface ISigninForm {
   password: string;
@@ -47,88 +48,82 @@ const SigninPage: React.FC = () => {
   }, [isAuthenticated]);
 
   return (
-    <IonPage>
-      <IonContent>
-        <CenterContainer>
-          <MainLogo />
-          <IonList lines='none'>
-            <IonListHeader>
-              <IonText>
-                <h1>Sign in</h1>
-              </IonText>
-            </IonListHeader>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    label='Email'
-                    labelPlacement='floating'
-                    type='email'
-                    fill='outline'
-                    {...register('email', {
-                      required: 'Email is required',
-                      pattern: {
-                        value:
-                          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-                        message: 'Enter a valid email address',
-                      },
-                    })}
-                  />
-                  <ValidationError error={errors.email} />
-                </IonLabel>
-              </IonItem>
+    <PublicPageLayout title='Sign in'>
+      <IonList lines='none'>
+        <IonListHeader>
+          <IonText>
+            <h1>Sign in</h1>
+          </IonText>
+        </IonListHeader>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <IonItem>
+            <IonLabel>
+              <IonInput
+                label='Email'
+                labelPlacement='floating'
+                type='email'
+                fill='outline'
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    message: 'Enter a valid email address',
+                  },
+                })}
+              />
+              <ValidationError error={errors.email} />
+            </IonLabel>
+          </IonItem>
 
-              <IonItem>
-                <IonLabel>
-                  <IonInput
-                    label='Password'
-                    labelPlacement='floating'
-                    type='password'
-                    fill='outline'
-                    {...register('password', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 6,
-                        message: 'Password must be at least 6 characters long',
-                      },
-                    })}
-                  />
-                  <ValidationError error={errors.password} />
-                </IonLabel>
-              </IonItem>
+          <IonItem>
+            <IonLabel>
+              <IonInput
+                label='Password'
+                labelPlacement='floating'
+                type='password'
+                fill='outline'
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: {
+                    value: 6,
+                    message: 'Password must be at least 6 characters long',
+                  },
+                })}
+              />
+              <ValidationError error={errors.password} />
+            </IonLabel>
+          </IonItem>
 
-              <IonItem tabIndex={0}>
-                <IonLabel>
-                  <IonButton
-                    size='default'
-                    expand='block'
-                    type='submit'
-                    disabled={pendingUpdate}
-                    className='ion-padding-top ion-padding-bottom'
-                  >
-                    Sign in
-                  </IonButton>
-                </IonLabel>
-              </IonItem>
-            </form>
+          <IonItem tabIndex={0}>
+            <IonLabel>
+              <IonButton
+                size='default'
+                expand='block'
+                type='submit'
+                disabled={pendingUpdate}
+                className='ion-padding-top ion-padding-bottom'
+              >
+                Sign in
+              </IonButton>
+            </IonLabel>
+          </IonItem>
+        </form>
 
-            <IonItem tabIndex={0}>
-              <IonLabel className='ion-text-center'>
-                <IonRouterLink href=''>Forgot Password?</IonRouterLink>
-              </IonLabel>
-            </IonItem>
-            <IonItem>
-              <IonLabel className='ion-text-center'>
-                <IonRouterLink href='/signup'>
-                  Don't have an account? Sign up
-                </IonRouterLink>
-              </IonLabel>
-            </IonItem>
-          </IonList>
-          <IonLoading isOpen={pendingUpdate} message={'Logging in...'} />
-        </CenterContainer>
-      </IonContent>
-    </IonPage>
+        <IonItem tabIndex={0}>
+          <IonLabel className='ion-text-center'>
+            <IonRouterLink href=''>Forgot Password?</IonRouterLink>
+          </IonLabel>
+        </IonItem>
+        <IonItem>
+          <IonLabel className='ion-text-center'>
+            <IonRouterLink href='/customer/signup'>
+              Don't have an account? Sign up
+            </IonRouterLink>
+          </IonLabel>
+        </IonItem>
+      </IonList>
+      <IonLoading isOpen={pendingUpdate} message={'Logging in...'} />
+    </PublicPageLayout>
   );
 };
 

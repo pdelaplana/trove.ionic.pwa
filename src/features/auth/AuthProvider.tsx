@@ -20,7 +20,7 @@ import {
 import { Preferences } from '@capacitor/preferences';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
-type profileFields = 'businessId' | 'role';
+type profileFields = 'businessId' | 'customerId' | 'role';
 
 export type UserRole =
   | 'businessAdmin'
@@ -31,6 +31,7 @@ export type UserRole =
 interface AuthUser extends User {
   role: UserRole;
   businessId?: string;
+  customerId?: string;
 }
 
 interface AuthContextType {
