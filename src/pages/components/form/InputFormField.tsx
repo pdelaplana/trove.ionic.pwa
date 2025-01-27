@@ -18,7 +18,7 @@ interface InputFormFieldProps {
   getValues?: UseFormGetValues<any>;
   validationRules?: any;
   error?: FieldError;
-  type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'url';
+  type?: 'text' | 'password' | 'email' | 'number' | 'tel' | 'url' | 'date';
   onChange?: (e: CustomEvent) => void;
   transformValue?: (value: string) => string;
 }

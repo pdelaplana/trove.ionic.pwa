@@ -5,6 +5,7 @@ export const en = {
       discountFixedAmount: 'Discount Fixed Amount',
       freeProduct: 'Free Product',
       pointsBonus: 'Points Bonus',
+      promoCode: 'Promo Code',
     },
     loyaltyProgramTierPerkType: {
       discount: 'Discount',
