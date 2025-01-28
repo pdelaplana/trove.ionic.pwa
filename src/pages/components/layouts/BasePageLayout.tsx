@@ -8,6 +8,7 @@ import {
   IonButton,
   IonIcon,
   IonContent,
+  useIonViewWillEnter,
 } from '@ionic/react';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import { personOutline, exitOutline } from 'ionicons/icons';
@@ -32,7 +33,13 @@ const BasePageLayout: React.FC<BasePageProps> = ({
   defaultBackButtonHref,
 }) => {
   const { signout } = useAuth();
-
+  useIonViewWillEnter(() => {
+    if (title) {
+      document.title = title + ' - Trove';
+    } else {
+      document.title = 'Trove - Rewards at Your Fingertips.';
+    }
+  });
   return (
     <IonPage>
       <IonHeader className='ion-no-border' hidden={!showHeader}>

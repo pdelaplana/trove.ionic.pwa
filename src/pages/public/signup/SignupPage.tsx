@@ -76,6 +76,11 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
 
     if (creds?.user) {
       setProfileData({ key: 'role', value: role, uid: creds.user.uid });
+
+      if (role === 'customer') {
+        router.push('/customer/onboarding', 'forward', 'replace');
+      }
+
       showNotification('Sign up successful!');
       router.push('/home', 'forward', 'replace');
     }

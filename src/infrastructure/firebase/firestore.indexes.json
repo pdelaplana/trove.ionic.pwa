@@ -39,6 +39,16 @@
       ]
     },
     {
+      "collectionGroup": "loyaltyCards",
+      "fieldPath": "customerId",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
       "collectionGroup": "loyaltyPrograms",
       "fieldPath": "uniqueCode",
       "indexes": [

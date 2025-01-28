@@ -1,6 +1,6 @@
 import { Customer } from '@src/domain';
-import { notificationsCircleOutline } from 'ionicons/icons';
 import { createContext, useContext } from 'react';
+import useFetchCustomerById from '../queries/useFetchCustomerById';
 
 type CustomerContextType = {
   customer?: Customer;
@@ -14,10 +14,11 @@ export const CustomerProvider: React.FC<{
   customerId: string;
   children: React.ReactNode;
 }> = ({ customerId, children }) => {
+  const { data: customer } = useFetchCustomerById(customerId);
   return (
     <CustomerContext.Provider
       value={{
-        customer: undefined,
+        customer: customer ?? undefined,
       }}
     >
       {children}
@@ -28,7 +29,9 @@ export const CustomerProvider: React.FC<{
 export const useCustomerProvider = (): CustomerContextType => {
   const context = useContext(CustomerContext);
   if (context === undefined) {
-    throw new Error('useBusiness must be used within a BusinessProvider');
+    throw new Error(
+      'useCustomerProvider must be used within a CustomerProvider'
+    );
   }
   return context;
 };

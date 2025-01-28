@@ -1,16 +1,7 @@
 import { LoyaltyCard, LoyaltyCardTransaction } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
 import { useQuery } from '@tanstack/react-query';
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  where,
-} from 'firebase/firestore';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 
 const TRANSACTIONS_PER_PAGE = 20;
 
