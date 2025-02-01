@@ -154,7 +154,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
         expiryInDays: formData.expiryInDays,
         validUntilDate: formData.validUntilDate
           ? new Date(formData.validUntilDate)
-          : undefined,
+          : new Date(),
       },
     };
 

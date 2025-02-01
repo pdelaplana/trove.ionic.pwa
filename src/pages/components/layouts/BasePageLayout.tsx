@@ -20,6 +20,7 @@ interface BasePageProps extends PropsWithChildren {
   showSignoutButton?: boolean;
   showHeader?: boolean;
   showProfileIcon?: boolean;
+  showBackButton?: boolean;
   children: React.ReactNode;
   defaultBackButtonHref?: string;
 }
@@ -30,6 +31,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
   showSignoutButton = false,
   showProfileIcon = true,
   showHeader = true,
+  showBackButton = true,
   defaultBackButtonHref,
 }) => {
   const { signout } = useAuth();
@@ -44,9 +46,12 @@ const BasePageLayout: React.FC<BasePageProps> = ({
     <IonPage>
       <IonHeader className='ion-no-border' hidden={!showHeader}>
         <IonToolbar>
-          <IonButtons slot='start'>
-            <IonBackButton defaultHref={defaultBackButtonHref} />
-          </IonButtons>
+          {showBackButton && (
+            <IonButtons slot='start'>
+              <IonBackButton defaultHref={defaultBackButtonHref} />
+            </IonButtons>
+          )}
+
           <HeaderLogo />
           <IonButtons slot='end'>
             {showProfileIcon && (

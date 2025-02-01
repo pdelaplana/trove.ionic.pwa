@@ -9,6 +9,7 @@ import {
 } from '@ionic/react';
 import { LoyaltyCard } from '@src/domain';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
+import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 
 interface LoyaltyCardItemProps {
   loyaltyCard: LoyaltyCard;
@@ -16,11 +17,20 @@ interface LoyaltyCardItemProps {
 const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({ loyaltyCard }) => {
   const { formatDate, formatNumber } = useFormatters();
   return (
-    <IonCard color='primary' button={true} style={{ maxWidth: '650px' }}>
+    <IonCard color='primary' button={true}>
+      <ResponsiveImage
+        src={'/public/images/trove.business.png'}
+        alt={loyaltyCard.businessName}
+        aspectRatio='LANDSCAPE'
+        containerHeights={{
+          default: '150px',
+          tablet: '200px',
+          desktop: '250px',
+        }}
+      />
+
       <IonCardHeader>
-        <IonCardTitle>
-          <h1>{loyaltyCard.businessName}</h1>
-        </IonCardTitle>
+        <IonCardTitle>{loyaltyCard.businessName}</IonCardTitle>
       </IonCardHeader>
       <IonCardContent>
         <IonGrid>
@@ -36,7 +46,7 @@ const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({ loyaltyCard }) => {
           </IonRow>
           <IonRow>
             <IonCol size='6' className='ion-text-start'>
-              <p>Poinst Balance</p>
+              <p>Points Balance</p>
               <h2>{formatNumber(loyaltyCard.points)}</h2>
             </IonCol>
             <IonCol size='6' className='ion-text-end'>

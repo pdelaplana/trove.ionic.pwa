@@ -36,6 +36,8 @@ import './theme/variables.css';
 
 /* Custom CSS */
 import './app.css';
+import './text.css';
+
 import AppRoutes from './AppRoutes';
 import { AuthProvider } from './features/auth/AuthProvider';
 

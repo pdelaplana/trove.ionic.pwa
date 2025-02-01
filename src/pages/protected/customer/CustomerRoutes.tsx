@@ -9,13 +9,15 @@ import {
 import ProtectedRoute from '@src/pages/components/routing/ProtectedRoute';
 import { Switch } from 'react-router';
 import CustomerHomePage from './home/CustomerHomePage';
-import UnderConstructionPage from '@src/pages/public/UnderConstructionPage';
 import { useAuth } from '@src/features/auth/AuthProvider';
-import { BusinessProvider } from '@src/features/business/BusinessProvider';
-import { homeOutline, ellipsisHorizontalOutline } from 'ionicons/icons';
-import BusinessRoutes from '../business/BusinessRoutes';
+import {
+  homeOutline,
+  ellipsisHorizontalOutline,
+  giftOutline,
+} from 'ionicons/icons';
 import { CustomerProvider } from '@src/features/customer/CustomerProvider';
 import CustomerOnboardingPage from './onboarding/CustomerOnboardingPage';
+import CustomerRewardsPage from './rewards/CustomerRewardsPage';
 
 interface CustomerRoutesProps {}
 
@@ -24,11 +26,11 @@ const TabRoutes = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Switch>
-          <ProtectedRoute path='/home'>
+          <ProtectedRoute path='/home' exact>
             <CustomerHomePage />
           </ProtectedRoute>
-          <ProtectedRoute path='/dashboard' exact>
-            <UnderConstructionPage />
+          <ProtectedRoute path='/rewards/' exact>
+            <CustomerRewardsPage />
           </ProtectedRoute>
         </Switch>
       </IonRouterOutlet>
@@ -36,6 +38,11 @@ const TabRoutes = () => {
         <IonTabButton tab='home' href='/home'>
           <IonIcon aria-hidden='true' icon={homeOutline} />
           <IonLabel>Home</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab='rewards' href='/rewards'>
+          <IonIcon aria-hidden='true' icon={giftOutline} />
+          <IonLabel>Rewards</IonLabel>
         </IonTabButton>
 
         <IonTabButton tab='manage' href='/manage'>
