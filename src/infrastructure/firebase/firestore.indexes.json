@@ -15,6 +15,20 @@
         { "fieldPath": "customerId", "mode": "ASCENDING" },
         { "fieldPath": "transactionDate", "mode": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "milestoneRewards",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "tierId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "points",
+          "order": "ASCENDING"
+        }
+      ]
     }
   ],
   "fieldOverrides": [
@@ -51,6 +65,16 @@
     {
       "collectionGroup": "loyaltyPrograms",
       "fieldPath": "uniqueCode",
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "milestoneRewards",
+      "fieldPath": "loyaltyProgramId",
       "indexes": [
         {
           "order": "ASCENDING",

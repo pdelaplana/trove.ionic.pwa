@@ -30,8 +30,8 @@ const ImageContainer: React.FC<ImageContainerProps> = ({
 
   const textOverlay: CSSProperties = {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
+    top: '10px',
+    left: '20px',
     transform: 'translate(-50%, -50%)',
     color: 'white',
     fontSize: '24px',

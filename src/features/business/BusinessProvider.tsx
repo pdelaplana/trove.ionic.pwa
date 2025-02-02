@@ -5,10 +5,7 @@ import useUpsertBusiness from '../mutations/useUpsertBusiness';
 import { LoyaltyProgram } from '@src/domain/entities/loyaltyProgram';
 
 import { useUniqueNumberGenerator } from '@src/pages/components/hooks/useUniqueNumberGenerator';
-import {
-  useFetchAllLoyaltyPrograms,
-  useFetchLoyaltyCardsByBusinessId,
-} from '../queries';
+import { useFetchAllLoyaltyPrograms } from '../queries';
 
 type BusinessContextType = {
   business?: Business;
@@ -20,8 +17,6 @@ type BusinessContextType = {
 
   upsertOperatingHours: (operatingHours: OperatingHours) => void;
   deleteOperatingHours: (operatingHours: OperatingHours) => void;
-
-  upsertLoyaltyProgram: (loyaltyProgram: LoyaltyProgram) => void;
 };
 
 const BusinessContext = createContext<BusinessContextType | undefined>(
@@ -82,28 +77,6 @@ export const BusinessProvider: React.FC<{
     });
   };
 
-  const upsertLoyaltyProgram = async (loyaltyProgram: LoyaltyProgram) => {
-    if (
-      loyaltyProgram.uniqueCode === undefined ||
-      loyaltyProgram.uniqueCode === ''
-    ) {
-      const usedNumbers = new Set(
-        loyaltyPrograms?.map((program) => program.uniqueCode)
-      );
-      loyaltyProgram.uniqueCode = generateUniqueNumber(6, usedNumbers);
-    }
-    await upsertAsync({
-      ...business!,
-      loyaltyPrograms: !business?.loyaltyPrograms
-        ? [loyaltyProgram]
-        : business.loyaltyPrograms.some((b) => b.id === loyaltyProgram.id)
-          ? business.loyaltyPrograms.map((b) =>
-              b.id === loyaltyProgram.id ? { ...b, ...loyaltyProgram } : b
-            )
-          : [...business.loyaltyPrograms, loyaltyProgram],
-    });
-  };
-
   return (
     <BusinessContext.Provider
       value={{
@@ -116,8 +89,6 @@ export const BusinessProvider: React.FC<{
 
         upsertOperatingHours,
         deleteOperatingHours,
-
-        upsertLoyaltyProgram,
       }}
     >
       {children}

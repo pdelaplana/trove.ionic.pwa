@@ -29,7 +29,7 @@ interface LoyaltyProgramPageProps {}
 const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
   const { t } = useTranslation();
   const { business } = useBusiness();
-  const { loyaltyProgram } = useLoyaltyProgram();
+  const { loyaltyProgram, loyaltyRewardMilestones } = useLoyaltyProgram();
   const { generateRewardDescription, generatePerkDescription } =
     useDescriptionGenerators();
   const { showConfirmPrompt } = usePrompt();
@@ -138,7 +138,7 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
 
         <ContentSection title='Milestones'>
           <IonList className='ion-outline'>
-            {loyaltyProgram?.milestones
+            {loyaltyRewardMilestones
               ?.sort((a, b) => a.points - b.points)
               .map((milestone) => (
                 <IonItem
@@ -151,7 +151,7 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
                   {milestone.tierId ? (
                     <IonBadge color='primary' slot='end'>
                       {
-                        loyaltyProgram.tiers.find(
+                        loyaltyProgram?.tiers.find(
                           (t) => t.id === milestone.tierId
                         )?.name
                       }

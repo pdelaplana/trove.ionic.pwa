@@ -1,17 +1,11 @@
 import {
-  IonDatetime,
-  IonDatetimeButton,
   IonItem,
-  IonItemDivider,
   IonLabel,
   IonList,
-  IonNote,
-  IonPopover,
   IonToggle,
   useIonRouter,
 } from '@ionic/react';
 
-import { useBusiness } from '@src/features/business/BusinessProvider';
 import {
   InputFormField,
   SelectFormField,
@@ -25,16 +19,12 @@ import {
 } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
 import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
-import {
-  LoyaltyProgramMilestone,
-  LoyaltyProgramReward,
-  LoyaltyProgramTier,
-} from '@src/domain';
+import { LoyaltyProgramMilestone, LoyaltyProgramTier } from '@src/domain';
 import { useLoyaltyProgram } from '@src/features/loyaltyProgram/LoyaltyProgramProvider';
 import {
   LoyaltyProgramRewardDiscountFixedAmount,
@@ -48,6 +38,8 @@ import {
 
 interface LoyaltyProgramMilestoneForm {
   id: string;
+  loyaltyProgramId: string;
+  businessId: string;
   tierId: string;
   points: number;
   expiryInDays?: number;
@@ -72,6 +64,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
 
   const {
     loyaltyProgram,
+    loyaltyRewardMilestones,
     upsertLoyaltyProgramMilestone,
     deleteLoyaltyProgramMilestone,
   } = useLoyaltyProgram();
@@ -139,12 +132,12 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
   const onSubmit: SubmitHandler<LoyaltyProgramMilestoneForm> = async (
     formData
   ) => {
-    if (!formData.id) formData.id = uuidv4();
-
     const milestone: LoyaltyProgramMilestone = {
       id: formData.id,
       tierId: formData.tierId,
       points: formData.points,
+      businessId: formData.businessId,
+      loyaltyProgramId: formData.loyaltyProgramId,
       reward: {
         name: formData.name ?? '',
         rewardType: formData.rewardType,
@@ -207,13 +200,15 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
 
   useEffect(() => {
     if (milestoneId && milestoneId !== 'new') {
-      if (loyaltyProgram) {
-        const foundMilestone = loyaltyProgram.milestones.find(
+      if (loyaltyRewardMilestones) {
+        const foundMilestone = loyaltyRewardMilestones.find(
           (m: LoyaltyProgramMilestone) => m.id === milestoneId
         );
         foundMilestone &&
           reset({
             id: foundMilestone.id,
+            loyaltyProgramId: foundMilestone.loyaltyProgramId,
+            businessId: foundMilestone.businessId,
             tierId: foundMilestone.tierId ?? '',
             points: foundMilestone.points,
             expiryInDays: foundMilestone.reward.expiryInDays ?? 30,
@@ -244,13 +239,15 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
     } else {
       reset({
         id: '',
+        loyaltyProgramId: loyaltyProgram?.id ?? '',
+        businessId: loyaltyProgram?.businessId ?? '',
         tierId: '',
         points: 0,
         expiryInDays: 30,
         rewardType: 'discountPercentage',
       });
     }
-  }, [milestoneId, loyaltyProgram]);
+  }, [milestoneId, loyaltyProgram, loyaltyRewardMilestones]);
 
   return (
     <BasePageLayout

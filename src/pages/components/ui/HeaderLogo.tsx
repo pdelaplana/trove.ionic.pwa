@@ -14,7 +14,7 @@ const StyledIonImg = styled(IonImg)`
 const HeaderLogo: React.FC = () => {
   return (
     <StyledIonImg
-      src='/public/images/trove.logo.header.png'
+      src='/images/trove.logo.header.png'
       alt='Trove'
       data-testid='the-logo'
     ></StyledIonImg>

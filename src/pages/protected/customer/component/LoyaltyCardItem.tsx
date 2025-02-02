@@ -19,7 +19,7 @@ const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({ loyaltyCard }) => {
   return (
     <IonCard color='primary' button={true}>
       <ResponsiveImage
-        src={'/public/images/trove.business.png'}
+        src={'/images/trove.business.png'}
         alt={loyaltyCard.businessName}
         aspectRatio='LANDSCAPE'
         containerHeights={{

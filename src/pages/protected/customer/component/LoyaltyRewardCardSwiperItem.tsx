@@ -21,7 +21,7 @@ const LoyaltyRewardCardSwiperItem: React.FC<LoyaltyRewardCardItemProps> = ({
         src={
           loyaltyRewardMilestone.reward.imageUrl
             ? loyaltyRewardMilestone.reward.imageUrl
-            : '/public/images/trove.rewards.3.png'
+            : '/images/trove.rewards.3.png'
         }
         alt={loyaltyRewardMilestone.reward.name}
         aspectRatio='LANDSCAPE'

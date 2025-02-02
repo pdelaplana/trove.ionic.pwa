@@ -18,6 +18,7 @@ import {
 import { CustomerProvider } from '@src/features/customer/CustomerProvider';
 import CustomerOnboardingPage from './onboarding/CustomerOnboardingPage';
 import CustomerRewardsPage from './rewards/CustomerRewardsPage';
+import CustomerRewardsRoutes from './rewards/CustomerRewardsRoutes';
 
 interface CustomerRoutesProps {}
 
@@ -29,8 +30,8 @@ const TabRoutes = () => {
           <ProtectedRoute path='/home' exact>
             <CustomerHomePage />
           </ProtectedRoute>
-          <ProtectedRoute path='/rewards/' exact>
-            <CustomerRewardsPage />
+          <ProtectedRoute path='/rewards'>
+            <CustomerRewardsRoutes />
           </ProtectedRoute>
         </Switch>
       </IonRouterOutlet>

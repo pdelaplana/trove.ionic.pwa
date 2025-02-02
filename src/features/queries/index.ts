@@ -8,8 +8,9 @@ import useFetchLoyaltyCardTransactionsByCustomerId from './loyaltyCard/useFetchL
 import useFetchLoyaltyCardWithCustomerInfoById from './loyaltyCard/useFetchLoyaltyCardWithCustomerInfoById';
 import useFetchAllLoyaltyPrograms from './loyaltyProgram/useFetchAllLoyaltyPrograms';
 import useFetchLoyaltyCardByCustomerId from './loyaltyCard/useFetchLoyaltyCardByCustomerId';
-import useFetchAvailableRewardsForCustomer from './useFetchAvailableRewardsForCustomer';
-import useFetchAvailableRewardsForCard from './useFetchAvailableRewardsForCard';
+import useFetchAvailableRewardsForCustomer from './loyaltyRewards/useFetchAvailableRewardsForCustomer';
+import useFetchAvailableRewardsForCard from './loyaltyRewards/useFetchAvailableRewardsForCard';
+import useFetchAllRewardsForLoyaltyProgram from './loyaltyRewards/useFetchAllRewardsForLoyaltyProgram';
 
 export {
   useFetchCustomerbyEmail,
@@ -24,4 +25,5 @@ export {
   useFetchAllLoyaltyPrograms,
   useFetchAvailableRewardsForCustomer,
   useFetchAvailableRewardsForCard,
+  useFetchAllRewardsForLoyaltyProgram,
 };

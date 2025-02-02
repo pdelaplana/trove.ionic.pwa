@@ -3,12 +3,18 @@ import {
   LoyaltyProgramMilestone,
   LoyaltyProgramTier,
 } from '@src/domain';
-import { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext, useEffect } from 'react';
 import useFetchLoyaltyProgramById from '../queries/loyaltyProgram/useFetchLoyaltyProgramById';
 import useUpsertLoyaltyProgram from '../mutations/useUpsertLoyaltyProgram';
+import { useUpsertLoyaltyProgramMilestone } from '../mutations';
+import useFetchAllRewardsForLoyaltyProgram from '../queries/loyaltyRewards/useFetchAllRewardsForLoyaltyProgram';
+import { l } from 'vite/dist/node/types.d-aGj9QkWt';
+import useDeleteDocument from '../mutations/useDeleteDocument';
+import useEarnPointsFunction from '../cloudFunctions/useEarnPointsFunction';
 
 type LoyaltyProgramContextType = {
   loyaltyProgram?: LoyaltyProgram;
+  loyaltyRewardMilestones?: LoyaltyProgramMilestone[];
   upsertLoyaltyProgram: (loyaltyProgram: LoyaltyProgram) => void;
   upsertLoyaltyProgramTier: (loyaltyProgramTier: LoyaltyProgramTier) => void;
   deleteLoyaltyProgramTier: (loyaltyProgramTierId: string) => void;
@@ -33,8 +39,21 @@ export const LoyaltyProgramProvider: React.FC<{
     refetch,
   } = useFetchLoyaltyProgramById(loyaltyProgramId, businessId);
 
+  const {
+    data: loyaltyRewardMilestones,
+    refetch: refetchLoyaltyRewardMilestones,
+  } = useFetchAllRewardsForLoyaltyProgram(loyaltyProgramId);
+
   const { mutateAsync, error, isPending, isSuccess, status, reset } =
     useUpsertLoyaltyProgram();
+
+  const {
+    mutate: mutateLoyaltyProgramMilestoneAsync,
+    reset: resetMutateLoyaltyProgramMilestone,
+    isSuccess: mutateLoyaltyProgramMilestoneSuccess,
+  } = useUpsertLoyaltyProgramMilestone();
+
+  const { mutateAsync: deleteDocumentAsync } = useDeleteDocument();
 
   const upsertLoyaltyProgram = async (loyaltyProgram: LoyaltyProgram) => {
     await mutateAsync(loyaltyProgram);
@@ -75,36 +94,34 @@ export const LoyaltyProgramProvider: React.FC<{
     loyaltyProgramMilestone: LoyaltyProgramMilestone
   ) => {
     if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        milestones: loyaltyProgram.milestones?.some(
-          (m) => m.id === loyaltyProgramMilestone.id
-        )
-          ? loyaltyProgram.milestones.map((m) =>
-              m.id === loyaltyProgramMilestone.id ? loyaltyProgramMilestone : m
-            )
-          : [...(loyaltyProgram.milestones || []), loyaltyProgramMilestone],
-      });
+      mutateLoyaltyProgramMilestoneAsync(loyaltyProgramMilestone);
     }
   };
 
   const deleteLoyaltyProgramMilestone = async (
     loyaltyProgramMilestoneId: string
   ) => {
-    if (loyaltyProgram) {
-      await upsertLoyaltyProgram({
-        ...loyaltyProgram,
-        milestones: loyaltyProgram.milestones.filter(
-          (m) => m.id !== loyaltyProgramMilestoneId
-        ),
-      });
-    }
+    deleteDocumentAsync({
+      id: loyaltyProgramMilestoneId,
+      collectionName: `businesses/${businessId}/loyaltyPrograms/${loyaltyProgramId}/milestoneRewards`,
+    });
   };
+
+  useEffect(() => {
+    if (mutateLoyaltyProgramMilestoneSuccess) {
+      refetchLoyaltyRewardMilestones();
+      setTimeout(() => {
+        // reset the status after 1 second
+        resetMutateLoyaltyProgramMilestone();
+      }, 1000);
+    }
+  }, [mutateLoyaltyProgramMilestoneSuccess]);
 
   return (
     <LoyaltyProgramContext.Provider
       value={{
         loyaltyProgram: loyaltyProgram ?? undefined,
+        loyaltyRewardMilestones: loyaltyRewardMilestones ?? undefined,
         upsertLoyaltyProgram,
         upsertLoyaltyProgramTier,
         deleteLoyaltyProgramTier,

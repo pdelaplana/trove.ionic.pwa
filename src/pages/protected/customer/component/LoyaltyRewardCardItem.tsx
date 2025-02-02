@@ -34,7 +34,7 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
 }) => {
   const { formatDate } = useFormatters();
   return (
-    <StyledCard className='reward-card' button>
+    <StyledCard className='reward-card' button routerLink='/rewards/details'>
       <IonCardContent className='ion-no-padding'>
         <IonGrid className='ion-no-padding'>
           <IonRow>
@@ -44,7 +44,7 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
                   src={
                     loyaltyRewardMilestone.reward.imageUrl
                       ? loyaltyRewardMilestone.reward.imageUrl
-                      : '/public/images/trove.rewards.3.png'
+                      : '/images/trove.rewards.3.png'
                   }
                   alt={loyaltyRewardMilestone.reward.name}
                   aspectRatio='SQUARE'

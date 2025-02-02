@@ -39,8 +39,8 @@ const StyledImage = styled.img<{ ratio: string; sizes?: string }>`
 
 const TextOverlay = styled.div`
   position: absolute;
-  top: 10%;
-  left: 18%;
+  top: 25px;
+  left: 110px;
   transform: translate(-50%, -50%);
   color: white;
   font-size: 24px;
