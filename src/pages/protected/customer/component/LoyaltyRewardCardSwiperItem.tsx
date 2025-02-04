@@ -16,7 +16,11 @@ const LoyaltyRewardCardSwiperItem: React.FC<LoyaltyRewardCardItemProps> = ({
   loyaltyRewardMilestone,
 }) => {
   return (
-    <StyledCard className='reward-card' button>
+    <StyledCard
+      className='reward-card'
+      button
+      routerLink={`/rewards/${loyaltyRewardMilestone.loyaltyProgramId}/details/${loyaltyRewardMilestone.id}`}
+    >
       <ResponsiveImage
         src={
           loyaltyRewardMilestone.reward.imageUrl

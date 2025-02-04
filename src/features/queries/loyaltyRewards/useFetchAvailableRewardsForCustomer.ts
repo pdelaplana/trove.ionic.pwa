@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { collectionGroup, where, getDocs, query } from 'firebase/firestore';
 import { getLoyaltyMilestoneRewardSubcollectionRef } from '../helpers';
 import { db } from '@src/infrastructure/firebase/firebase.config';
+import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgramMilestone';
 
 const useFetchAvailableRewardsForCustomer = (customerId: string) => {
   return useQuery({
@@ -49,15 +50,10 @@ const useFetchAvailableRewardsForCustomer = (customerId: string) => {
 
               return querySnapshot.docs.map(
                 (doc) =>
-                  ({
-                    ...doc.data(),
-                    reward: {
-                      ...doc.data().reward,
-                      validUntilDate: doc.data().reward.validUntilDate
-                        ? (doc.data().reward.validUntilDate as any).toDate()
-                        : null,
-                    },
-                  }) as LoyaltyProgramMilestone
+                  toLoyaltyProgramMilestone(
+                    doc.id,
+                    doc.data()
+                  ) as LoyaltyProgramMilestone
               );
             })
           )

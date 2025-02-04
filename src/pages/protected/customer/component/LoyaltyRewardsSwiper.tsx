@@ -14,7 +14,7 @@ const LoyaltyRewardsSwiper: React.FC<LoyaltyRewardsSwiperProps> = ({
 }) => {
   return (
     <>
-      <div className='ion-padding-start ion-padding-end  ion-flex ion-justify-content-between ion-align-items-baseline'>
+      <div className='ion-pa dding-start ion-padding-end  ion-flex ion-justify-content-between ion-align-items-baseline'>
         <h3>Available Rewards</h3>
         <IonRouterLink routerLink={`/rewards`}>View all rewards</IonRouterLink>
       </div>

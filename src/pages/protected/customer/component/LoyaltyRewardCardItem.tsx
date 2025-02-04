@@ -34,7 +34,11 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
 }) => {
   const { formatDate } = useFormatters();
   return (
-    <StyledCard className='reward-card' button routerLink='/rewards/details'>
+    <StyledCard
+      className='reward-card'
+      button
+      routerLink={`/rewards/${loyaltyRewardMilestone.loyaltyProgramId}/details/${loyaltyRewardMilestone.id}`}
+    >
       <IonCardContent className='ion-no-padding'>
         <IonGrid className='ion-no-padding'>
           <IonRow>

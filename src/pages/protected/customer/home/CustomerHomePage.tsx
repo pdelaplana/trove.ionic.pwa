@@ -2,42 +2,38 @@ import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import { LoyaltyCard } from '@src/domain';
 import LoyaltyCardsSwiper from '../component/LoyaltyCardsSwiper';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
-import {
-  useFetchAvailableRewardsForCard,
-  useFetchLoyaltyCardByCustomerId,
-} from '@src/features/queries';
-import { useEffect, useState } from 'react';
+import { useFetchAvailableRewardsForCard } from '@src/features/queries';
+import { useEffect } from 'react';
 import LoyaltyRewardsSwiper from '../component/LoyaltyRewardsSwiper';
 
 const CustomerHomePage: React.FC = () => {
-  const { customer } = useCustomerProvider();
-  const [selectedCard, setSelectedCard] = useState<LoyaltyCard | null>(null);
-  const { data } = useFetchLoyaltyCardByCustomerId(customer?.id ?? '');
+  const { loyaltyCards, setCurrentLoyaltyCard, getCurrentLoyaltyCard } =
+    useCustomerProvider();
 
   const { data: rewards } = useFetchAvailableRewardsForCard(
-    selectedCard?.membershipNumber ?? ''
+    getCurrentLoyaltyCard()?.membershipNumber ?? ''
   );
 
   const onSlideChange = (card: LoyaltyCard) => {
-    setSelectedCard(card);
+    setCurrentLoyaltyCard(card);
   };
 
   useEffect(() => {
-    if (data?.cards.length) {
-      setSelectedCard(data.cards[0]);
+    if (loyaltyCards?.length) {
+      setCurrentLoyaltyCard(loyaltyCards[0]);
     }
-  }, [data]);
+  }, [loyaltyCards]);
 
   return (
     <BasePageLayout
-      title='Home'
+      title='Customer'
       showProfileIcon={true}
       showHeader={true}
       showBackButton={false}
     >
       <CenterContainer>
         <LoyaltyCardsSwiper
-          loyaltyCards={data?.cards ?? []}
+          loyaltyCards={loyaltyCards ?? []}
           onCardClick={() => {}}
           onSlideChange={onSlideChange}
         />

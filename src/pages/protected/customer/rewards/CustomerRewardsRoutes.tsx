@@ -9,7 +9,7 @@ const CustomerRewardsRoutes: React.FC = () => {
     <IonRouterOutlet>
       <Switch>
         {/* Rewards Routes */}
-        <ProtectedRoute exact path='/rewards/details'>
+        <ProtectedRoute exact path='/rewards/:loyaltyProgramId/details/:id'>
           <CustomerRewardsDetailsPage />
         </ProtectedRoute>
 

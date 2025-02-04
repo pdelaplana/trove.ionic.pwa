@@ -18,7 +18,13 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
   );
 
   return (
-    <BasePageLayout title='Rewards' showProfileIcon={true} showHeader={true}>
+    <BasePageLayout
+      title='Rewards'
+      showProfileIcon={true}
+      showHeader={true}
+      showLogo={false}
+      showBackButton={false}
+    >
       <CenterContainer>
         {milestoneRewards?.map((milestone) => (
           <LoyaltyRewardCardItem
