@@ -28,7 +28,7 @@ const useFetchAvailableRewardsForCard = (membershipNo: string) => {
 
         const queryRef = query(
           loyaltyRewardMilestonesSubcollectionRef,
-          where('points', '<=', loyaltyCard.points.toString()),
+          where('points', '<=', loyaltyCard.rewardPoints.toString()),
           where('tierId', 'in', [loyaltyCard.tierId, ''])
         );
 

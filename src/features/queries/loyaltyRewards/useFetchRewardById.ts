@@ -2,8 +2,6 @@ import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgra
 import { getLoyaltyMilestoneRewardSubcollectionRef } from '@src/infrastructure/firebase/firestore.helpers';
 import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
-import { get } from 'react-hook-form';
-import { l } from 'vite/dist/node/types.d-aGj9QkWt';
 import { getBusinessRef } from '../helpers';
 import { LoyaltyProgramMilestone } from '@src/domain';
 

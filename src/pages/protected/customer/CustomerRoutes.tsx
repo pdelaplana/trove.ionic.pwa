@@ -14,11 +14,13 @@ import {
   homeOutline,
   ellipsisHorizontalOutline,
   giftOutline,
+  telescopeOutline,
 } from 'ionicons/icons';
 import { CustomerProvider } from '@src/features/customer/CustomerProvider';
 import CustomerOnboardingPage from './onboarding/CustomerOnboardingPage';
 import CustomerRewardsPage from './rewards/CustomerRewardsPage';
 import CustomerRewardsRoutes from './rewards/CustomerRewardsRoutes';
+import DiscoverRewardsPage from './discover/DiscoverRewardsPage';
 
 interface CustomerRoutesProps {}
 
@@ -30,6 +32,9 @@ const TabRoutes = () => {
           <ProtectedRoute path='/home' exact>
             <CustomerHomePage />
           </ProtectedRoute>
+          <ProtectedRoute path='/discover'>
+            <DiscoverRewardsPage />
+          </ProtectedRoute>
           <ProtectedRoute path='/rewards'>
             <CustomerRewardsRoutes />
           </ProtectedRoute>
@@ -39,6 +44,11 @@ const TabRoutes = () => {
         <IonTabButton tab='home' href='/home'>
           <IonIcon aria-hidden='true' icon={homeOutline} />
           <IonLabel>Home</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab='discover' href='/discover'>
+          <IonIcon aria-hidden='true' icon={telescopeOutline} />
+          <IonLabel>Discover</IonLabel>
         </IonTabButton>
 
         <IonTabButton tab='rewards' href='/rewards'>

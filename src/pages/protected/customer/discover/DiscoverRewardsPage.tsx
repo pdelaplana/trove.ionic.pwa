@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useFetchAvailableRewardsForCustomer } from '@src/features/queries';
 import LoyaltyRewardCardItem from '../component/LoyaltyRewardCardItem';
 
-interface CustomerRewardsPageProps {}
-const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
+interface DiscoverRewardsPageProps {}
+const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
   const { customer } = useCustomerProvider();
 
   const { membershipNo } = useParams<{ membershipNo: string }>();
@@ -16,13 +16,16 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
 
   return (
     <BasePageLayout
-      title='Rewards'
+      title='Discover'
       showProfileIcon={true}
       showHeader={true}
       showLogo={false}
       showBackButton={false}
     >
       <CenterContainer>
+        <div className='ion-padding'>
+          <h2>Discover Rewards</h2>
+        </div>
         {milestoneRewards?.map((milestone) => (
           <LoyaltyRewardCardItem
             key={milestone.id}
@@ -33,4 +36,4 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
     </BasePageLayout>
   );
 };
-export default CustomerRewardsPage;
+export default DiscoverRewardsPage;
