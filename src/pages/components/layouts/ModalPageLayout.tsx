@@ -7,18 +7,20 @@ import {
   IonIcon,
   IonTitle,
   IonContent,
-  IonList,
+  IonFooter,
 } from '@ionic/react';
 import { closeOutline } from 'ionicons/icons';
-import { PropsWithChildren } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 interface ModalProps extends PropsWithChildren {
-  title: string;
+  title?: string;
+  footer?: React.ReactNode;
   onDismiss: () => void;
 }
 
 const ModalPageLayout: React.FC<ModalProps> = ({
-  title,
+  title = '',
+  footer,
   children,
   onDismiss,
 }) => {
@@ -39,6 +41,7 @@ const ModalPageLayout: React.FC<ModalProps> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>{children}</IonContent>
+      {footer && <IonFooter>{footer}</IonFooter>}
     </IonPage>
   );
 };

@@ -10,17 +10,15 @@ const StyledCard = styled(IonCard)`
 
 interface LoyaltyRewardCardItemProps {
   loyaltyRewardMilestone: LoyaltyProgramMilestone;
+  onClick: () => void;
 }
 
 const LoyaltyRewardCardSwiperItem: React.FC<LoyaltyRewardCardItemProps> = ({
   loyaltyRewardMilestone,
+  onClick,
 }) => {
   return (
-    <StyledCard
-      className='reward-card'
-      button
-      routerLink={`/rewards/${loyaltyRewardMilestone.loyaltyProgramId}/details/${loyaltyRewardMilestone.id}`}
-    >
+    <StyledCard className='reward-card' button onClick={onClick}>
       <ResponsiveImage
         src={
           loyaltyRewardMilestone.reward.imageUrl

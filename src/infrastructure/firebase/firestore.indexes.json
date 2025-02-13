@@ -29,6 +29,26 @@
           "order": "ASCENDING"
         }
       ]
+    },
+    {
+      "collectionGroup": "customerRewards",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "customerId", "order": "ASCENDING" },
+        { "fieldPath": "expiryDate", "mode": "ASCENDING" },
+        { "fieldPath": "validUntilDate", "mode": "ASCENDING" },
+        { "fieldPath": "expiryDate", "order": "DESCENDING" },
+        { "fieldPath": "validUntilDate", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "customerRewards",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "customerId", "order": "ASCENDING" },
+        { "fieldPath": "expiryDate", "order": "DESCENDING" },
+        { "fieldPath": "validUntilDate", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": [

@@ -47,7 +47,7 @@ const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({ loyaltyCard }) => {
           <IonRow>
             <IonCol size='6' className='ion-text-start'>
               <p>Points Balance</p>
-              <h2>{formatNumber(loyaltyCard.points)}</h2>
+              <h2>{formatNumber(loyaltyCard.rewardPoints)}</h2>
             </IonCol>
             <IonCol size='6' className='ion-text-end'>
               <p>Tier</p>

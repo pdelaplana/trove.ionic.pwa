@@ -48,13 +48,17 @@ const useFetchAvailableRewardsForCustomer = (customerId: string) => {
 
               const querySnapshot = await getDocs(queryRef);
 
-              return querySnapshot.docs.map(
-                (doc) =>
-                  toLoyaltyProgramMilestone(
-                    doc.id,
-                    doc.data()
-                  ) as LoyaltyProgramMilestone
-              );
+              return querySnapshot.docs.map((doc) => {
+                const milestone = toLoyaltyProgramMilestone(doc.id, doc.data());
+                return {
+                  ...milestone,
+                  membershipNumber: loyaltyCard.membershipNumber,
+                  businessName: loyaltyCard.businessName,
+                } as LoyaltyProgramMilestone & {
+                  membershipNumber: string;
+                  businessName: string;
+                };
+              });
             })
           )
         ).flat();

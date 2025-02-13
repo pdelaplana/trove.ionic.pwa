@@ -14,6 +14,7 @@ const ProfilePage: React.FC = () => {
     <BasePageLayout
       title='Profile'
       defaultBackButtonHref='/'
+      showLogo={false}
       showProfileIcon={false}
       showSignoutButton={true}
     >

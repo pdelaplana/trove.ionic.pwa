@@ -5,6 +5,7 @@ import {
 } from '../helpers';
 import { useQuery } from '@tanstack/react-query';
 import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgramMilestone';
+import { LoyaltyProgramMilestone } from '@src/domain';
 
 const useFetchAvailableRewardsForCard = (membershipNo: string) => {
   return useQuery({
@@ -33,11 +34,19 @@ const useFetchAvailableRewardsForCard = (membershipNo: string) => {
         );
 
         const querySnapshot = await getDocs(queryRef);
-        return querySnapshot.docs.map((doc) =>
-          toLoyaltyProgramMilestone(doc.id, doc.data())
+        return querySnapshot.docs.map(
+          (doc) =>
+            ({
+              ...toLoyaltyProgramMilestone(doc.id, doc.data()),
+              businessName: loyaltyCard.businessName,
+              loyaltyCardId: loyaltyCard.id,
+            }) as LoyaltyProgramMilestone & {
+              businessName: string;
+              loyaltyCardId: string;
+            }
         );
       } catch (error) {
-        console.log(`Failed to fetch rewards: ${error}`);
+        console.error(`Failed to fetch rewards: ${error}`);
         throw new Error(`Failed to fetch rewards: ${error}`);
       }
     },

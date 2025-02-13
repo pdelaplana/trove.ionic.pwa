@@ -2,7 +2,9 @@ import BasePageLayout from './BasePageLayout';
 import CenterContainer from './CenterContainer';
 import ContentSection from './ContentSection';
 import { FixedBottomContainer } from './FixedBottomContainer';
+import FooterSection from './FooterSection';
 import ModalPageLayout from './ModalPageLayout';
+import ScrollableContainer from './ScrollableSection';
 
 export {
   BasePageLayout,
@@ -10,4 +12,6 @@ export {
   CenterContainer,
   ContentSection,
   FixedBottomContainer,
+  ScrollableContainer,
+  FooterSection,
 };

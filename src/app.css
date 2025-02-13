@@ -22,6 +22,12 @@ ion-header {
   border-bottom-width: thin;
 }
 
+ion-footer {
+  border-top-style: none;
+  border-top-color: var(--ion-color-light-shade);
+  border-top-width: thin;
+}
+
 /* full screen modal styles */
 ion-modal {
   --max-height: 100%;

@@ -1,11 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  getCustomerRewardsSubcollectionRef,
   getLoyaltyCardByMembershipNo,
-  getLoyaltyCardsSubcollectionRef,
-  getLoyaltyMilestoneRewardSubcollectionRef,
 } from '../helpers';
-import { db } from '@src/infrastructure/firebase/firebase.config';
-import { collection, doc, getDocs, orderBy, query } from 'firebase/firestore';
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  where,
+} from 'firebase/firestore';
+import { toCustomerReward } from '@src/features/mappers/toCustomerReward';
 
 const useFetchRewardsClaimedForLoyaltyCard = (membershipNumber: string) => {
   return useQuery({
@@ -22,18 +28,29 @@ const useFetchRewardsClaimedForLoyaltyCard = (membershipNumber: string) => {
           return null;
         }
 
-        const customerRewardsRef = collection(
-          db,
-          `businesses\\${loyaltyCard.businessId}\\loyaltycards\\${loyaltyCard.id}\\customerRewards`
+        const customerRewardsSubcollectionRef =
+          getCustomerRewardsSubcollectionRef(
+            loyaltyCard.businessId,
+            loyaltyCard.id
+          );
+
+        const now = new Date();
+        const querySnapshot = await getDocs(
+          query(
+            customerRewardsSubcollectionRef,
+            where('expiryDate', '>=', now),
+            where('validUntilDate', '>=', now),
+            orderBy('expiryDate', 'desc'),
+            orderBy('validUntilDate', 'desc')
+          )
         );
 
-        const querySnapshot = await query(
-          customerRewardsRef,
-          orderBy('validityDate', 'desc')
+        return querySnapshot.docs.map((doc) =>
+          toCustomerReward(doc.id, doc.data())
         );
       } catch (error) {
-        console.log(`Failed to fetch rewards: ${error}`);
-        throw new Error(`Failed to fetch rewards: ${error}`);
+        console.error(`Failed to fetch customer rewards: ${error}`);
+        throw new Error(`Failed to fetch custopmer rewards: ${error}`);
       }
     },
   });

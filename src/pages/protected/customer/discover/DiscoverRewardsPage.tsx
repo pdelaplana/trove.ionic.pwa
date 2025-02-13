@@ -1,14 +1,13 @@
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
-import { useParams } from 'react-router-dom';
 import { useFetchAvailableRewardsForCustomer } from '@src/features/queries';
 import LoyaltyRewardCardItem from '../component/LoyaltyRewardCardItem';
+import { useDiscoverRewardsDetailsModal } from './components/DiscoverRewardsDetailsModal';
 
 interface DiscoverRewardsPageProps {}
 const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
   const { customer } = useCustomerProvider();
-
-  const { membershipNo } = useParams<{ membershipNo: string }>();
+  const { open: openRewardDetailsModal } = useDiscoverRewardsDetailsModal();
 
   const { data: milestoneRewards } = useFetchAvailableRewardsForCustomer(
     customer?.id ?? ''
@@ -30,6 +29,7 @@ const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
           <LoyaltyRewardCardItem
             key={milestone.id}
             loyaltyRewardMilestone={milestone}
+            onClick={() => openRewardDetailsModal(milestone)}
           />
         ))}
       </CenterContainer>

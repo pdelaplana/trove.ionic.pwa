@@ -22,7 +22,6 @@ import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
 import { useEffect, useMemo } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
 import { useTranslation } from 'react-i18next';
 import { LoyaltyProgramMilestone, LoyaltyProgramTier } from '@src/domain';
 import { useLoyaltyProgram } from '@src/features/loyaltyProgram/LoyaltyProgramProvider';
@@ -43,7 +42,7 @@ interface LoyaltyProgramMilestoneForm {
   tierId: string;
   points: number;
   expiryInDays?: number;
-  validUntilDate?: Date;
+  validUntilDate?: string;
   name?: string;
   description?: string;
   termsAndConditions?: string;
@@ -204,6 +203,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
         const foundMilestone = loyaltyRewardMilestones.find(
           (m: LoyaltyProgramMilestone) => m.id === milestoneId
         );
+        console.log('foundMilestone', foundMilestone);
         foundMilestone &&
           reset({
             id: foundMilestone.id,
@@ -212,7 +212,10 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
             tierId: foundMilestone.tierId ?? '',
             points: foundMilestone.points,
             expiryInDays: foundMilestone.reward.expiryInDays ?? 30,
-            validUntilDate: foundMilestone.reward.validUntilDate,
+            validUntilDate:
+              foundMilestone.reward.validUntilDate
+                ?.toISOString()
+                .split('T')[0] ?? '',
             rewardType: foundMilestone.reward.rewardType,
             name: foundMilestone.reward.name,
             description: foundMilestone.reward.description,

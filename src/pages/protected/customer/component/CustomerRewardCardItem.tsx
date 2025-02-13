@@ -1,37 +1,37 @@
 import {
   IonCard,
   IonCardContent,
-  IonText,
-  IonNote,
   IonCol,
   IonGrid,
+  IonNote,
   IonRow,
+  IonText,
 } from '@ionic/react';
-import { LoyaltyProgramMilestone } from '@src/domain';
+import { CustomerReward } from '@src/domain';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 import styled from 'styled-components';
 
 const StyledCard = styled(IonCard)`
   margin-bottom: 0.5rem;
-  height: 120px;
+  height: 190px;
 
   @media (min-width: 768px) {
-    height: 150px;
+    height: 190px;
   }
 
   @media (min-width: 1024px) {
-    height: 120px;
+    height: 190px;
   }
 `;
 
-interface LoyaltyRewardCardItemProps {
-  loyaltyRewardMilestone: LoyaltyProgramMilestone;
+interface CustomerRewardCardItemProps {
+  customerReward: CustomerReward & { businessName: string };
   onClick: () => void;
 }
 
-const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
-  loyaltyRewardMilestone,
+const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
+  customerReward,
   onClick,
 }) => {
   const { formatDate } = useFormatters();
@@ -44,27 +44,28 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
               <div className='ion-flex ion-justify-content-center ion-align-items-center'>
                 <ResponsiveImage
                   src={
-                    loyaltyRewardMilestone.reward.imageUrl
-                      ? loyaltyRewardMilestone.reward.imageUrl
+                    customerReward.imageUrl
+                      ? customerReward.imageUrl
                       : '/images/trove.rewards.3.png'
                   }
-                  alt={loyaltyRewardMilestone.reward.name}
+                  alt={customerReward.name}
                   aspectRatio='SQUARE'
                   containerHeights={{
-                    default: '120px',
-                    tablet: '150px',
-                    desktop: '120px',
+                    default: '190px',
+                    tablet: '190px',
+                    desktop: '190px',
                   }}
                 />
               </div>
             </IonCol>
             <IonCol size='8' className='ion-padding'>
               <IonText className='text-base' color='dark'>
-                {loyaltyRewardMilestone.reward.name}
+                <h2>{customerReward.businessName}</h2>
+                {customerReward.name}
               </IonText>
               <p>
                 <IonText color='medium' className='text-sm line-clamp-2'>
-                  {loyaltyRewardMilestone.reward.description}
+                  {customerReward.description}
                 </IonText>
               </p>
               <IonNote
@@ -72,7 +73,7 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
                 style={{ position: 'absolute', bottom: '.5rem', left: '1rem' }}
                 color='medium'
               >
-                {loyaltyRewardMilestone.points} points
+                {formatDate(customerReward.expiryDate)}
               </IonNote>
             </IonCol>
           </IonRow>
@@ -82,4 +83,4 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
   );
 };
 
-export default LoyaltyRewardCardItem;
+export default CustomerRewardCardItem;
