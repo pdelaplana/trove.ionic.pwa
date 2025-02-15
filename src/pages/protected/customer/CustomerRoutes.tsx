@@ -7,7 +7,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import ProtectedRoute from '@src/pages/components/routing/ProtectedRoute';
-import { Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import CustomerHomePage from './home/CustomerHomePage';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import {
@@ -21,6 +21,8 @@ import CustomerOnboardingPage from './onboarding/CustomerOnboardingPage';
 import CustomerRewardsPage from './rewards/CustomerRewardsPage';
 import CustomerRewardsRoutes from './rewards/CustomerRewardsRoutes';
 import DiscoverRewardsPage from './discover/DiscoverRewardsPage';
+import CustomerRewardsDetailsPage from './rewards/details/CustomerRewardsDetailsPage';
+import DiscoverRewardsDetailsPage from './discover/DiscoverRewardsDetailsPage';
 
 interface CustomerRoutesProps {}
 
@@ -74,8 +76,24 @@ const CustomerRoutes: React.FC<CustomerRoutesProps> = ({}) => {
 
   return (
     <CustomerProvider customerId={user?.customerId ?? ''}>
-      {' '}
-      <TabRoutes />
+      <Switch>
+        {/* No Tab Rewards Routes */}
+
+        <ProtectedRoute
+          exact
+          path='/discover/rewards/:businessId/:loyaltyProgramId/:loyaltyProgramMilestoneId'
+        >
+          <DiscoverRewardsDetailsPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute exact path='/rewards/:loyaltyCardId/:id'>
+          <CustomerRewardsDetailsPage />
+        </ProtectedRoute>
+
+        <Route path='/'>
+          <TabRoutes />
+        </Route>
+      </Switch>
     </CustomerProvider>
   );
 };

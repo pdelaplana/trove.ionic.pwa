@@ -2,47 +2,47 @@ import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgra
 import { getLoyaltyMilestoneRewardSubcollectionRef } from '@src/infrastructure/firebase/firestore.helpers';
 import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
-import { getBusinessRef } from '../helpers';
+import { getBusinessById } from '../helpers';
 import { LoyaltyProgramMilestone } from '@src/domain';
 
-const useFetchRewardById = (
+const useFetchLoyaltyProgramMilestoneById = (
   id: string,
   loyaltyProgramId: string,
   businessId: string
 ) => {
   return useQuery({
-    queryKey: ['useFetchRewardById', id, loyaltyProgramId, businessId],
+    queryKey: [
+      'useFetchLoyaltyProgramMilestoneById',
+      id,
+      loyaltyProgramId,
+      businessId,
+    ],
     queryFn: async () => {
       if (!id || !loyaltyProgramId || !businessId) {
         return null;
       }
 
       try {
-        const loyaltyRewardMilestonesRef = doc(
+        const loyaltyProgramMilestoneSubcollectiionRef =
           getLoyaltyMilestoneRewardSubcollectionRef(
             loyaltyProgramId,
             businessId
-          ),
-          id
+          );
+
+        const loyaltyProgramMilestoneSnapshot = await getDoc(
+          doc(loyaltyProgramMilestoneSubcollectiionRef, id)
         );
 
-        const loyaltyRewardMilestonesSnapshot = await getDoc(
-          loyaltyRewardMilestonesRef
-        );
-        const data = loyaltyRewardMilestonesSnapshot.data();
-
-        const business = await getDoc(getBusinessRef(businessId));
-
-        const reward = toLoyaltyProgramMilestone(
-          loyaltyRewardMilestonesSnapshot.id,
-          data
+        const milestone = toLoyaltyProgramMilestone(
+          loyaltyProgramMilestoneSnapshot.id,
+          loyaltyProgramMilestoneSnapshot.data()
         );
 
-        const businessData = business.data();
+        const business = await getBusinessById(businessId);
 
         return {
-          ...reward,
-          businessName: businessData?.name,
+          ...milestone,
+          businessName: business?.name,
         } as LoyaltyProgramMilestone & { businessName: string };
       } catch (error) {
         console.error(error);
@@ -52,4 +52,4 @@ const useFetchRewardById = (
   });
 };
 
-export default useFetchRewardById;
+export default useFetchLoyaltyProgramMilestoneById;

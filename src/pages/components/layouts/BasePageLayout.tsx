@@ -9,6 +9,7 @@ import {
   IonIcon,
   IonContent,
   useIonViewWillEnter,
+  IonFooter,
 } from '@ionic/react';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import { personOutline, exitOutline } from 'ionicons/icons';
@@ -24,6 +25,7 @@ interface BasePageProps extends PropsWithChildren {
   showLogo?: boolean;
   children: React.ReactNode;
   defaultBackButtonHref?: string;
+  footer?: React.ReactNode;
 }
 
 const BasePageLayout: React.FC<BasePageProps> = ({
@@ -35,6 +37,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
   showBackButton = true,
   showLogo = true,
   defaultBackButtonHref,
+  footer,
 }) => {
   const { signout } = useAuth();
   useIonViewWillEnter(() => {
@@ -69,6 +72,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
         </IonToolbar>
       </IonHeader>
       <IonContent>{children}</IonContent>
+      {footer && <IonFooter>{footer}</IonFooter>}
     </IonPage>
   );
 };

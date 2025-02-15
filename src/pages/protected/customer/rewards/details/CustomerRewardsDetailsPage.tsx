@@ -6,88 +6,64 @@ import {
   IonList,
   IonRow,
   IonText,
-  useIonRouter,
 } from '@ionic/react';
 import { LoyaltyCard } from '@src/domain';
-import useClaimRewardFunction from '@src/features/cloudFunctions/useClaimRewardFunction';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
-import useFetchRewardById from '@src/features/queries/loyaltyRewards/useFetchRewardById';
-import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
+import { useFetchCustomerRewardById } from '@src/features/queries';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
-import { usePrompt } from '@src/pages/components/hooks/usePrompt';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useCustomerRewardQrCodeModal } from '../components/CustomerRewardQrCodeModal';
 
 interface CustomerRewardsDetailsPageProps {}
 
 const CustomerRewardsDetailsPage: React.FC = () => {
-  const { id, loyaltyProgramId } = useParams<{
+  const { id, loyaltyCardId } = useParams<{
     id: string;
-    loyaltyProgramId: string;
+    loyaltyCardId: string;
   }>();
   const { formatDate } = useFormatters();
 
-  const { showNotification, showErrorNotification } = useAppNotifications();
-  const { showConfirmPrompt } = usePrompt();
-  const { push } = useIonRouter();
+  const { open: openRewardQrCodeModal } = useCustomerRewardQrCodeModal();
 
   const [loyaltyCard, setLoyaltyCard] = useState<LoyaltyCard | null>(null);
 
   const { loyaltyCards } = useCustomerProvider();
 
-  const { data: milestoneReward } = useFetchRewardById(
+  const { data: customerReward } = useFetchCustomerRewardById(
     id,
-    loyaltyCard?.loyaltyProgramId ?? '',
+    loyaltyCard?.id ?? '',
     loyaltyCard?.businessId ?? ''
   );
 
-  const {
-    mutate: claimReward,
-    isSuccess,
-    isError,
-    isPending,
-  } = useClaimRewardFunction();
-
-  const handleClaimReward = () => {
-    showConfirmPrompt({
-      title: 'Claim Reward',
-      message: 'Are you sure you want to claim this reward?',
-      onConfirm: () => {
-        claimReward({
-          membershipNumber: loyaltyCard?.membershipNumber ?? '',
-          loyaltyProgramMilestoneId: milestoneReward?.id ?? '',
-        });
-      },
-    });
-  };
+  const footer = (
+    <CenterContainer>
+      <ActionButton
+        isLoading={false}
+        isDisabled={false}
+        expand='full'
+        onClick={() => customerReward && openRewardQrCodeModal(customerReward)}
+        label={'Use Now'}
+      />
+    </CenterContainer>
+  );
 
   useEffect(() => {
-    const loyaltyCard = loyaltyCards?.find(
-      (card) => card.loyaltyProgramId === loyaltyProgramId
-    );
+    const loyaltyCard = loyaltyCards?.find((card) => card.id === loyaltyCardId);
     setLoyaltyCard(loyaltyCard ?? null);
-  }, [loyaltyCards]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      showNotification('Reward claimed successfully');
-      push('/rewards', 'back', 'pop');
-    }
-    if (isError) {
-      showErrorNotification('Error claiming reward');
-    }
-  }, [isSuccess, isError]);
+  }, [loyaltyCards, loyaltyCardId]);
 
   return (
     <BasePageLayout
-      title='Rewards'
-      showProfileIcon={true}
+      title=''
+      showProfileIcon={false}
       showHeader={true}
       showLogo={false}
       defaultBackButtonHref='/rewards'
+      footer={footer}
     >
       <CenterContainer>
         <ResponsiveImage
@@ -103,14 +79,13 @@ const CustomerRewardsDetailsPage: React.FC = () => {
         <IonList lines='none'>
           <IonItem lines='none'>
             <IonLabel className='ion-text-center'>
-              <h1>{milestoneReward?.reward?.name}</h1>
-              <h2>{milestoneReward?.businessName}</h2>
+              <h1>{customerReward?.name}</h1>
             </IonLabel>
           </IonItem>
-          {milestoneReward?.reward?.description && (
+          {customerReward?.description && (
             <IonItem lines='none'>
               <IonLabel className='ion-text-center '>
-                <IonText>{milestoneReward?.reward?.description}</IonText>
+                <IonText>{customerReward?.description}</IonText>
               </IonLabel>
             </IonItem>
           )}
@@ -122,14 +97,16 @@ const CustomerRewardsDetailsPage: React.FC = () => {
                   <p>
                     <IonText color='medium'> Points Required</IonText>
                     <br />
-                    {milestoneReward?.points} points
                   </p>
                 </IonCol>
                 <IonCol size='6' className='ion-text-end ion-no-padding'>
-                  {milestoneReward?.reward.validUntilDate && (
+                  {customerReward?.expiryDate && (
                     <p>
-                      <IonText color='medium'>Valid Until</IonText> <br />
-                      {formatDate(milestoneReward?.reward.validUntilDate)}
+                      <IonText color='medium'>Expires On</IonText> <br />
+                      {formatDate(
+                        customerReward.expiryDate ??
+                          customerReward.validUntilDate
+                      )}
                     </p>
                   )}
                 </IonCol>
@@ -137,22 +114,15 @@ const CustomerRewardsDetailsPage: React.FC = () => {
             </IonGrid>
           </IonItem>
 
-          {milestoneReward?.reward?.termsAndConditions && (
+          {customerReward?.termsAndConditions && (
             <IonItem lines='none'>
               <IonLabel>
                 <h2>Terms and Conditions</h2>
-                <p>{milestoneReward?.reward?.termsAndConditions}</p>
+                <p>{customerReward?.termsAndConditions}</p>
               </IonLabel>
             </IonItem>
           )}
         </IonList>
-        <ActionButton
-          isLoading={isPending}
-          isDisabled={false}
-          expand='full'
-          onClick={() => handleClaimReward()}
-          label={'Claim Reward'}
-        />
       </CenterContainer>
     </BasePageLayout>
   );

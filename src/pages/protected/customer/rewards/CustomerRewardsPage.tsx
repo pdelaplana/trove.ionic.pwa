@@ -10,6 +10,7 @@ import {
   IonSegmentContent,
 } from '@ionic/react';
 import { useCustomerRewardsDetailsModal } from './components/CustomerRewardsDetailsModal';
+import { useCustomerRewardQrCodeModal } from './components/CustomerRewardQrCodeModal';
 
 interface CustomerRewardsPageProps {}
 const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
@@ -44,7 +45,9 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
               <CustomerRewardCardItem
                 key={customerReward.id}
                 customerReward={customerReward}
-                onClick={() => openRewardDetailsModal(customerReward)}
+                onClickUrl={`/rewards/${customerReward.loyaltyCardId}/${customerReward.id}`}
+                //onClick={() => openRewardQrCodeModal(customerReward)}
+                //onClick={() => openRewardDetailsModal(customerReward)}
               />
             ))}
           </IonSegmentContent>

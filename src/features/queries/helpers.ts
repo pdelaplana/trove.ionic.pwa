@@ -1,4 +1,4 @@
-import { LoyaltyCard, LoyaltyProgram } from '@src/domain';
+import { Business, LoyaltyCard, LoyaltyProgram } from '@src/domain';
 import { db } from '@src/infrastructure/firebase/firebase.config';
 import {
   addDoc,
@@ -13,6 +13,7 @@ import {
   updateDoc,
   where,
 } from 'firebase/firestore';
+import { toLoyaltyCard } from '../mappers/toLoyaltyCard';
 
 export const insertDocument = async <T extends { id?: string }>(
   data: T,
@@ -106,6 +107,29 @@ export const getLoyaltyMilestoneRewardSubcollectionRef = (
   return collection(loyaltyProgramRef, 'milestoneRewards');
 };
 
+export const getBusinessById = async (businessId: string) => {
+  const businessRef = getBusinessRef(businessId);
+  const businessSnapshot = await getDoc(businessRef);
+
+  return {
+    ...businessSnapshot.data(),
+    id: businessSnapshot.id,
+  } as Business;
+};
+
+export const getLoyaltyCardById = async (
+  loyaltyCardId: string,
+  businessId: string
+) => {
+  const loyaltyCardRef = doc(
+    getLoyaltyCardsSubcollectionRef(businessId),
+    loyaltyCardId
+  );
+  const loyaltyCardSnapshot = await getDoc(loyaltyCardRef);
+
+  return toLoyaltyCard(loyaltyCardSnapshot?.id, loyaltyCardSnapshot?.data());
+};
+
 export const getLoyaltyCardByMembershipNo = async (membershipNo: string) => {
   const loyaltyCardQueryRef = query(
     collectionGroup(db, 'loyaltyCards'),
@@ -117,15 +141,10 @@ export const getLoyaltyCardByMembershipNo = async (membershipNo: string) => {
     return null;
   }
 
-  return {
-    ...loyaltyCardQuerySnapshot.docs[0].data(),
-    id: loyaltyCardQuerySnapshot.docs[0].id,
-    membershipDate: loyaltyCardQuerySnapshot.docs[0]
-      .data()
-      .membershipDate.toDate(),
-    expiryDate: loyaltyCardQuerySnapshot.docs[0].data().expiryDate?.toDate(),
-    businessId: loyaltyCardQuerySnapshot.docs[0].ref.parent.parent?.id,
-  } as LoyaltyCard;
+  return toLoyaltyCard(
+    loyaltyCardQuerySnapshot.docs[0].id,
+    loyaltyCardQuerySnapshot.docs[0].data()
+  );
 };
 
 export const getLoyaltyProgramByCode = async (code: string) => {

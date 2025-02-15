@@ -27,16 +27,23 @@ const StyledCard = styled(IonCard)`
 
 interface LoyaltyRewardCardItemProps {
   loyaltyRewardMilestone: LoyaltyProgramMilestone;
-  onClick: () => void;
+  onClickUrl?: string;
+  onClick?: (() => void) | null;
 }
 
 const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
   loyaltyRewardMilestone,
+  onClickUrl,
   onClick,
 }) => {
   const { formatDate } = useFormatters();
   return (
-    <StyledCard className='reward-card' button onClick={onClick}>
+    <StyledCard
+      className='reward-card'
+      button
+      {...(onClickUrl ? { routerLink: onClickUrl } : {})}
+      {...(onClick ? { onClick } : {})}
+    >
       <IonCardContent className='ion-no-padding'>
         <IonGrid className='ion-no-padding'>
           <IonRow>

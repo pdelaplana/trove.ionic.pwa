@@ -28,10 +28,6 @@ const CustomerRewardsDetailsModal: React.FC<
 > = ({ customerReward, onDismiss }) => {
   const { formatDate } = useFormatters();
 
-  useEffect(() => {
-    console.log('useEffect', customerReward);
-  }, [customerReward]);
-
   return (
     <ModalPageLayout onDismiss={onDismiss}>
       <CenterContainer>
@@ -107,10 +103,6 @@ export const useCustomerRewardsDetailsModal = (): {
     customerReward: inputs?.customerReward,
     onDismiss: (data: any, role: string) => dismiss(data, role),
   });
-
-  useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
 
   return {
     open: (customerReward: CustomerReward) => {

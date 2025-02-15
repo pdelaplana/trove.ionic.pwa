@@ -29,7 +29,8 @@ const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
           <LoyaltyRewardCardItem
             key={milestone.id}
             loyaltyRewardMilestone={milestone}
-            onClick={() => openRewardDetailsModal(milestone)}
+            onClickUrl={`/discover/rewards/${milestone.businessId}/${milestone.loyaltyProgramId}/${milestone.id}`}
+            //onClick={() => openRewardDetailsModal(milestone)}
           />
         ))}
       </CenterContainer>

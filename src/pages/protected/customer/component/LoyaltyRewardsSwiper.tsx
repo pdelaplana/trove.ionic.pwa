@@ -36,7 +36,7 @@ const LoyaltyRewardsSwiper: React.FC<LoyaltyRewardsSwiperProps> = ({
           <SwiperSlide key={milestone.id}>
             <LoyaltyRewardCardSwiperItem
               loyaltyRewardMilestone={milestone}
-              onClick={() => openRewardDetailsModal(milestone)}
+              onClickUrl={`/discover/rewards/${milestone.businessId}/${milestone.loyaltyProgramId}/${milestone.id}`}
             />
           </SwiperSlide>
         ))}
