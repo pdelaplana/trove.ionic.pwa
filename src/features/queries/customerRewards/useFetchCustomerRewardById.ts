@@ -1,12 +1,10 @@
 import { toCustomerReward } from '@src/features/mappers/toCustomerReward';
-import { useQuery } from '@tanstack/react-query';
-import { doc, getDoc } from 'firebase/firestore';
 import {
-  getBusinessRef,
   getCustomerRewardsSubcollectionRef,
   getLoyaltyCardById,
-  getLoyaltyCardByMembershipNo,
-} from '../helpers';
+} from '@src/infrastructure/firebase/firestore.helpers';
+import { useQuery } from '@tanstack/react-query';
+import { doc, getDoc } from 'firebase/firestore';
 
 const useFetchCustomerRewardById = (
   id: string,

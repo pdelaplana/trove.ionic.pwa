@@ -15,8 +15,6 @@ interface LoyaltyRewardsSwiperProps {
 const LoyaltyRewardsSwiper: React.FC<LoyaltyRewardsSwiperProps> = ({
   milestones,
 }) => {
-  const { open: openRewardDetailsModal } = useDiscoverRewardsDetailsModal();
-
   return (
     <>
       <div className='ion-pa dding-start ion-padding-end  ion-flex ion-justify-content-between ion-align-items-baseline'>

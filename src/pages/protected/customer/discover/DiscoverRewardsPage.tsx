@@ -30,7 +30,6 @@ const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
             key={milestone.id}
             loyaltyRewardMilestone={milestone}
             onClickUrl={`/discover/rewards/${milestone.businessId}/${milestone.loyaltyProgramId}/${milestone.id}`}
-            //onClick={() => openRewardDetailsModal(milestone)}
           />
         ))}
       </CenterContainer>
