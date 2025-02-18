@@ -25,8 +25,12 @@
           "order": "ASCENDING"
         },
         {
+          "fieldPath": "reward.validUntilDate",
+          "order": "DESCENDING"
+        },
+        {
           "fieldPath": "points",
-          "order": "ASCENDING"
+          "order": "DESCENDING"
         }
       ]
     },
@@ -35,10 +39,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "customerId", "order": "ASCENDING" },
-        { "fieldPath": "expiryDate", "mode": "ASCENDING" },
-        { "fieldPath": "validUntilDate", "mode": "ASCENDING" },
-        { "fieldPath": "expiryDate", "order": "DESCENDING" },
-        { "fieldPath": "validUntilDate", "order": "DESCENDING" }
+        { "fieldPath": "expiryDate", "mode": "ASCENDING" }
       ]
     },
     {
@@ -46,8 +47,16 @@
       "queryScope": "COLLECTION_GROUP",
       "fields": [
         { "fieldPath": "customerId", "order": "ASCENDING" },
-        { "fieldPath": "expiryDate", "order": "DESCENDING" },
-        { "fieldPath": "validUntilDate", "order": "DESCENDING" }
+        { "fieldPath": "expiryDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "customerRewards",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "customerId", "order": "ASCENDING" },
+        { "fieldPath": "expiryDate", "order": "ASCENDING" },
+        { "fieldPath": "redeemedDate", "order": "ASCENDING" }
       ]
     }
   ],

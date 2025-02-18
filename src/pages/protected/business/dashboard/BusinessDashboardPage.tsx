@@ -1,5 +1,4 @@
-import { CenterContainer } from '@src/pages/components/layouts';
-import BusinessPage from '../BusinessPage';
+import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import {
   IonButton,
   IonCard,
@@ -12,19 +11,17 @@ import {
   IonLabel,
   IonList,
 } from '@ionic/react';
-import {
-  addCircle,
-  addCircleOutline,
-  downloadOutline,
-  giftOutline,
-  personAddOutline,
-  text,
-  walletOutline,
-} from 'ionicons/icons';
+import { giftOutline, personAddOutline, walletOutline } from 'ionicons/icons';
 
 const BusinessDashboardPage: React.FC = () => {
   return (
-    <BusinessPage title='Dashboard' showProfileIcon={true} showHeader={true}>
+    <BasePageLayout
+      title='Dashboard'
+      showProfileIcon={true}
+      showHeader={true}
+      showLogo={true}
+      showBackButton={false}
+    >
       <CenterContainer>
         <IonCard
           button
@@ -97,7 +94,7 @@ const BusinessDashboardPage: React.FC = () => {
           </IonItem>
         </IonList>
       </CenterContainer>
-    </BusinessPage>
+    </BasePageLayout>
   );
 };
 

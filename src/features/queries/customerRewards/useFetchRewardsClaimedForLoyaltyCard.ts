@@ -39,9 +39,7 @@ const useFetchRewardsClaimedForLoyaltyCard = (membershipNumber: string) => {
           query(
             customerRewardsSubcollectionRef,
             where('expiryDate', '>=', now),
-            where('validUntilDate', '>=', now),
-            orderBy('expiryDate', 'desc'),
-            orderBy('validUntilDate', 'desc')
+            orderBy('expiryDate', 'desc')
           )
         );
 

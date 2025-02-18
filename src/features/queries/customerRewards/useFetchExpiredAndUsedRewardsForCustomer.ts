@@ -3,19 +3,21 @@ import { db } from '@src/infrastructure/firebase/firebase.config';
 import { useQuery } from '@tanstack/react-query';
 import {
   collectionGroup,
+  Timestamp,
   query,
   where,
-  getDocs,
   orderBy,
-  Timestamp,
+  getDocs,
   getDoc,
-  doc,
+  or,
+  and,
+  limit,
 } from 'firebase/firestore';
 import { getBusinessRef } from '../helpers';
 
-const useFetchRewardsClaimedByCustomer = (customerId: string) => {
+const useFetchExpiredAndUsedRewardsForCustomer = (customerId: string) => {
   return useQuery({
-    queryKey: ['useFetchRewardsClaimedByCustomer', customerId],
+    queryKey: ['useFetchExpiredAndUsedRewardsForCustomer', customerId],
     queryFn: async () => {
       if (!customerId) {
         return null;
@@ -27,11 +29,13 @@ const useFetchRewardsClaimedByCustomer = (customerId: string) => {
         const now = Timestamp.now();
         const customerRewardsQueryRef = query(
           customerRewardsRef,
-          where('customerId', '==', customerId),
-          where('expiryDate', '>=', now),
-          where('validUntilDate', '>=', now),
-          orderBy('expiryDate', 'desc'),
-          orderBy('validUntilDate', 'desc')
+          and(
+            where('customerId', '==', customerId),
+            //where('redeemedDate', '==', null)
+            or(where('redeemedDate', '!=', null), where('expiryDate', '<', now))
+          ),
+          orderBy('expiryDate', 'asc'),
+          limit(10)
         );
         const customerRewardsQuerySnapshot = await getDocs(
           customerRewardsQueryRef
@@ -56,11 +60,15 @@ const useFetchRewardsClaimedByCustomer = (customerId: string) => {
 
         return customerRewardsWithBusinessName;
       } catch (error) {
-        console.error(`Error fetching rewards claimed by customer: ${error}`);
-        throw new Error(`Error fetching rewards claimed by customer: ${error}`);
+        console.error(
+          `Error fetching expired and used rewards for customer: ${error}`
+        );
+        throw new Error(
+          `Error fetching expired and used rewards for customer: ${error}`
+        );
       }
     },
   });
 };
 
-export default useFetchRewardsClaimedByCustomer;
+export default useFetchExpiredAndUsedRewardsForCustomer;

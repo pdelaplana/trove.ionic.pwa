@@ -7,7 +7,6 @@ import { useDiscoverRewardsDetailsModal } from './components/DiscoverRewardsDeta
 interface DiscoverRewardsPageProps {}
 const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
   const { customer } = useCustomerProvider();
-  const { open: openRewardDetailsModal } = useDiscoverRewardsDetailsModal();
 
   const { data: milestoneRewards } = useFetchAvailableRewardsForCustomer(
     customer?.id ?? ''

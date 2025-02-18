@@ -134,7 +134,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
     const milestone: LoyaltyProgramMilestone = {
       id: formData.id,
       tierId: formData.tierId,
-      points: formData.points,
+      points: Number(formData.points),
       businessId: formData.businessId,
       loyaltyProgramId: formData.loyaltyProgramId,
       reward: {
@@ -143,7 +143,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
         description: formData.description,
         imageUrl: '',
         termsAndConditions: formData.termsAndConditions,
-        expiryInDays: formData.expiryInDays,
+        expiryInDays: Number(formData.expiryInDays),
         validUntilDate: formData.validUntilDate
           ? new Date(formData.validUntilDate)
           : new Date(),
@@ -154,26 +154,26 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
       case 'discountPercentage':
         milestone.reward = {
           ...milestone.reward,
-          discountPercentage: formData.discountPercentage,
+          discountPercentage: Number(formData.discountPercentage),
         } as LoyaltyProgramRewardDiscountPercentage;
         break;
       case 'discountFixedAmount':
         milestone.reward = {
           ...milestone.reward,
-          discountFixedAmount: formData.discountFixedAmount,
+          discountFixedAmount: Number(formData.discountFixedAmount),
         } as LoyaltyProgramRewardDiscountFixedAmount;
         break;
       case 'freeProduct':
         milestone.reward = {
           ...milestone.reward,
           freeProduct: formData.freeProduct,
-          freeProductQuantity: formData.freeProductQuantity,
+          freeProductQuantity: Number(formData.freeProductQuantity),
         } as LoyaltyProgramRewardFreeProduct;
         break;
       case 'pointsBonus':
         milestone.reward = {
           ...milestone.reward,
-          pointsBonus: formData.pointsBonus,
+          pointsBonus: Number(formData.pointsBonus),
         } as LoyaltyProgramRewardPointsBonus;
         break;
       case 'promoCode':

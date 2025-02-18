@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { differenceInCalendarDays, format } from 'date-fns';
 
 const useFormatters = () => {
   const formatCurrency = (
@@ -22,6 +22,16 @@ const useFormatters = () => {
     return date ? format(date, formatStr) : '';
   };
 
+  const formatDaysUntil = (date: Date | undefined) => {
+    if (!date) {
+      return '';
+    }
+
+    const diffDays = differenceInCalendarDays(date, new Date());
+
+    return `${diffDays}`;
+  };
+
   const formatNumber = (
     value: number | undefined,
     decimals: number = 0,
@@ -39,6 +49,7 @@ const useFormatters = () => {
   return {
     formatCurrency,
     formatDate,
+    formatDaysUntil,
     formatNumber,
   };
 };

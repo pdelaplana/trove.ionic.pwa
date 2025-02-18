@@ -35,7 +35,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
   showProfileIcon = true,
   showHeader = true,
   showBackButton = true,
-  showLogo = true,
+  showLogo = false,
   defaultBackButtonHref,
   footer,
 }) => {

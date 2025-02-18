@@ -36,7 +36,7 @@ const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
   onClickUrl = null,
   onClick,
 }) => {
-  const { formatDate } = useFormatters();
+  const { formatDate, formatDaysUntil } = useFormatters();
   return (
     <StyledCard
       className='reward-card'
@@ -78,9 +78,9 @@ const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
               <IonNote
                 className='text-xs'
                 style={{ position: 'absolute', bottom: '.5rem', left: '1rem' }}
-                color='medium'
+                color='primary'
               >
-                {formatDate(customerReward.expiryDate)}
+                {`Ends in ${formatDaysUntil(customerReward.expiryDate)} days`}
               </IonNote>
             </IonCol>
           </IonRow>

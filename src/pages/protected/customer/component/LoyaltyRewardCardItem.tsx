@@ -6,10 +6,12 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  IonIcon,
 } from '@ionic/react';
 import { LoyaltyProgramMilestone } from '@src/domain';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import { timeOutline } from 'ionicons/icons';
 import styled from 'styled-components';
 
 const StyledCard = styled(IonCard)`
@@ -36,7 +38,8 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
   onClickUrl,
   onClick,
 }) => {
-  const { formatDate } = useFormatters();
+  const { formatDaysUntil } = useFormatters();
+
   return (
     <StyledCard
       className='reward-card'
@@ -66,13 +69,22 @@ const LoyaltyRewardCardItem: React.FC<LoyaltyRewardCardItemProps> = ({
               </div>
             </IonCol>
             <IonCol size='8' className='ion-padding'>
-              <IonText className='text-base' color='dark'>
+              <IonText className='text-base text-medium' color='dark'>
                 {loyaltyRewardMilestone.reward.name}
               </IonText>
               <p>
                 <IonText color='medium' className='text-sm line-clamp-2'>
                   {loyaltyRewardMilestone.reward.description}
                 </IonText>
+              </p>
+              <p>
+                <IonNote color='primary' className='text-xs text-semibold'>
+                  <IonIcon icon={timeOutline} size='medium' />
+                  {` Ends in ${formatDaysUntil(
+                    loyaltyRewardMilestone.reward.validUntilDate
+                  )} `}
+                  days
+                </IonNote>
               </p>
               <IonNote
                 className='text-xs'

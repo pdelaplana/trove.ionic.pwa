@@ -1,7 +1,5 @@
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
-import CustomerRewardCardItem from '../component/CustomerRewardCardItem';
-import useFetchRewardsClaimedByCustomer from '@src/features/queries/loyaltyRewards/useFetchRewardsClaimedByCustomer';
 import {
   IonLabel,
   IonSegment,
@@ -9,17 +7,13 @@ import {
   IonSegmentView,
   IonSegmentContent,
 } from '@ionic/react';
-import { useCustomerRewardsDetailsModal } from './components/CustomerRewardsDetailsModal';
-import { useCustomerRewardQrCodeModal } from './components/CustomerRewardQrCodeModal';
+
+import AvailableCustomerRewardsList from './components/AvailableCustomerRewardsList';
+import UsedAndExpiredCustomerRewardsList from './components/UsedAndExpiredCustomerRewardsList';
 
 interface CustomerRewardsPageProps {}
 const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
   const { customer } = useCustomerProvider();
-  const { data: customerRewards } = useFetchRewardsClaimedByCustomer(
-    customer?.id || ''
-  );
-
-  const { open: openRewardDetailsModal } = useCustomerRewardsDetailsModal();
 
   return (
     <BasePageLayout
@@ -30,7 +24,7 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
       showBackButton={false}
     >
       <CenterContainer>
-        <IonSegment value='default'>
+        <IonSegment value='default' mode='md'>
           <IonSegmentButton value='default' contentId='default'>
             <IonLabel>Available</IonLabel>
           </IonSegmentButton>
@@ -40,21 +34,12 @@ const CustomerRewardsPage: React.FC<CustomerRewardsPageProps> = ({}) => {
         </IonSegment>
         <IonSegmentView>
           <IonSegmentContent id='default'>
-            <div className='ion-margin'></div>
-            {customerRewards?.map((customerReward) => (
-              <CustomerRewardCardItem
-                key={customerReward.id}
-                customerReward={customerReward}
-                onClickUrl={`/rewards/${customerReward.loyaltyCardId}/${customerReward.id}`}
-                //onClick={() => openRewardQrCodeModal(customerReward)}
-                //onClick={() => openRewardDetailsModal(customerReward)}
-              />
-            ))}
+            <AvailableCustomerRewardsList customerId={customer?.id ?? ''} />
           </IonSegmentContent>
           <IonSegmentContent id='expired'>
-            <div className='ion-padding'>
-              <h2></h2>
-            </div>
+            <UsedAndExpiredCustomerRewardsList
+              customerId={customer?.id ?? ''}
+            />
           </IonSegmentContent>
         </IonSegmentView>
       </CenterContainer>

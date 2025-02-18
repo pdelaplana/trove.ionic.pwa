@@ -1,4 +1,4 @@
-import { getDocs, query, where } from 'firebase/firestore';
+import { getDocs, orderBy, query, Timestamp, where } from 'firebase/firestore';
 import {
   getLoyaltyCardByMembershipNo,
   getLoyaltyMilestoneRewardSubcollectionRef,
@@ -29,8 +29,10 @@ const useFetchAvailableRewardsForCard = (membershipNo: string) => {
 
         const queryRef = query(
           loyaltyRewardMilestonesSubcollectionRef,
-          where('points', '<=', loyaltyCard.rewardPoints.toString()),
-          where('tierId', 'in', [loyaltyCard.tierId, ''])
+          where('reward.validUntilDate', '>=', Timestamp.now()),
+          where('points', '<=', loyaltyCard.rewardPoints),
+          where('tierId', 'in', [loyaltyCard.tierId, '']),
+          orderBy('reward.validUntilDate', 'desc')
         );
 
         const querySnapshot = await getDocs(queryRef);

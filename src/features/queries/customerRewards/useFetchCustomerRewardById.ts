@@ -2,7 +2,7 @@ import { toCustomerReward } from '@src/features/mappers/toCustomerReward';
 import {
   getCustomerRewardsSubcollectionRef,
   getLoyaltyCardById,
-} from '@src/infrastructure/firebase/firestore.helpers';
+} from '@src/infrastructure/firebase/firebase.helpers';
 import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
 

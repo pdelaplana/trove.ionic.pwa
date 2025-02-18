@@ -1,5 +1,5 @@
 import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgramMilestone';
-import { getLoyaltyMilestoneRewardSubcollectionRef } from '@src/infrastructure/firebase/firestore.helpers';
+import { getLoyaltyMilestoneRewardSubcollectionRef } from '@src/infrastructure/firebase/firebase.helpers';
 import { useQuery } from '@tanstack/react-query';
 import { doc, getDoc } from 'firebase/firestore';
 import { getBusinessById } from '../helpers';

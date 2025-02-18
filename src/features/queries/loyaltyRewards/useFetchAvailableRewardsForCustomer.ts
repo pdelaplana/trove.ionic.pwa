@@ -1,6 +1,13 @@
 import { LoyaltyCard, LoyaltyProgramMilestone } from '@src/domain';
 import { useQuery } from '@tanstack/react-query';
-import { collectionGroup, where, getDocs, query } from 'firebase/firestore';
+import {
+  collectionGroup,
+  where,
+  getDocs,
+  query,
+  Timestamp,
+  orderBy,
+} from 'firebase/firestore';
 import { getLoyaltyMilestoneRewardSubcollectionRef } from '../helpers';
 import { db } from '@src/infrastructure/firebase/firebase.config';
 import { toLoyaltyProgramMilestone } from '@src/features/mappers/toLoyaltyProgramMilestone';
@@ -31,7 +38,6 @@ const useFetchAvailableRewardsForCustomer = (customerId: string) => {
               const loyaltyCard = {
                 ...card.data(),
                 id: card.id,
-                businessId: card.ref.parent.parent?.id,
               } as LoyaltyCard;
 
               const loyaltyRewardMilestonesSubcollectionRef =
@@ -42,12 +48,13 @@ const useFetchAvailableRewardsForCustomer = (customerId: string) => {
 
               const queryRef = query(
                 loyaltyRewardMilestonesSubcollectionRef,
-                where('points', '<=', loyaltyCard.rewardPoints.toString()),
-                where('tierId', 'in', [loyaltyCard.tierId, ''])
+                where('reward.validUntilDate', '>=', Timestamp.now()),
+                where('points', '<=', loyaltyCard.rewardPoints),
+                where('tierId', 'in', [loyaltyCard.tierId, '']),
+                orderBy('reward.validUntilDate', 'desc')
               );
 
               const querySnapshot = await getDocs(queryRef);
-
               return querySnapshot.docs.map((doc) => {
                 const milestone = toLoyaltyProgramMilestone(doc.id, doc.data());
                 return {
@@ -65,7 +72,7 @@ const useFetchAvailableRewardsForCustomer = (customerId: string) => {
 
         return combinedRewards;
       } catch (error) {
-        console.log(`Failed to fetch rewards: ${error}`);
+        console.error(`Failed to fetch rewards: ${error}`);
         throw new Error(`Failed to fetch rewards: ${error}`);
       }
     },
