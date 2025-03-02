@@ -41,7 +41,7 @@ import './text.css';
 import AppRoutes from './AppRoutes';
 import { AuthProvider } from './features/auth/AuthProvider';
 
-setupIonicReact();
+setupIonicReact({ mode: 'md' });
 
 const queryClient = new QueryClient({
   defaultOptions: {
