@@ -88,19 +88,14 @@
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "loyaltyCards",
-      "fieldPath": "customerId",
-      "indexes": [
+        },
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION"
         }
       ]
     },
+
     {
       "collectionGroup": "loyaltyPrograms",
       "fieldPath": "uniqueCode",
