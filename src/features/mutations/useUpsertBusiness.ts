@@ -5,9 +5,10 @@ import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 const useUpsertBusiness = () => {
   const insert = async (data: Business) => {
+    const { id, ...dataWithoutId } = data;
     const docRef = await addDoc(collection(db, 'businesses'), {
-      ...(data as Omit<Business, 'id'>),
-      timestamp: new Date(),
+      ...(dataWithoutId as Omit<Business, 'id'>),
+      created: new Date(),
     });
     const docSnapshot = await getDoc(docRef);
     return {
@@ -27,9 +28,11 @@ const useUpsertBusiness = () => {
     }
 
     // Step 3: Update the Firestore document
+    const { id, ...dataWithoutId } = data;
     await updateDoc(docRef, {
       ...(docSnapshot.data() as Business),
-      ...(data as Omit<Business, 'id'>),
+      ...dataWithoutId,
+      updated: new Date(),
     });
 
     // Step 4: Get the updated document data
@@ -53,9 +56,9 @@ const useUpsertBusiness = () => {
         throw new Error('Error adding document: ' + error);
       }
     },
-    onSuccess: (data) => {
-      console.log('Document written with ID: ', data.id);
-    },
+    //onSuccess: (data) => {
+    //  console.log('Document written with ID: ', data.id);
+    //},
     onError: (error: unknown) => {
       console.error('Error adding document: ', error);
     },

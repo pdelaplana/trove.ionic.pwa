@@ -13,13 +13,14 @@ interface BusinessAdvanceSettingsPageProps {}
 
 interface BusinessAdvanceSettingsForm {
   currency: CurrencyCode;
+  phoneCountryCode: string;
 }
 
 const BusinessAdvanceSettingsPage: React.FC<
   BusinessAdvanceSettingsPageProps
 > = ({}) => {
   const { business, upsertAsync, status } = useBusiness();
-
+  const countries = JSON.parse(import.meta.env.VITE_PHONE_COUNTRY_CODES ?? {});
   const {
     register,
     setValue,
@@ -29,7 +30,8 @@ const BusinessAdvanceSettingsPage: React.FC<
     reset,
   } = useForm<BusinessAdvanceSettingsForm>({
     defaultValues: {
-      currency: business?.currency ?? 'USD',
+      currency: business?.currency ?? 'AUD',
+      phoneCountryCode: business?.phoneCountryCode ?? 'AU',
     },
   });
 
@@ -41,6 +43,7 @@ const BusinessAdvanceSettingsPage: React.FC<
     upsertAsync({
       ...business!,
       currency: formData.currency,
+      phoneCountryCode: formData.phoneCountryCode,
     });
   };
 
@@ -77,6 +80,23 @@ const BusinessAdvanceSettingsPage: React.FC<
                   optionsList={Object.entries(currencies).map(
                     ([code, { name }]) => {
                       return { value: code, label: name };
+                    }
+                  )}
+                />
+              </IonLabel>
+            </IonItem>
+            <IonItem lines='none'>
+              <IonLabel>
+                <SelectFormField
+                  name='phoneCountryCode'
+                  label='Phone Number Format'
+                  fill='outline'
+                  register={register}
+                  setValue={setValue}
+                  getValues={getValues}
+                  optionsList={countries.map(
+                    (c: { key: string; value: string }) => {
+                      return { value: c.key, label: c.value };
                     }
                   )}
                 />
