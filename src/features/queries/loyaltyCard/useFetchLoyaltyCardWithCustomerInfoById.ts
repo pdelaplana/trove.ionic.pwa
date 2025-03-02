@@ -9,7 +9,7 @@ const useFetchLoyaltyCardWithCustomerInfoById = (
   businessId: string
 ) => {
   return useQuery({
-    queryKey: ['useFetchLoyaltyCardWithCustomerInfoById', id],
+    queryKey: ['useFetchLoyaltyCardWithCustomerInfoById', id, businessId],
     queryFn: async () => {
       const loyaltyCardsSubcollectionRef =
         getLoyaltyCardsSubcollectionRef(businessId);

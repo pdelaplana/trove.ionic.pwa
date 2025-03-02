@@ -5,6 +5,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 import LoyaltyCardItem from './LoyaltyCardItem';
+import { useLoyaltyCardModal } from '../loyaltyCard/LoyaltyCardModal';
 
 interface LoyaltyCardsSwiperProps {
   loyaltyCards: LoyaltyCard[];
@@ -16,6 +17,7 @@ const LoyaltyCardsSwiper: React.FC<LoyaltyCardsSwiperProps> = ({
   loyaltyCards,
   onSlideChange,
 }) => {
+  const { open } = useLoyaltyCardModal();
   return (
     <Swiper
       slidesPerView={1}
@@ -31,7 +33,11 @@ const LoyaltyCardsSwiper: React.FC<LoyaltyCardsSwiperProps> = ({
     >
       {loyaltyCards.map((card) => (
         <SwiperSlide key={card.id}>
-          <LoyaltyCardItem loyaltyCard={card} />
+          <LoyaltyCardItem
+            loyaltyCard={card}
+            onClickUrl={`/card/${card.id}`}
+            //onClick={() => open(card)}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

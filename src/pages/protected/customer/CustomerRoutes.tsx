@@ -23,6 +23,7 @@ import CustomerRewardsRoutes from './rewards/CustomerRewardsRoutes';
 import DiscoverRewardsPage from './discover/DiscoverRewardsPage';
 import CustomerRewardsDetailsPage from './rewards/details/CustomerRewardsDetailsPage';
 import DiscoverRewardsDetailsPage from './discover/DiscoverRewardsDetailsPage';
+import LoyaltyCardPage from './loyaltyCard/LoyaltyCardPage';
 
 interface CustomerRoutesProps {}
 
@@ -88,6 +89,10 @@ const CustomerRoutes: React.FC<CustomerRoutesProps> = ({}) => {
 
         <ProtectedRoute exact path='/rewards/:loyaltyCardId/:id'>
           <CustomerRewardsDetailsPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute exact path='/card/:id'>
+          <LoyaltyCardPage />
         </ProtectedRoute>
 
         <Route path='/'>

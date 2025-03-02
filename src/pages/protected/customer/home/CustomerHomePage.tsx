@@ -5,6 +5,7 @@ import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
 import { useFetchAvailableRewardsForCard } from '@src/features/queries';
 import { useEffect } from 'react';
 import LoyaltyRewardsSwiper from '../component/LoyaltyRewardsSwiper';
+import { IonList, IonItem, IonLabel } from '@ionic/react';
 
 const CustomerHomePage: React.FC = () => {
   const { loyaltyCards, setCurrentLoyaltyCard, getCurrentLoyaltyCard } =
@@ -37,6 +38,7 @@ const CustomerHomePage: React.FC = () => {
           onCardClick={() => {}}
           onSlideChange={onSlideChange}
         />
+
         <LoyaltyRewardsSwiper milestones={rewards ?? []} />
       </CenterContainer>
     </BasePageLayout>

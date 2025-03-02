@@ -12,12 +12,28 @@ import useFormatters from '@src/pages/components/hooks/useFormatters';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 
 interface LoyaltyCardItemProps {
-  loyaltyCard: LoyaltyCard;
+  loyaltyCard?: LoyaltyCard;
+  onClickUrl?: string;
+  onClick?: (() => void) | null;
 }
-const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({ loyaltyCard }) => {
+const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({
+  loyaltyCard,
+  onClickUrl = null,
+  onClick,
+}) => {
   const { formatDate, formatNumber } = useFormatters();
+
+  if (!loyaltyCard) {
+    return null;
+  }
+
   return (
-    <IonCard color='primary' button={true}>
+    <IonCard
+      color='primary'
+      button={true}
+      {...(onClickUrl ? { routerLink: onClickUrl } : {})}
+      {...(onClick ? { onClick } : {})}
+    >
       <ResponsiveImage
         src={'/images/trove.business.png'}
         alt={loyaltyCard.businessName}

@@ -1,8 +1,10 @@
 import { QRCodeSVG } from 'qrcode.react';
 import { useEffect, useState } from 'react';
 
+const SCANNER_APP_URL = import.meta.env.VITE_SCANNER_APP_URL;
+
 interface QRCodeProps {
-  value: string;
+  value: Record<string, any>;
   size?: number;
   level?: 'L' | 'M' | 'Q' | 'H';
   bgColor?: string;
@@ -22,6 +24,23 @@ const QRCode: React.FC<QRCodeProps> = ({
   const [timestamp, setTimestamp] = useState<number>(Date.now());
   const [remainingTime, setRemainingTime] = useState(0);
 
+  // Build the deep link URL
+  const getDeepLinkUrl = () => {
+    const baseUrl = import.meta.env.VITE_SCANNER_APP_URL; // Your base URL
+    const path = 'scan'; // Your deep link path
+    const params = new URLSearchParams();
+
+    const memberno = value.memberno ?? '';
+    const businessId = value.businessid ?? '';
+    params.append('memberno', memberno);
+    params.append('businessId', businessId);
+
+    // You can add more parameters as needed
+    params.append('timestamp', Date.now().toString());
+
+    return `${baseUrl}/${path}?${params.toString()}`;
+  };
+
   const timeUntilRefresh = () => {
     const elapsed = Date.now() - timestamp;
     const remaining = Math.max(0, refreshInterval - elapsed);
@@ -40,9 +59,9 @@ const QRCode: React.FC<QRCodeProps> = ({
   };
 
   useEffect(() => {
-    generateSecuredValue(value);
+    setSecuredValue(getDeepLinkUrl());
     const interval = setInterval(() => {
-      generateSecuredValue(value);
+      setSecuredValue(getDeepLinkUrl());
     }, refreshInterval);
     return () => clearInterval(interval);
   }, [value, refreshInterval]);

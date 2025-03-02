@@ -107,7 +107,7 @@ const CustomerLoyaltyCardResult: React.FC<CustomerLoyaltyCardResultProps> = ({
             <IonItem>
               <IonLabel>
                 <h2>Available Points</h2>
-                <p>{formatNumber(data?.points)}</p>
+                <p>{formatNumber(data?.rewardPoints)}</p>
               </IonLabel>
             </IonItem>
           </IonList>

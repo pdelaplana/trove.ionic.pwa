@@ -31,7 +31,6 @@ const useFetchExpiredAndUsedRewardsForCustomer = (customerId: string) => {
           customerRewardsRef,
           and(
             where('customerId', '==', customerId),
-            //where('redeemedDate', '==', null)
             or(where('redeemedDate', '!=', null), where('expiryDate', '<', now))
           ),
           orderBy('expiryDate', 'asc'),

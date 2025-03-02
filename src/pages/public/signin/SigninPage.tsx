@@ -15,8 +15,6 @@ import {
 } from '@ionic/react';
 import { useAuth } from '@features/auth/AuthProvider';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { CenterContainer } from '@src/pages/components/layouts';
-import MainLogo from '@src/pages/components/ui/MainLogo';
 import ValidationError from '@src/pages/components/form/ValidationError';
 import PublicPageLayout from '@src/pages/components/layouts/PublicPageLayout';
 

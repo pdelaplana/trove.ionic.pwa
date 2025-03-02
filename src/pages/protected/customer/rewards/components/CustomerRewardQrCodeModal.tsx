@@ -17,9 +17,8 @@ import {
   ModalPageLayout,
   CenterContainer,
 } from '@src/pages/components/layouts';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import QRCode from '@src/pages/components/ui/QRCode';
-import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 
 interface CustomerRewardQrCodeModalProps {
