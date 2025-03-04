@@ -22,7 +22,7 @@ const useFetchCustomerRewardById = (
         const loyaltyCard = await getLoyaltyCardById(loyaltyCardId, businessId);
 
         const customerRewardRef = doc(
-          getCustomerRewardsSubcollectionRef(businessId, loyaltyCardId),
+          getCustomerRewardsSubcollectionRef(businessId),
           id
         );
 

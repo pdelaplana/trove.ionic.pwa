@@ -66,16 +66,10 @@ export const getLoyaltyCardsSubcollectionRef = (businessId: string) => {
   return collection(businessRef, 'loyaltyCards');
 };
 
-export const getCustomerRewardsSubcollectionRef = (
-  businessId: string,
-  loyaltyCardId: string
-) => {
+export const getCustomerRewardsSubcollectionRef = (businessId: string) => {
   const businessRef = getBusinessRef(businessId);
-  const loyaltyCardRef = doc(
-    collection(businessRef, 'loyaltyCards'),
-    loyaltyCardId
-  );
-  return collection(loyaltyCardRef, 'customerRewards');
+
+  return collection(businessRef, 'customerRewards');
 };
 
 export const getLoyaltyCardTransactionsSubcollectionRef = (
