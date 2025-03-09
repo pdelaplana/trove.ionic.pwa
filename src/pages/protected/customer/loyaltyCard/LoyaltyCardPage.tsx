@@ -63,6 +63,7 @@ const LoyaltyCardPage: React.FC = () => {
                         memberno: loyaltyCard?.membershipNumber ?? '',
                         businessid: loyaltyCard?.businessId ?? '',
                       }}
+                      url={`${import.meta.env.VITE_SCANNER_APP_URL}/reward`}
                       size={250}
                       level='M'
                     />

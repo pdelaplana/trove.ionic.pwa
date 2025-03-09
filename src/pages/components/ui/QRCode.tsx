@@ -5,6 +5,7 @@ const SCANNER_APP_URL = import.meta.env.VITE_SCANNER_APP_URL;
 
 interface QRCodeProps {
   value: Record<string, any>;
+  url?: string;
   size?: number;
   level?: 'L' | 'M' | 'Q' | 'H';
   bgColor?: string;
@@ -14,6 +15,7 @@ interface QRCodeProps {
 
 const QRCode: React.FC<QRCodeProps> = ({
   value,
+  url,
   size = 256,
   level = 'M',
   bgColor = '#FFFFFF',
@@ -26,19 +28,20 @@ const QRCode: React.FC<QRCodeProps> = ({
 
   // Build the deep link URL
   const getDeepLinkUrl = () => {
-    const baseUrl = import.meta.env.VITE_SCANNER_APP_URL; // Your base URL
-    const path = 'scan'; // Your deep link path
     const params = new URLSearchParams();
 
-    const memberno = value.memberno ?? '';
-    const businessId = value.businessid ?? '';
-    params.append('memberno', memberno);
-    params.append('businessId', businessId);
+    // Iterate through all properties in the value object
+    Object.entries(value).forEach(([key, val]) => {
+      // Only append if the value is not null or undefined
+      if (val != null) {
+        params.append(key.toLowerCase(), val.toString());
+      }
+    });
 
     // You can add more parameters as needed
     params.append('timestamp', Date.now().toString());
 
-    return `${baseUrl}/${path}?${params.toString()}`;
+    return `${url}?${params.toString()}`;
   };
 
   const timeUntilRefresh = () => {

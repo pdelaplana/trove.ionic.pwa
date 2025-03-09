@@ -54,7 +54,14 @@ const CustomerRewardQrCodeModal: React.FC<CustomerRewardQrCodeModalProps> = ({
         </div>
 
         <div className='ion-flex ion-justify-content-center ion-align-items-center'>
-          <QRCode value={customerReward.id} size={250} level='M' />
+          <QRCode
+            url={`${import.meta.env.VITE_SCANNER_APP_URL}/redeem`}
+            value={{
+              rewardcode: customerReward?.id ?? '',
+            }}
+            size={250}
+            level='M'
+          />
         </div>
         <div className='ion-flex ion-justify-content-center ion-align-items-center'>
           <IonText color='medium' className='ion-padding-top'>
