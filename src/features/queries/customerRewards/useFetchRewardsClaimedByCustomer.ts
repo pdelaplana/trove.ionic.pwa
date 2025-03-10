@@ -28,6 +28,7 @@ const useFetchRewardsClaimedByCustomer = (customerId: string) => {
         const customerRewardsQueryRef = query(
           customerRewardsRef,
           where('customerId', '==', customerId),
+          where('redeemedDate', '==', null),
           where('expiryDate', '>=', now),
           orderBy('expiryDate', 'asc')
         );

@@ -1,19 +1,67 @@
 {
   "indexes": [
     {
+      "collectionGroup": "customerRewards",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "customerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "expiryDate",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "redeemedDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "customerRewards",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        {
+          "fieldPath": "customerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "redeemedDate",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "expiryDate",
+          "order": "ASCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "loyaltyCards",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "businessId", "mode": "ASCENDING" },
-        { "fieldPath": "membershipDate", "mode": "DESCENDING" }
+        {
+          "fieldPath": "businessId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "membershipDate",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
       "collectionGroup": "loyaltyCardTransactions",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "customerId", "mode": "ASCENDING" },
-        { "fieldPath": "transactionDate", "mode": "DESCENDING" }
+        {
+          "fieldPath": "customerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "transactionDate",
+          "order": "DESCENDING"
+        }
       ]
     },
     {
@@ -33,37 +81,13 @@
           "order": "DESCENDING"
         }
       ]
-    },
-    {
-      "collectionGroup": "customerRewards",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "customerId", "order": "ASCENDING" },
-        { "fieldPath": "expiryDate", "mode": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "customerRewards",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "customerId", "order": "ASCENDING" },
-        { "fieldPath": "expiryDate", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "customerRewards",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "customerId", "order": "ASCENDING" },
-        { "fieldPath": "expiryDate", "order": "ASCENDING" },
-        { "fieldPath": "redeemedDate", "order": "ASCENDING" }
-      ]
     }
   ],
   "fieldOverrides": [
     {
       "collectionGroup": "businesses",
       "fieldPath": "loyaltyPrograms.uniqueCode",
+      "ttl": false,
       "indexes": [
         {
           "order": "ASCENDING",
@@ -72,33 +96,46 @@
       ]
     },
     {
-      "collectionGroup": "loyaltyCards",
-      "fieldPath": "membershipNumber",
+      "collectionGroup": "customers",
+      "fieldPath": "phone",
+      "ttl": false,
       "indexes": [
         {
           "order": "ASCENDING",
-          "queryScope": "COLLECTION_GROUP"
+          "queryScope": "COLLECTION"
         }
       ]
     },
     {
       "collectionGroup": "loyaltyCards",
       "fieldPath": "customerId",
+      "ttl": false,
+      "indexes": [
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION"
+        },
+        {
+          "order": "ASCENDING",
+          "queryScope": "COLLECTION_GROUP"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "loyaltyCards",
+      "fieldPath": "membershipNumber",
+      "ttl": false,
       "indexes": [
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION_GROUP"
-        },
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION"
         }
       ]
     },
-
     {
       "collectionGroup": "loyaltyPrograms",
       "fieldPath": "uniqueCode",
+      "ttl": false,
       "indexes": [
         {
           "order": "ASCENDING",
@@ -109,20 +146,11 @@
     {
       "collectionGroup": "milestoneRewards",
       "fieldPath": "loyaltyProgramId",
+      "ttl": false,
       "indexes": [
         {
           "order": "ASCENDING",
           "queryScope": "COLLECTION_GROUP"
-        }
-      ]
-    },
-    {
-      "collectionGroup": "customers",
-      "fieldPath": "phone",
-      "indexes": [
-        {
-          "order": "ASCENDING",
-          "queryScope": "COLLECTION"
         }
       ]
     }

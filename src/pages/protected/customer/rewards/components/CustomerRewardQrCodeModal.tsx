@@ -1,16 +1,4 @@
-import {
-  IonGrid,
-  IonRow,
-  IonCol,
-  IonSpinner,
-  IonImg,
-  IonText,
-  IonBadge,
-  useIonModal,
-  IonRefresher,
-  IonRefresherContent,
-  RefresherEventDetail,
-} from '@ionic/react';
+import { IonText, useIonModal } from '@ionic/react';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
 import { CustomerReward } from '@src/domain';
 import {
