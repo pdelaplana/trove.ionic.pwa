@@ -4,10 +4,20 @@ import { CustomerReward } from '@src/domain';
 import {
   ModalPageLayout,
   CenterContainer,
+  Gap,
 } from '@src/pages/components/layouts';
 import { useState } from 'react';
 import QRCode from '@src/pages/components/ui/QRCode';
-import useFormatters from '@src/pages/components/hooks/useFormatters';
+import styled from 'styled-components';
+
+const QrCodeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 2rem;
+`;
 
 interface CustomerRewardQrCodeModalProps {
   customerReward: CustomerReward & { businessName: string };
@@ -18,44 +28,30 @@ const CustomerRewardQrCodeModal: React.FC<CustomerRewardQrCodeModalProps> = ({
   customerReward,
   onDismiss,
 }) => {
-  const { formatDate } = useFormatters();
   return (
     <ModalPageLayout onDismiss={onDismiss}>
       <CenterContainer>
-        <div className='ion-flex ion-justify-content-between ion-align-items-baseline'>
-          <h2>{customerReward.name}</h2>
-          <span>{customerReward.businessName}</span>
-        </div>
-        <div
-          className='ion-flex ion-justify-content-between ion-align-items-start'
-          style={{ marginBottom: '50px' }}
-        >
-          <br />
-          <span>{formatDate(customerReward.expiryDate)}</span>
-        </div>
-
-        <div
-          className='ion-flex ion-justify-content-center ion-align-items-center'
-          style={{ marginBottom: '20px' }}
-        >
-          <IonText>Scan to Redeem Your Reward</IonText>
-        </div>
-
-        <div className='ion-flex ion-justify-content-center ion-align-items-center'>
-          <QRCode
-            url={`${import.meta.env.VITE_SCANNER_APP_URL}/redeem`}
-            value={{
-              rewardcode: customerReward?.id ?? '',
-            }}
-            size={250}
-            level='M'
-          />
-        </div>
-        <div className='ion-flex ion-justify-content-center ion-align-items-center'>
-          <IonText color='medium' className='ion-padding-top'>
-            ID: {customerReward.id}
-          </IonText>
-        </div>
+        <QrCodeContainer>
+          <div className='ion-flex ion-justify-content-center ion-align-items-center'>
+            <IonText>Scan to Redeem Your Reward</IonText>
+          </div>
+          <Gap size={'30px'} />
+          <div className='ion-flex ion-justify-content-center ion-align-items-center'>
+            <QRCode
+              url={`${import.meta.env.VITE_SCANNER_APP_URL}/redeem`}
+              value={{
+                rewardcode: customerReward?.id ?? '',
+              }}
+              size={250}
+              level='M'
+            />
+          </div>
+          <div className='ion-flex ion-justify-content-center ion-align-items-center'>
+            <IonText color='medium' className='ion-padding-top'>
+              ID: {customerReward.id}
+            </IonText>
+          </div>
+        </QrCodeContainer>
       </CenterContainer>
     </ModalPageLayout>
   );

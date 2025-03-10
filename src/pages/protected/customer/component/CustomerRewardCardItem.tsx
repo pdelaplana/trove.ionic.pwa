@@ -80,7 +80,9 @@ const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
                 style={{ position: 'absolute', bottom: '.5rem', left: '1rem' }}
                 color='primary'
               >
-                {`Ends in ${formatDaysUntil(customerReward.expiryDate)} days`}
+                {customerReward.redeemedDate
+                  ? `Redeemed on ${formatDate(customerReward.redeemedDate)}`
+                  : `Ends in ${formatDaysUntil(customerReward.expiryDate)} days`}
               </IonNote>
             </IonCol>
           </IonRow>

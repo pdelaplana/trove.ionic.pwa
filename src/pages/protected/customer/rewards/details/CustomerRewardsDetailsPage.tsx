@@ -17,6 +17,7 @@ import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCustomerRewardQrCodeModal } from '../components/CustomerRewardQrCodeModal';
+import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
 
 interface CustomerRewardsDetailsPageProps {}
 
@@ -41,13 +42,19 @@ const CustomerRewardsDetailsPage: React.FC = () => {
 
   const footer = (
     <CenterContainer>
-      <ActionButton
-        isLoading={false}
-        isDisabled={false}
-        expand='full'
-        onClick={() => customerReward && openRewardQrCodeModal(customerReward)}
-        label={'Use Now'}
-      />
+      {!customerReward?.redeemedDate ? (
+        <ActionButton
+          isLoading={false}
+          isDisabled={false}
+          expand='full'
+          onClick={() =>
+            customerReward && openRewardQrCodeModal(customerReward)
+          }
+          label={'Use Now'}
+        />
+      ) : (
+        ''
+      )}
     </CenterContainer>
   );
 
