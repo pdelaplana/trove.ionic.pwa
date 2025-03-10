@@ -98,12 +98,19 @@ const CustomerRewardsDetailsPage: React.FC = () => {
                   className='ion-text-start ion-no-padding'
                 ></IonCol>
                 <IonCol size='6' className='ion-text-end ion-no-padding'>
-                  {customerReward?.expiryDate && (
+                  {customerReward?.redeemedDate != null && (
                     <p>
-                      <IonText color='medium'>Expires On</IonText> <br />
-                      {formatDate(customerReward.expiryDate)}
+                      <IonText color='medium'>Redeemed On</IonText> <br />
+                      {formatDate(customerReward.redeemedDate)}
                     </p>
                   )}
+                  {customerReward?.expiryDate &&
+                    !customerReward.redeemedDate && (
+                      <p>
+                        <IonText color='medium'>Expires On</IonText> <br />
+                        {formatDate(customerReward.expiryDate)}
+                      </p>
+                    )}
                 </IonCol>
               </IonRow>
             </IonGrid>
