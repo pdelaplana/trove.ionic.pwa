@@ -74,3 +74,27 @@ ion-item.ion-no-border {
   border-bottom: none !important;
   border-right: none !important;
 }
+
+.item-start-wrapper ion-icon {
+  width: 1.2em;
+  height: 1.2em;
+
+  position: absolute;
+
+  left: 14px;
+  top: 14px;
+  display: flex;
+  align-self: start;
+}
+
+.item-end-wrapper {
+  position: absolute;
+
+  top: 10px;
+  right: 10px;
+
+  font-size: 0.8rem;
+
+  display: flex;
+  align-items: center;
+}

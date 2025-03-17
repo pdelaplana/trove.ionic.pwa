@@ -52,7 +52,6 @@ const LoyaltyCardPage: React.FC = () => {
               <IonCard color={'primary'}>
                 <IonCardHeader>
                   <IonCardTitle className='ion-text-center'>
-                    {' '}
                     <h2>{loyaltyCard?.businessName}</h2>
                   </IonCardTitle>
                 </IonCardHeader>
@@ -89,7 +88,12 @@ const LoyaltyCardPage: React.FC = () => {
           </IonRow>
         </IonGrid>
         <IonList className='ion-outline ion-padding'>
-          <IonItem lines='none' detail button>
+          <IonItem
+            lines='none'
+            detail
+            button
+            href={`/card/${loyaltyCard?.id}/activity`}
+          >
             <IonLabel>View Activity</IonLabel>
           </IonItem>
           <IonItem lines='none' detail button>

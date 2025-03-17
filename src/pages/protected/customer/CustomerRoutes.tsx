@@ -7,7 +7,7 @@ import {
   IonTabs,
 } from '@ionic/react';
 import ProtectedRoute from '@src/pages/components/routing/ProtectedRoute';
-import { Redirect, Route, Switch } from 'react-router';
+import { Route, Switch } from 'react-router';
 import CustomerHomePage from './home/CustomerHomePage';
 import { useAuth } from '@src/features/auth/AuthProvider';
 import {
@@ -18,12 +18,13 @@ import {
 } from 'ionicons/icons';
 import { CustomerProvider } from '@src/features/customer/CustomerProvider';
 import CustomerOnboardingPage from './onboarding/CustomerOnboardingPage';
-import CustomerRewardsPage from './rewards/CustomerRewardsPage';
 import CustomerRewardsRoutes from './rewards/CustomerRewardsRoutes';
 import DiscoverRewardsPage from './discover/DiscoverRewardsPage';
 import CustomerRewardsDetailsPage from './rewards/details/CustomerRewardsDetailsPage';
 import DiscoverRewardsDetailsPage from './discover/DiscoverRewardsDetailsPage';
 import LoyaltyCardPage from './loyaltyCard/LoyaltyCardPage';
+import LoyaltyCardActivityDetailsPage from './loyaltyCard/activity/LoyaltyCardActivityDetailsPage';
+import LoyaltyCardActivityPage from './loyaltyCard/activity/LoyaltyCardActivityPage';
 
 interface CustomerRoutesProps {}
 
@@ -89,6 +90,14 @@ const CustomerRoutes: React.FC<CustomerRoutesProps> = ({}) => {
 
         <ProtectedRoute exact path='/rewards/:loyaltyCardId/:id'>
           <CustomerRewardsDetailsPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute exact path='/card/:cardId/activity/:transactionId'>
+          <LoyaltyCardActivityDetailsPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute exact path='/card/:id/activity'>
+          <LoyaltyCardActivityPage />
         </ProtectedRoute>
 
         <ProtectedRoute exact path='/card/:id'>

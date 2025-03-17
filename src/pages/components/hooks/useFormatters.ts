@@ -1,5 +1,16 @@
 import { differenceInCalendarDays, format } from 'date-fns';
 
+export const DateFormatString = {
+  MMM_DD_YYYY: 'MMM dd, yyyy',
+  MM_DD_YYYY: 'MM/dd/yyyy',
+  MM_DD_YYYY_HH_MM_A: 'MM/dd/yyyy hh:mm a',
+  MM_DD_YYYY_HH_MM: 'MM/dd/yyyy HH:mm',
+  MM_DD_YYYY_HH_MM_SS: 'MM/dd/yyyy HH:mm:ss',
+  MM_DD_YYYY_HH_MM_SS_A: 'MM/dd/yyyy hh:mm:ss a',
+  YYYY_MM_DD: 'yyyy-MM-dd',
+  EEE_MM_DD_YYYY: 'EEE MMM dd',
+};
+
 const useFormatters = () => {
   const formatCurrency = (
     value: number | undefined,

@@ -15,6 +15,7 @@ import { personOutline, exitOutline } from 'ionicons/icons';
 import { PropsWithChildren } from 'react';
 import HeaderLogo from '../ui/HeaderLogo';
 import { usePrompt } from '../hooks/usePrompt';
+import styled from 'styled-components';
 
 interface BasePageProps extends PropsWithChildren {
   title: string;
@@ -27,6 +28,18 @@ interface BasePageProps extends PropsWithChildren {
   defaultBackButtonHref?: string;
   footer?: React.ReactNode;
 }
+
+const CenterTitle = styled.div<{
+  addLeftMargin: boolean;
+  addRightMargin: boolean;
+}>`
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: ${(props) => (props.addLeftMargin ? '45px' : '0')};
+  margin-right: ${(props) => (props.addRightMargin ? '45px' : '0')};
+`;
 
 const BasePageLayout: React.FC<BasePageProps> = ({
   title,
@@ -49,6 +62,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
       onConfirm: signout,
     });
   };
+
   useIonViewWillEnter(() => {
     if (title) {
       document.title = title + ' - Trove';
@@ -59,13 +73,20 @@ const BasePageLayout: React.FC<BasePageProps> = ({
   return (
     <IonPage>
       <IonHeader className='ion-no-border' hidden={!showHeader}>
-        <IonToolbar>
-          {showBackButton && (
-            <IonButtons slot='start'>
+        <IonToolbar color={'light'}>
+          <IonButtons slot='start'>
+            {showBackButton && (
               <IonBackButton defaultHref={defaultBackButtonHref} />
-            </IonButtons>
-          )}
-          {showLogo && <HeaderLogo />}
+            )}
+          </IonButtons>
+          <CenterTitle
+            addLeftMargin={!showBackButton}
+            addRightMargin={!showSignoutButton && !showProfileIcon}
+          >
+            {showLogo && <HeaderLogo />}
+            {!showLogo && title && <h1>{title}</h1>}
+          </CenterTitle>
+
           <IonButtons slot='end'>
             {showProfileIcon && (
               <IonButton routerLink='/profile'>
@@ -80,7 +101,7 @@ const BasePageLayout: React.FC<BasePageProps> = ({
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>{children}</IonContent>
+      <IonContent color={'light'}>{children}</IonContent>
       {footer && <IonFooter>{footer}</IonFooter>}
     </IonPage>
   );
