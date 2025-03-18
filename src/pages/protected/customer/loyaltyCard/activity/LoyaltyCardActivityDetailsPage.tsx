@@ -3,7 +3,6 @@ import {
   IonItem,
   IonLabel,
   IonLoading,
-  IonNote,
   IonText,
   IonRouterLink,
   IonButton,
@@ -198,7 +197,8 @@ const LoyaltyCardActivityDetailsPage: React.FC = () => {
                     To help us improve, we'd love to hear your feedback about
                     your recent shopping experience.
                   </p>
-                  <p style={{ marginTop: '1rem' }}>
+                  <Gap size='1rem' />
+                  <p>
                     <IonButton expand='full'>Provide Feedback</IonButton>
                   </p>
                 </IonLabel>
