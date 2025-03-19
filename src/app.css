@@ -16,10 +16,14 @@
 }
 */
 
-ion-header {
+ion-header.primary {
   border-bottom-style: inset;
   border-bottom-color: var(--ion-color-light-shade);
   border-bottom-width: thin;
+}
+
+.header-collapse-main {
+  background-color: var(--ion-color-light);
 }
 
 ion-footer {
