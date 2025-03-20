@@ -115,7 +115,7 @@ const SigninPage: React.FC = () => {
         <IonItem>
           <IonLabel className='ion-text-center'>
             <IonRouterLink href='/customer/signup'>
-              Don't have an account? Sign up
+              Don't have an account? Sign up here
             </IonRouterLink>
           </IonLabel>
         </IonItem>

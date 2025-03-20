@@ -68,6 +68,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
   const router = useIonRouter();
 
   const onSubmit: SubmitHandler<SignupForm> = async (formData) => {
+    setLoading(true);
     const creds = await signup(
       formData.email,
       formData.password,
@@ -84,6 +85,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
       showNotification('Sign up successful!');
       router.push('/home', 'forward', 'replace');
     }
+    setLoading(false);
   };
 
   // Watch password for confirmation validation
@@ -176,6 +178,24 @@ const SignupPage: React.FC<SignupPageProps> = ({ role }) => {
               </IonRouterLink>
             </IonLabel>
           </IonItem>
+          {role === 'customer' && (
+            <IonItem>
+              <IonLabel className='ion-text-center'>
+                <IonRouterLink href='/business/signup'>
+                  Business? Sign up here
+                </IonRouterLink>
+              </IonLabel>
+            </IonItem>
+          )}
+          {role === 'businessAdmin' && (
+            <IonItem>
+              <IonLabel className='ion-text-center'>
+                <IonRouterLink href='/customer/signup'>
+                  Customer? Sign up here
+                </IonRouterLink>
+              </IonLabel>
+            </IonItem>
+          )}
         </IonList>
       </form>
     </PublicPageLayout>
