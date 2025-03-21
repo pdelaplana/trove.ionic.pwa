@@ -1,5 +1,5 @@
 import ProtectedRoute from '@src/pages/components/routing/ProtectedRoute';
-import { Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import {
   IonTabs,
   IonRouterOutlet,
@@ -58,7 +58,9 @@ const BusinessRoutes: React.FC<BusinessRoutesProps> = ({}) => {
 
   return (
     <BusinessProvider businessId={user?.businessId ?? ''}>
-      <TabRoutes />
+      <Route path='/'>
+        <TabRoutes />
+      </Route>
     </BusinessProvider>
   );
 };

@@ -2,11 +2,17 @@ import { IonList, IonItem, IonLabel } from '@ionic/react';
 import { useBusinessValidationRules } from '@src/domain/entities/business';
 import InputFormField from '@src/pages/components/form/InputFormField';
 import TextAreaFormField from '@src/pages/components/form/TextAreaFormField';
-import { UseFormRegister, FieldErrors, UseFormSetValue } from 'react-hook-form';
+import {
+  UseFormRegister,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormGetValues,
+} from 'react-hook-form';
 
 interface ShopInformationFormProps {
   register: UseFormRegister<any>;
   setValue?: UseFormSetValue<any>;
+  getValues?: UseFormGetValues<any>;
   errors?: FieldErrors<{
     name: string;
     description: string;

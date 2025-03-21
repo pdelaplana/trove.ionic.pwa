@@ -1,12 +1,10 @@
 import {
-  IonButton,
   IonContent,
   IonHeader,
   IonPage,
   IonRouterLink,
   IonText,
   useIonRouter,
-  useIonToast,
 } from '@ionic/react';
 import { Address, Business } from '@src/domain';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,6 +16,7 @@ import BusinessInformationForm from '../components/BusinessInformationForm';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import NiceButton from '@src/pages/components/ui/NiceButton';
 import { CenterContainer } from '@src/pages/components/layouts';
+import useGenerateApiKeyFunction from '@src/features/cloudFunctions/useGenerateApiKeyFunction';
 
 interface BusinessOnboardingPageForm {
   id: string;
@@ -28,15 +27,19 @@ interface BusinessOnboardingPageForm {
   phone: string;
   email: string;
   address: Address;
+  currency: string;
+  phoneCountryCode: string;
 }
 
+const VITE_DEFAULT_CURRENCY = import.meta.env.VITE_DEFAULT_CURRENCY;
+const DEFAULT_PHONE_COUNTRY_CODE = import.meta.env
+  .VITE_DEFAULT_PHONE_COUNTRY_CODE;
 const BusinessOnboardingPage: React.FC = () => {
   const [shop, setShop] = useState<Business>();
 
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<BusinessOnboardingPageForm>();
 
@@ -50,11 +53,11 @@ const BusinessOnboardingPage: React.FC = () => {
     isPending,
   } = useUpsertBusiness();
 
+  const { mutateAsync: generateApiKey } = useGenerateApiKeyFunction();
+
   const router = useIonRouter();
 
   const { showNotification, showErrorNotification } = useAppNotifications();
-
-  const [present] = useIonToast();
 
   const onSubmit: SubmitHandler<BusinessOnboardingPageForm> = async (
     formData
@@ -75,16 +78,20 @@ const BusinessOnboardingPage: React.FC = () => {
         postCode: '',
       },
       operatingHours: defaultOperatingHours,
-      currency: '',
+      currency: VITE_DEFAULT_CURRENCY,
+      phoneCountryCode: DEFAULT_PHONE_COUNTRY_CODE,
       loyaltyPrograms: [],
     });
+    if (business) {
+      await generateApiKey({ businessId: business.id });
+    }
     setProfileData({ key: 'businessId', value: business.id });
   };
 
   useEffect(() => {
     if (isSuccess) {
       showNotification('Shop created successfully!');
-      router.push('/home', 'forward', 'replace');
+      router.push('/dashboard', 'forward', 'replace');
     }
     if (isError) {
       showErrorNotification('Failed to create shop');
