@@ -12,7 +12,8 @@
     "lint": "eslint",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "git.submodules.update": "git submodule update --init --recursive",
-    "git.submodules.pull": "git submodule foreach git pull origin main"
+    "git.submodules.pull": "git submodule foreach git pull origin main",
+    "firebase.firestore.indexes.pull": "firebase firestore:indexes > src/infrastructure/firebase/firestore.indexes.json"
   },
   "dependencies": {
     "@capacitor/app": "6.0.2",

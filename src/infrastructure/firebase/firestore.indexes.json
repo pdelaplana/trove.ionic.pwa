@@ -41,8 +41,8 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
-          "fieldPath": "businessId",
-          "order": "ASCENDING"
+          "fieldPath": "keywords",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "membershipDate",
@@ -56,6 +56,20 @@
       "fields": [
         {
           "fieldPath": "customerId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "transactionDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "loyaltyCardTransactions",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "loyaltyCardId",
           "order": "ASCENDING"
         },
         {

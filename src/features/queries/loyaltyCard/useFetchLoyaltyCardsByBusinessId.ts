@@ -9,6 +9,7 @@ import {
   startAfter,
   getDoc,
   doc,
+  where,
 } from 'firebase/firestore';
 import { getLoyaltyCardsSubcollectionRef } from '../helpers';
 
@@ -19,50 +20,73 @@ export type LoyaltyCardPage = {
   lastVisible: any;
 };
 
-const useFetchLoyaltyCardsByBusinessId = (businessId: string) => {
+const useFetchLoyaltyCardsByBusinessId = (
+  businessId: string,
+  search?: string
+) => {
   return useInfiniteQuery<LoyaltyCardPage>({
-    queryKey: ['useFetchLoyaltyCardsByBusinessId', businessId],
+    queryKey: ['useFetchLoyaltyCardsByBusinessId', businessId, search],
     initialPageParam: null,
     queryFn: async ({ pageParam = null }) => {
-      const cardsRef = getLoyaltyCardsSubcollectionRef(businessId);
+      try {
+        const cardsRef = getLoyaltyCardsSubcollectionRef(businessId);
 
-      let q = query(
-        cardsRef,
-        orderBy('membershipDate', 'desc'),
-        limit(CARDS_PER_PAGE)
-      );
-      if (pageParam) {
-        q = query(q, startAfter(pageParam));
-      }
-      const snapshot = await getDocs(q);
+        let q = query(
+          cardsRef,
+          orderBy('membershipDate', 'desc'),
+          limit(CARDS_PER_PAGE)
+        );
 
-      // Fetch customer data for each card
-      const cardsWithCustomers = await Promise.all(
-        snapshot.docs.map(async (loyaltyCardDoc) => {
-          const card = {
-            ...loyaltyCardDoc.data(),
-            id: loyaltyCardDoc.id,
-          } as LoyaltyCard;
-          const customerDoc = await getDoc(
-            doc(db, 'customers', card.customerId)
+        if (search) {
+          q = query(
+            q,
+            where(
+              'keywords',
+              'array-contains-any',
+              search.toLowerCase().split(' ')
+            )
           );
-          const customer = {
-            ...customerDoc.data(),
-          } as Omit<Customer, 'id'>;
+        }
 
-          return {
-            ...customer,
-            ...card,
-          };
-        })
-      );
+        if (pageParam) {
+          q = query(q, startAfter(pageParam));
+        }
+        const snapshot = await getDocs(q);
 
-      const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+        // Fetch customer data for each card
+        const cardsWithCustomers = await Promise.all(
+          snapshot.docs.map(async (loyaltyCardDoc) => {
+            const card = {
+              ...loyaltyCardDoc.data(),
+              id: loyaltyCardDoc.id,
+            } as LoyaltyCard;
+            const customerDoc = await getDoc(
+              doc(db, 'customers', card.customerId)
+            );
+            const customer = {
+              ...customerDoc.data(),
+            } as Omit<Customer, 'id'>;
 
-      return {
-        cards: cardsWithCustomers,
-        lastVisible,
-      };
+            return {
+              ...customer,
+              ...card,
+            };
+          })
+        );
+
+        const lastVisible = snapshot.docs[snapshot.docs.length - 1];
+
+        return {
+          cards: cardsWithCustomers,
+          lastVisible,
+        };
+      } catch (error) {
+        console.error('Error fetching loyalty cards', error);
+        return {
+          cards: [],
+          lastVisible: null,
+        };
+      }
     },
 
     getNextPageParam: (lastPage: LoyaltyCardPage) =>
