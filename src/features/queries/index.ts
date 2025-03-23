@@ -15,6 +15,7 @@ import useFetchRewardsClaimedForLoyaltyCard from './customerRewards/useFetchRewa
 import useFetchCustomerRewardById from './customerRewards/useFetchCustomerRewardById';
 import useFetchLoyaltyProgramMilestoneById from './loyaltyRewards/useFetchLoyaltyProgramMilestoneById';
 import useFetchExpiredAndUsedRewardsForCustomer from './customerRewards/useFetchExpiredAndUsedRewardsForCustomer';
+import useFetchLoyaltyCardTransactionsByCardId from './loyaltyCard/useFetchLoyaltyCardTransactionsByCardId';
 
 export {
   useFetchCustomerbyEmail,
@@ -25,6 +26,7 @@ export {
   useFetchLoyaltyCardsByBusinessId,
   useFetchLoyaltyCardTransactionById,
   useFetchLoyaltyCardTransactionsByCustomerId,
+  useFetchLoyaltyCardTransactionsByCardId,
   useFetchLoyaltyCardWithCustomerInfoById,
   useFetchAllLoyaltyPrograms,
   useFetchAvailableRewardsForCustomer,

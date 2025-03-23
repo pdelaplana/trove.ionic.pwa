@@ -25,13 +25,6 @@ const CustomersSection = () => {
             <p>Add loyalty points for purchases made by your customer</p>
           </IonLabel>
         </IonItem>
-        <IonItem lines='none' detail={true} routerLink='/manage/customers'>
-          <IonIcon slot='start' icon={peopleOutline} color='primary' />
-          <IonLabel>
-            <h2>View Customers</h2>
-            <p>View and manage your enrolled customers.</p>
-          </IonLabel>
-        </IonItem>
       </IonList>
     </>
   );

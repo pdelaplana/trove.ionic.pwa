@@ -9,6 +9,7 @@ import {
   IonLabel,
 } from '@ionic/react';
 import {
+  business,
   ellipsisHorizontalOutline,
   homeOutline,
   peopleOutline,
@@ -18,6 +19,13 @@ import BusinessOnboardingPage from './onboarding/BusinessOnboardingPage';
 import { BusinessProvider } from '@src/features/business/BusinessProvider';
 import BusinessDashboardPage from './dashboard/BusinessDashboardPage';
 import BusinessSettingsRoutes from './management/ManagementRoutes';
+import { BUSINESSADMIN_ROUTES } from '@src/routesDefintion';
+import CustomerDetailsPage from './customers/details/CustomerDetailsPage';
+import CustomerEditPage from './customers/edit/CustomerEditPage';
+import CustomersPage from './customers/CustomersPage';
+import CustomerTransactionsListPage from './customers/activity/CustomerActivitiesPage';
+import CustomerActivitiesPage from './customers/activity/CustomerActivitiesPage';
+import CustomerActivityDetailsPage from './customers/activity/CustomerActivityDetailsPage';
 
 interface BusinessRoutesProps {}
 
@@ -26,21 +34,31 @@ const TabRoutes = () => {
     <IonTabs>
       <IonRouterOutlet>
         <Switch>
-          <ProtectedRoute path='/manage'>
+          <ProtectedRoute path={BUSINESSADMIN_ROUTES.DASHBOARD}>
+            <BusinessDashboardPage />
+          </ProtectedRoute>
+
+          <ProtectedRoute path={BUSINESSADMIN_ROUTES.MANAGE}>
             <BusinessSettingsRoutes />
           </ProtectedRoute>
-          <ProtectedRoute path='/dashboard' exact>
-            <BusinessDashboardPage />
+
+          <ProtectedRoute path={BUSINESSADMIN_ROUTES.CUSTOMERS} exact>
+            <CustomersPage />
           </ProtectedRoute>
         </Switch>
       </IonRouterOutlet>
       <IonTabBar slot='bottom'>
-        <IonTabButton tab='home' href='/dashboard'>
+        <IonTabButton tab='home' href={BUSINESSADMIN_ROUTES.DASHBOARD}>
           <IonIcon aria-hidden='true' icon={homeOutline} />
           <IonLabel>Home</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab='manage' href='/manage'>
+        <IonTabButton tab='customers' href={BUSINESSADMIN_ROUTES.CUSTOMERS}>
+          <IonIcon aria-hidden='true' icon={peopleOutline} />
+          <IonLabel>Customers</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab='manage' href={BUSINESSADMIN_ROUTES.MANAGE}>
           <IonIcon aria-hidden='true' icon={ellipsisHorizontalOutline} />
           <IonLabel>Manage</IonLabel>
         </IonTabButton>
@@ -58,9 +76,27 @@ const BusinessRoutes: React.FC<BusinessRoutesProps> = ({}) => {
 
   return (
     <BusinessProvider businessId={user?.businessId ?? ''}>
-      <Route path='/'>
-        <TabRoutes />
-      </Route>
+      <Switch>
+        <ProtectedRoute path={BUSINESSADMIN_ROUTES.CUSTOMER_DETAILS} exact>
+          <CustomerDetailsPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute path='/customers/:id/edit' exact>
+          <CustomerEditPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute path='/customers/:id/activity' exact>
+          <CustomerActivitiesPage />
+        </ProtectedRoute>
+
+        <ProtectedRoute path='/customers/:id/activity/:transactionId' exact>
+          <CustomerActivityDetailsPage />
+        </ProtectedRoute>
+
+        <Route path='/'>
+          <TabRoutes />
+        </Route>
+      </Switch>
     </BusinessProvider>
   );
 };

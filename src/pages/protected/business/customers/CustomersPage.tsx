@@ -4,10 +4,14 @@ import { useBusiness } from '@src/features/business/BusinessProvider';
 import { useFetchLoyaltyCardsByBusinessId } from '@src/features/queries';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import EmptySection from '@src/pages/components/layouts/EmptySection';
-import { walletOutline } from 'ionicons/icons';
+import {
+  IonItemEndSlot,
+  IonItemStartSlot,
+} from '@src/pages/components/ui/IonItemSlot';
+import { chevronForward, walletOutline } from 'ionicons/icons';
 import { useEffect, useState } from 'react';
 
-const CustomersListPage: React.FC = () => {
+const CustomersPage: React.FC = () => {
   const { business } = useBusiness();
   const {
     data,
@@ -25,7 +29,7 @@ const CustomersListPage: React.FC = () => {
   }, [data]);
 
   return (
-    <BasePageLayout title={'Customers'} defaultBackButtonHref='/manage'>
+    <BasePageLayout title={'Customers'} showBackButton={false}>
       <CenterContainer>
         {loyaltyCards?.length === 0 && (
           <EmptySection
@@ -37,37 +41,50 @@ const CustomersListPage: React.FC = () => {
         {loyaltyCards?.length! > 0 && (
           <>
             <div className='ion-margin'>Manage Customers</div>
-            <IonList className='ion-outline'>
+            <IonList className='ion-margin-bottom'>
               {loyaltyCards?.map((card) => (
                 <IonItem
                   key={card.id}
-                  lines='none'
-                  detail={true}
-                  routerLink={`/manage/customers/${card.id}`}
+                  lines='full'
+                  button={true}
+                  routerLink={`/customers/${card.id}`}
                 >
-                  <IonIcon slot='start' icon={walletOutline} color='primary' />
+                  <IonItemStartSlot slot='start'>
+                    <IonIcon icon={walletOutline} color='primary' />
+                  </IonItemStartSlot>
                   <IonLabel>
                     <h2>{`${card.firstName} ${card.lastName}`}</h2>
                     <h3>{card.membershipNumber}</h3>
-                    <p>{`Points: ${card.points}`}</p>
+                    <p>{`Points: ${card.rewardPoints}`}</p>
                   </IonLabel>
+                  <IonItemEndSlot slot='end'>
+                    <IonIcon
+                      color='primary'
+                      icon={chevronForward}
+                      size='medium'
+                    ></IonIcon>
+                  </IonItemEndSlot>
                 </IonItem>
               ))}
+              {hasNextPage && (
+                <IonItem lines='none'>
+                  <IonLabel>
+                    <IonButton
+                      expand='full'
+                      fill='clear'
+                      onClick={() => fetchNextPage()}
+                      disabled={isFetchingNextPage}
+                    >
+                      {isFetchingNextPage ? 'Loading more...' : 'Load More'}
+                    </IonButton>
+                  </IonLabel>
+                </IonItem>
+              )}
             </IonList>
-            {hasNextPage && (
-              <IonButton
-                expand='full'
-                fill='clear'
-                onClick={() => fetchNextPage()}
-                disabled={isFetchingNextPage}
-              >
-                {isFetchingNextPage ? 'Loading more...' : 'Load More'}
-              </IonButton>
-            )}
           </>
         )}
       </CenterContainer>
     </BasePageLayout>
   );
 };
-export default CustomersListPage;
+export default CustomersPage;

@@ -8,9 +8,12 @@ import { useAppNotifications } from '@src/pages/components/hooks/useAppNotificat
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
 import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
+import { BUSINESSADMIN_ROUTES } from '@src/routesDefintion';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
+import { useBusiness } from '@src/features/business/BusinessProvider';
+import useFetchLoyaltyCardWithCustomerInfoById from '@src/features/queries/loyaltyCard/useFetchLoyaltyCardWithCustomerInfoById';
 
 interface CustomerEditForm {
   id: string;
@@ -24,7 +27,14 @@ interface CustomerEditForm {
 
 const CustomerEditPage: React.FC = () => {
   const { id, customerId } = useParams<{ id: string; customerId: string }>();
-  const { data, refetch } = useFetchCustomerById(customerId);
+
+  const { business } = useBusiness();
+
+  const { data: loyaltyCard } = useFetchLoyaltyCardWithCustomerInfoById(
+    id,
+    business?.id ?? ''
+  );
+  const { data, refetch } = useFetchCustomerById(loyaltyCard?.customerId ?? '');
 
   const { mutate: deleteDocument } = useDeleteDocument();
   const { push } = useIonRouter();
@@ -70,7 +80,7 @@ const CustomerEditPage: React.FC = () => {
     if (getValues('id')) {
       deleteDocument({ id: getValues('id'), collectionName: 'customers' });
       showNotification('Customer deleted successfully');
-      push(`/manage/customers`, 'back', 'pop');
+      push(BUSINESSADMIN_ROUTES.CUSTOMERS, 'back', 'pop');
     }
   };
 
@@ -95,10 +105,10 @@ const CustomerEditPage: React.FC = () => {
   return (
     <BasePageLayout
       title='Edit Customer'
-      defaultBackButtonHref={`/manage/customers/${id}`}
+      defaultBackButtonHref={`/customers/${id}`}
     >
       <CenterContainer>
-        <IonList lines='none'>
+        <IonList lines='none' className='ion-margin-top'>
           <IonItem>
             <IonLabel>
               <InputFormField

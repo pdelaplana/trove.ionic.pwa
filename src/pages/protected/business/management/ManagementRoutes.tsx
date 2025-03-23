@@ -5,14 +5,11 @@ import BusinessSettingsPage from './ManagementPage';
 import BusinessAddressPage from './business/businessAddress/BusinessAddressPage';
 
 import BusinessAdvanceSettingsPage from './business/businessAdvanceSettings/BusinessAdvanceSettingsPage';
-import LoyaltyProgramInformationPage from './loyaltyProgram/details/loyaltyProgramInformation/LoyaltyProgramInformationPage';
 import CustomerEnrollmentPage from './customers/enrollment/CustomerEnrollmentPage';
 import BusinessHoursPage from './business/businessHours/BusinessHoursPage';
-import CustomersListPage from './customers/list/CustomersListPage';
 import { Switch } from 'react-router';
 import CustomerEarnPointsPage from './customers/earn/CustomerEarnPointsPage';
 import { LoyaltyProgramRoutes } from './loyaltyProgram/LoyaltyProgramRoutes';
-import { CustomerDetailsRoutes } from './customers/CustomerDetailsRoutes';
 import NewLoyaltyProgramPage from './loyaltyProgram/new/NewLoyaltyProgramPage';
 
 const ManagementRoutes: React.FC = () => {
@@ -49,15 +46,6 @@ const ManagementRoutes: React.FC = () => {
         {/* Customer Earn Points */}
         <ProtectedRoute path='/manage/customers/earn' exact>
           <CustomerEarnPointsPage />
-        </ProtectedRoute>
-
-        {/* Customer Details */}
-        <ProtectedRoute path='/manage/customers/:id'>
-          <CustomerDetailsRoutes />
-        </ProtectedRoute>
-
-        <ProtectedRoute path='/manage/customers' exact>
-          <CustomersListPage />
         </ProtectedRoute>
 
         <ProtectedRoute path='/manage' exact>

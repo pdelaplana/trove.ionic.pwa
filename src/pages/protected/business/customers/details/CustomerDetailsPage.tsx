@@ -9,11 +9,14 @@ import {
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 import { usePrompt } from '@src/pages/components/hooks/usePrompt';
-import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
+import {
+  BasePageLayout,
+  CenterContainer,
+  Gap,
+} from '@src/pages/components/layouts';
 import ActionSheetButton, {
   ActionOption,
 } from '@src/pages/components/ui/ActionSheetButton';
-import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -81,7 +84,7 @@ const CustomerDetailsPage = () => {
     batchDelete(itemsToDelete, {
       onSuccess: () => {
         showNotification('Customer and related data deleted successfully');
-        push('/manage/customers', 'back', 'pop');
+        push('/customers', 'back', 'pop');
       },
       onError: (error) => {
         showErrorNotification('Failed to delete customer');
@@ -99,23 +102,49 @@ const CustomerDetailsPage = () => {
         });
         break;
       case 'edit':
-        push(
-          `/manage/customers/${id}/edit/${customerDetailsPageValues?.customerId}`,
-          'forward'
-        );
+        push(`/customers/${id}/edit`, 'forward');
         break;
-      case 'transaction-history':
-        push(
-          `/manage/customers/${id}/transactions/${customerDetailsPageValues?.customerId}`,
-          'forward'
-        );
+      case 'activity':
+        push(`/customers/${id}/activity`, 'forward');
         break;
     }
   };
 
+  const footer = (
+    <CenterContainer>
+      <Gap size='.65rem' />
+      <ActionSheetButton
+        buttonLabel={'Options...'}
+        sheetTitle='Options...'
+        expand='full'
+        fill='solid'
+        className='ion-no-margin'
+        options={[
+          {
+            text: 'Delete Card and Customer',
+            role: 'destructive',
+            data: 'delete',
+          },
+          {
+            text: 'Edit Customer',
+            role: 'destructive',
+            data: 'edit',
+          },
+          {
+            text: 'View Activity',
+            data: 'activity',
+          },
+        ]}
+        onActionComplete={handleActionComplete}
+      />
+    </CenterContainer>
+  );
+
   useEffect(() => {
     if (data) {
-      setCustomerDetailsPageValues((prevData) => ({ ...prevData, ...data }));
+      setCustomerDetailsPageValues(
+        (prevData) => ({ ...prevData, ...data }) as CustomerDetailsPageValues
+      );
     }
   }, [data]);
 
@@ -148,7 +177,11 @@ const CustomerDetailsPage = () => {
   }, [isDeleteSuccess, isDeleteError, isDeletePending]);
 
   return (
-    <BasePageLayout title='Details' defaultBackButtonHref='/manage/customers'>
+    <BasePageLayout
+      title='Details'
+      defaultBackButtonHref='/customers'
+      footer={footer}
+    >
       <CenterContainer>
         <div className='ion-margin'>Membership Information</div>
 
@@ -183,7 +216,7 @@ const CustomerDetailsPage = () => {
               <p>{customerDetailsPageValues?.tierName}</p>
             </IonLabel>
           </IonItem>
-          <IonItem>
+          <IonItem lines='none'>
             <IonLabel>
               <h2>Points</h2>
               <p>{formatNumber(customerDetailsPageValues?.points ?? 0)}</p>
@@ -199,37 +232,13 @@ const CustomerDetailsPage = () => {
               <p>{customerDetailsPageValues?.email}</p>
             </IonLabel>
           </IonItem>
-          <IonItem>
+          <IonItem lines='none'>
             <IonLabel>
               <h2>Phone</h2>
               <p>{customerDetailsPageValues?.phone}</p>
             </IonLabel>
           </IonItem>
         </IonList>
-
-        <ActionSheetButton
-          buttonLabel={'Options...'}
-          sheetTitle='Options...'
-          expand='full'
-          fill='clear'
-          options={[
-            {
-              text: 'Delete Card and Customer',
-              role: 'destructive',
-              data: 'delete',
-            },
-            {
-              text: 'Edit Customer',
-              role: 'destructive',
-              data: 'edit',
-            },
-            {
-              text: 'Transaction History',
-              data: 'transaction-history',
-            },
-          ]}
-          onActionComplete={handleActionComplete}
-        />
       </CenterContainer>
     </BasePageLayout>
   );

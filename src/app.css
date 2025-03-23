@@ -26,10 +26,21 @@ ion-header.primary {
   background-color: var(--ion-color-light);
 }
 
+/*
 ion-footer {
   border-top-style: none;
   border-top-color: var(--ion-color-light-shade);
   border-top-width: thin;
+}
+*/
+ion-footer {
+  box-shadow: none !important;
+
+  border-top-width: thin;
+  border-top-style: solid;
+  border-top-color: var(--ion-color-light-shade);
+
+  height: 56px;
 }
 
 /* full screen modal styles */

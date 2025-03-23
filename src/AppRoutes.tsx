@@ -12,6 +12,7 @@ import SigninPage from './pages/public/signin/SigninPage';
 import BusinessRoutes from './pages/protected/business/BusinessRoutes';
 import ProfileRoutes from './pages/protected/profile/ProfileRoutes';
 import CustomerRoutes from './pages/protected/customer/CustomerRoutes';
+import { ROUTES } from './routesDefintion';
 
 interface AuthState {
   isInitialized: boolean;
@@ -64,7 +65,7 @@ const AppRoutes: React.FC = () => {
     console.debug('Auth state:', authState);
 
     if (!isAuthenticated) {
-      return <Redirect to='/signin' />;
+      return <Redirect to={ROUTES.SIGNIN} />;
     }
     switch (user?.role) {
       case 'businessAdmin':
@@ -74,7 +75,7 @@ const AppRoutes: React.FC = () => {
         return <CustomerRoutes />;
       default:
         console.warn('No valid role, redirecting to landing');
-        return <Redirect to='/landing' />;
+        return <Redirect to='/' />;
     }
   };
 
@@ -87,25 +88,29 @@ const AppRoutes: React.FC = () => {
       <IonRouterOutlet>
         <Switch>
           {/* Public routes */}
-          <Route exact path='/not-found' component={UnderConstructionPage} />
-          <Route exact path='/landing' component={LandingPage} />
+          <Route
+            exact
+            path={ROUTES.NOT_FOUND}
+            component={UnderConstructionPage}
+          />
+          <Route exact path={ROUTES.LANDING} component={LandingPage} />
 
-          <Route exact path='/signin' component={SigninPage} />
+          <Route exact path={ROUTES.SIGNIN} component={SigninPage} />
 
           <Route
             exact
-            path='/business/signup'
+            path={ROUTES.BUSINESS_SIGNUP}
             render={() => <SignupPage role='businessAdmin' />}
           />
 
           <Route
             exact
-            path='/customer/signup'
+            path={ROUTES.CUSTOMER_SIGNUP}
             render={() => <SignupPage role='customer' />}
           />
 
           {/* Protected routes */}
-          <ProtectedRoute path='/profile'>
+          <ProtectedRoute path={ROUTES.PROFILE}>
             <ProfileRoutes />
           </ProtectedRoute>
 
