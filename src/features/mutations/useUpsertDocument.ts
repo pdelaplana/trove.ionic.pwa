@@ -10,7 +10,7 @@ const useUpsertDocument = <T extends BaseDocument>(collectionName: string) => {
   const insert = async (data: Omit<T, 'id'>) => {
     const docRef = await addDoc(collection(db, collectionName), {
       ...data,
-      timestamp: new Date(),
+      created: new Date(),
     });
     const docSnapshot = await getDoc(docRef);
     return {
@@ -22,9 +22,10 @@ const useUpsertDocument = <T extends BaseDocument>(collectionName: string) => {
   const update = async (data: T) => {
     if (!data.id) throw new Error('Document ID is required for update');
     const docRef = doc(db, collectionName, data.id);
+    const { id, ...dataWithoutId } = data;
     await updateDoc(docRef, {
-      ...(data as { [key: string]: any }),
-      timestamp: new Date(),
+      ...dataWithoutId,
+      updated: new Date(),
     });
     return data;
   };

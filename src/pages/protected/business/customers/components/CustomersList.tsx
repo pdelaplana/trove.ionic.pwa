@@ -45,10 +45,10 @@ const CustomersList: React.FC<CustomersListProps> = ({
       {loyaltyCards?.length! > 0 && (
         <>
           <IonList className='ion-margin-bottom'>
-            {loyaltyCards?.map((card) => (
+            {loyaltyCards?.map((card, index) => (
               <IonItem
                 key={card.id}
-                lines='full'
+                lines={index === loyaltyCards.length - 1 ? 'none' : 'full'}
                 button={true}
                 routerLink={`/customers/${card.id}`}
               >

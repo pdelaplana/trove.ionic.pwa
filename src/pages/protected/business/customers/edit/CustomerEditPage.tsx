@@ -7,7 +7,6 @@ import { InputFormField, SelectFormField } from '@src/pages/components/form';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
-import DestructiveButton from '@src/pages/components/ui/DestructiveButton';
 import { BUSINESSADMIN_ROUTES } from '@src/routesDefintion';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -47,6 +46,13 @@ const CustomerEditPage: React.FC = () => {
     isError,
     isPending,
   } = useUpsertDocument<Customer>('customers');
+
+  const {
+    mutate: upsertLoyaltyCard,
+    isSuccess: isLoyaltyCardSuccess,
+    isError: isLoyaltyCardError,
+    isPending: isLoyaltyCardPending,
+  } = useUpsertDocument<any>(`businesses/${business?.id}/loyaltyCards`);
 
   const {
     register,
@@ -93,6 +99,15 @@ const CustomerEditPage: React.FC = () => {
   useEffect(() => {
     const updateEffect = async () => {
       if (!isPending && isSuccess) {
+        if (loyaltyCard) {
+          upsertLoyaltyCard({
+            id: id,
+            customerName: `${getValues('firstName')} ${getValues('lastName')}`,
+            customerEmail: getValues('email'),
+            customerPhone: getValues('phone'),
+          });
+        }
+
         showNotification('Customer details updated successfully');
         await refetch();
       } else if (!isPending && isError) {
@@ -180,15 +195,6 @@ const CustomerEditPage: React.FC = () => {
           isDisabled={!isDirty}
           onClick={handleSubmit(onSubmit)}
         />
-        {getValues('id') && (
-          <DestructiveButton
-            label='Delete'
-            prompt='Delete this customer?'
-            expand='full'
-            className='ion-margin'
-            onClick={() => onDelete()}
-          />
-        )}
       </CenterContainer>
     </BasePageLayout>
   );
