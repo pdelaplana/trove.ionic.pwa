@@ -24,12 +24,12 @@ import {
   CenterContainer,
   FixedBottomContainer,
 } from '@src/pages/components/layouts';
-import ModalPage from '@src/pages/components/modal/ModalPage';
 import NiceButton from '@src/pages/components/ui/NiceButton';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useHoursSelector } from './HoursSelectorModal';
 import { SelectFormField } from '@src/pages/components/form';
+import { ModalPageLayout } from '@src/pages/components/layouts';
 
 interface BusinessHoursForm {
   day: DayOfWeek;
@@ -98,7 +98,7 @@ const BusinessHoursFormModal: React.FC<BusinessHoursFormModalProps> = ({
   };
 
   return (
-    <ModalPage title={'Add Operating Hours'} onDismiss={onDismiss}>
+    <ModalPageLayout title={'Add Operating Hours'} onDismiss={onDismiss}>
       <CenterContainer>
         <form onSubmit={handleSubmit(onSubmit)}>
           <IonList lines='none'>
@@ -212,7 +212,7 @@ const BusinessHoursFormModal: React.FC<BusinessHoursFormModalProps> = ({
           )}
         </form>
       </CenterContainer>
-    </ModalPage>
+    </ModalPageLayout>
   );
 };
 

@@ -4,9 +4,12 @@ import { useEffect, useState } from 'react';
 import NiceButton from '@src/pages/components/ui/NiceButton';
 import { useBusiness } from '@src/features/business/BusinessProvider';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
-import BusinessPage from '../../../BusinessPage';
 import BusinessAddressForm from '../../../components/BusinessAddressForm';
-import { CenterContainer } from '@src/pages/components/layouts';
+import {
+  BasePageLayout,
+  CenterContainer,
+  Gap,
+} from '@src/pages/components/layouts';
 
 interface BusinessAddressForm {
   id: string;
@@ -22,7 +25,6 @@ const BusinessAddressPage: React.FC = () => {
     register,
     setValue,
     handleSubmit,
-    watch,
     formState: { errors, isDirty },
     reset,
   } = useForm<BusinessAddressForm>({
@@ -60,12 +62,13 @@ const BusinessAddressPage: React.FC = () => {
   }, [business]);
 
   return (
-    <BusinessPage
+    <BasePageLayout
       title='Address'
       defaultBackButtonHref='/manage'
       showProfileIcon={false}
     >
       <CenterContainer>
+        <Gap size='1rem' />
         <form onSubmit={handleSubmit(onSubmit)}>
           <BusinessAddressForm register={register} setValue={setValue} />
           <NiceButton
@@ -80,7 +83,7 @@ const BusinessAddressPage: React.FC = () => {
           </NiceButton>
         </form>
       </CenterContainer>
-    </BusinessPage>
+    </BasePageLayout>
   );
 };
 

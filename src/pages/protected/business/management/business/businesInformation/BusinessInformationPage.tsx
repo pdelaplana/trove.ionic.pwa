@@ -7,7 +7,7 @@ import { useBusiness } from '@src/features/business/BusinessProvider';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import BusinessInformationForm from '../../../components/BusinessInformationForm';
 import BusinessPage from '../../../BusinessPage';
-import { CenterContainer } from '@src/pages/components/layouts';
+import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 
 interface BusinessInformationPageProps {}
 
@@ -72,7 +72,7 @@ const BusinessInformationPage: React.FC<
   }, [business]);
 
   return (
-    <BusinessPage
+    <BasePageLayout
       title='Edit Information'
       defaultBackButtonHref='/manage/'
       showProfileIcon={false}
@@ -96,7 +96,7 @@ const BusinessInformationPage: React.FC<
           </NiceButton>
         </form>
       </CenterContainer>
-    </BusinessPage>
+    </BasePageLayout>
   );
 };
 

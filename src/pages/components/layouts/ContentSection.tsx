@@ -19,7 +19,7 @@ const ContentSection: React.FC<SectionProps> = ({
 }) => {
   return (
     <SectionWrapper $marginTop={marginTop} {...rest}>
-      {title && <div className='ion-padding'>{title}</div>}
+      {title && <div className='ion-padding-vertical'>{title}</div>}
       {children}
     </SectionWrapper>
   );

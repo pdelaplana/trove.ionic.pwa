@@ -11,13 +11,13 @@ const LoyaltyProgramsSection = () => {
   return (
     <>
       <div className='ion-padding'>Loyalty Programs</div>
-      <IonList className='ion-outline'>
+      <IonList>
         {loyaltyPrograms?.map((program) => (
           <IonItem
             key={program.id}
             button={true}
             detail={true}
-            lines='none'
+            lines='full'
             routerLink={`/manage/loyalty/${program.id}`}
           >
             <IonIcon
@@ -37,7 +37,7 @@ const LoyaltyProgramsSection = () => {
         <IonItem
           button={true}
           detail={true}
-          lines='none'
+          lines='full'
           routerLink='/manage/loyalty/new'
         >
           <IonIcon

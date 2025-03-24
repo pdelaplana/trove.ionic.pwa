@@ -35,6 +35,8 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
   const { showConfirmPrompt } = usePrompt();
   const { push } = useIonRouter();
 
+  const currentCurrency = getCurrency(business?.currency ?? '')?.shortName;
+
   const handleDelete = () => {};
 
   const handleActionComplete = (action: ActionOption) => {
@@ -65,27 +67,31 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
       defaultBackButtonHref='/manage'
     >
       <CenterContainer>
-        <div className='ion-padding'>Information</div>
-        <IonList className='ion-outline' lines='none'>
-          <IonItem lines='none'>
+        <div className='ion-padding-vertical'>Information</div>
+        <IonList>
+          <IonItem lines='full'>
             <IonLabel>
               <h2>{loyaltyProgram?.name}</h2>
             </IonLabel>
           </IonItem>
-          <IonItem>
+          <IonItem lines='full'>
             <IonLabel>
-              <h2>{loyaltyProgram?.type}</h2>
+              <h2>
+                {t(`types.loyaltyProgramType.${loyaltyProgram?.type}`, {
+                  currency: currentCurrency,
+                })}
+              </h2>
               <p>
                 {`Earn ${loyaltyProgram?.pointsPerSpend} ${t(
                   `types.loyaltyProgramType.${loyaltyProgram?.type ?? 'pointsPerSpend'}`,
                   {
-                    currency: getCurrency(business?.currency ?? '')?.shortName,
+                    currency: currentCurrency,
                   }
                 )}`}
               </p>
             </IonLabel>
           </IonItem>
-          <IonItem>
+          <IonItem lines='none'>
             <IonLabel>
               <h2>Description</h2>
               <p>{loyaltyProgram?.description}</p>
@@ -94,13 +100,13 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
         </IonList>
 
         <ContentSection title='Tiers'>
-          <IonList className='ion-outline'>
+          <IonList>
             {loyaltyProgram?.tiers.map((tier) => (
               <IonItem
                 key={tier.id}
                 button
                 detail
-                lines='none'
+                lines='full'
                 routerLink={`/manage/loyalty/${loyaltyProgram?.id}/tiers/${tier.id}`}
               >
                 <IonLabel>
@@ -136,8 +142,8 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
           </IonList>
         </ContentSection>
 
-        <ContentSection title='Milestones'>
-          <IonList className='ion-outline'>
+        <ContentSection title='Reward Milestones'>
+          <IonList>
             {loyaltyRewardMilestones
               ?.sort((a, b) => a.points - b.points)
               .map((milestone) => (
@@ -145,7 +151,7 @@ const LoyaltyProgramPage: React.FC<LoyaltyProgramPageProps> = ({}) => {
                   key={milestone.id}
                   button
                   detail
-                  lines='none'
+                  lines='full'
                   routerLink={`/manage/loyalty/${loyaltyProgram?.id}/milestones/${milestone.id}`}
                 >
                   {milestone.tierId ? (

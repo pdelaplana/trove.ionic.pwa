@@ -10,11 +10,11 @@ const BusinessSection = () => {
   return (
     <>
       <div className='ion-padding'>Your Business</div>
-      <IonList className='ion-outline'>
+      <IonList>
         <IonItem
           button={true}
           detail={true}
-          lines='none'
+          lines='full'
           routerLink='/manage/business/information'
         >
           <IonIcon
@@ -33,7 +33,7 @@ const BusinessSection = () => {
         <IonItem
           button={true}
           detail={true}
-          lines='none'
+          lines='full'
           routerLink='/manage/business/address'
         >
           <IonIcon
@@ -52,7 +52,7 @@ const BusinessSection = () => {
         <IonItem
           button={true}
           detail={true}
-          lines='none'
+          lines='full'
           routerLink='/manage/business/hours'
         >
           <IonIcon icon={timeOutline} slot='start' color='primary'></IonIcon>
@@ -67,7 +67,7 @@ const BusinessSection = () => {
         <IonItem
           button={true}
           detail={true}
-          lines='none'
+          lines='full'
           routerLink='/manage/business/advance'
         >
           <IonIcon icon={buildOutline} slot='start' color='primary'></IonIcon>

@@ -5,9 +5,9 @@ const CustomersSection = () => {
   return (
     <>
       <div className='ion-padding'>Customers</div>
-      <IonList className='ion-outline'>
+      <IonList>
         <IonItem
-          lines='none'
+          lines='full'
           detail={true}
           routerLink='/manage/customers/enroll'
         >
@@ -18,7 +18,7 @@ const CustomersSection = () => {
           </IonLabel>
         </IonItem>
 
-        <IonItem lines='none' button detail routerLink='/manage/customers/earn'>
+        <IonItem lines='full' button detail routerLink='/manage/customers/earn'>
           <IonIcon src={walletOutline} slot='start' color='primary'></IonIcon>
           <IonLabel>
             <h2>Add Loyalty Points</h2>

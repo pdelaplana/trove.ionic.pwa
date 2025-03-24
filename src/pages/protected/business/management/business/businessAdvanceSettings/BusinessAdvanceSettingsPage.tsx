@@ -3,8 +3,11 @@ import NiceButton from '@src/pages/components/ui/NiceButton';
 import { useEffect } from 'react';
 import { useBusiness } from '@src/features/business/BusinessProvider';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
-import BusinessPage from '../../../BusinessPage';
-import { CenterContainer } from '@src/pages/components/layouts';
+import {
+  BasePageLayout,
+  CenterContainer,
+  Gap,
+} from '@src/pages/components/layouts';
 import { currencies, CurrencyCode } from '@src/domain/valueTypes/currency';
 import { IonList, IonItem, IonLabel } from '@ionic/react';
 import { SelectFormField } from '@src/pages/components/form';
@@ -60,12 +63,13 @@ const BusinessAdvanceSettingsPage: React.FC<
   }, [business]);
 
   return (
-    <BusinessPage
+    <BasePageLayout
       title='Regional Settings'
       defaultBackButtonHref='/manage/'
       showProfileIcon={false}
     >
       <CenterContainer>
+        <Gap size='1rem' />
         <form onSubmit={handleSubmit(onSubmit)}>
           <IonList lines='none'>
             <IonItem lines='none'>
@@ -115,7 +119,7 @@ const BusinessAdvanceSettingsPage: React.FC<
           </NiceButton>
         </form>
       </CenterContainer>
-    </BusinessPage>
+    </BasePageLayout>
   );
 };
 

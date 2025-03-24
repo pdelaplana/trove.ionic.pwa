@@ -44,6 +44,7 @@ const InputFormField: React.FC<InputFormFieldProps> = ({
       labelPlacement='floating'
       type={type}
       readonly={readonly}
+      /*
       {...(readonly
         ? {
             style: {
@@ -54,6 +55,7 @@ const InputFormField: React.FC<InputFormFieldProps> = ({
             },
           }
         : {})}
+        */
       {...(fill ? { fill } : {})}
       {...(getValues ? { value: getValues(name) } : {})}
       {...(transformValue && getValues

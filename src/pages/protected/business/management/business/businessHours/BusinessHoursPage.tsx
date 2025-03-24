@@ -24,7 +24,7 @@ const BusinessHoursPage: React.FC = () => {
   return (
     <BasePageLayout
       title='Operating Hours'
-      defaultBackButtonHref='/manage/shop'
+      defaultBackButtonHref='/manage'
       showProfileIcon={false}
     >
       <CenterContainer>
