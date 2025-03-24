@@ -1,6 +1,7 @@
 import { IonList, IonItem, IonLabel, useIonRouter } from '@ionic/react';
 import { LoyaltyProgram } from '@src/domain';
 import { useBusiness } from '@src/features/business/BusinessProvider';
+import { useDeleteLoyaltyCard } from '@src/features/mutations';
 import useBatchDeleteDocument from '@src/features/mutations/useBatchDeleteDocument';
 import {
   useFetchLoyaltyCardWithCustomerInfoById,
@@ -64,12 +65,28 @@ const CustomerDetailsPage = () => {
     isPending: isDeletePending,
   } = useBatchDeleteDocument();
 
+  const { mutate: deleteLoyaltyCard } = useDeleteLoyaltyCard();
+
   const { push } = useIonRouter();
   const { showConfirmPrompt } = usePrompt();
   const { showNotification, showErrorNotification } = useAppNotifications();
   const { formatNumber, formatDate } = useFormatters();
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    deleteLoyaltyCard(
+      { id, businessId: business!.id },
+      {
+        onSuccess: () => {
+          showNotification('Customer and related data deleted successfully');
+          push('/customers', 'back', 'pop');
+        },
+        onError: (error) => {
+          showErrorNotification('Failed to delete customer');
+        },
+      }
+    );
+
+    /*
     const itemsToDelete = [
       {
         id: customerDetailsPageValues!.id,
@@ -90,6 +107,7 @@ const CustomerDetailsPage = () => {
         showErrorNotification('Failed to delete customer');
       },
     });
+    */
   };
 
   const handleActionComplete = (action: ActionOption) => {
@@ -97,7 +115,8 @@ const CustomerDetailsPage = () => {
       case 'delete':
         showConfirmPrompt({
           title: 'Delete Customer',
-          message: 'Are you sure you want to delete this customer?',
+          message:
+            'Are you sure you want to delete loyalty card of this customer?',
           onConfirm: handleDelete,
         });
         break;
