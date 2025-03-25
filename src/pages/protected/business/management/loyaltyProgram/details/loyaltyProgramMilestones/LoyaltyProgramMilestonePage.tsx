@@ -34,6 +34,7 @@ import {
   LoyaltyProgramRewardType,
   useLoyaltyProgramMilestoneValidationRules,
 } from '@src/domain/entities/loyaltyProgramReward';
+import HtmlEditorForm from '@src/pages/components/editor/HtmlEditorForm';
 
 interface LoyaltyProgramMilestoneForm {
   id: string;
@@ -471,15 +472,13 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
                 <IonToggle labelPlacement='end' alignment='center'></IonToggle>{' '}
               </IonLabel>
             </IonItem>
+
+            <IonItem lines='none'>
+              <IonLabel>Terms and Conditions</IonLabel>
+            </IonItem>
             <IonItem lines='none'>
               <IonLabel>
-                <TextAreaFormField
-                  name='termsAndConditions'
-                  label='Terms and Conditions'
-                  fill='outline'
-                  register={register}
-                  setValue={setValue}
-                />
+                <HtmlEditorForm getValues={getValues} setValue={setValue} />
               </IonLabel>
             </IonItem>
           </IonList>
