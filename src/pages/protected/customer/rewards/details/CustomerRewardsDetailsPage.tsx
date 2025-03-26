@@ -7,6 +7,7 @@ import {
   IonRow,
   IonText,
 } from '@ionic/react';
+import DOMPurify from 'dompurify';
 import { LoyaltyCard } from '@src/domain';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
 import { useFetchCustomerRewardById } from '@src/features/queries';
@@ -127,7 +128,13 @@ const CustomerRewardsDetailsPage: React.FC = () => {
             <IonItem lines='none'>
               <IonLabel>
                 <h2>Terms and Conditions</h2>
-                <p>{customerReward?.termsAndConditions}</p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(
+                      customerReward?.termsAndConditions
+                    ),
+                  }}
+                ></p>
               </IonLabel>
             </IonItem>
           )}

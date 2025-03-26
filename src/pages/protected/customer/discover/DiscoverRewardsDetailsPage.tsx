@@ -8,6 +8,7 @@ import {
   IonCol,
   useIonRouter,
 } from '@ionic/react';
+import DOMPurify from 'dompurify';
 import { LoyaltyCard } from '@src/domain';
 import useClaimRewardFunction from '@src/features/cloudFunctions/useClaimRewardFunction';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
@@ -158,7 +159,13 @@ const DiscoverRewardsDetailsPage: React.FC = () => {
             <IonItem lines='none'>
               <IonLabel>
                 <h2>Terms and Conditions</h2>
-                <p>{loyaltyProgramMilestone?.reward?.termsAndConditions}</p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(
+                      loyaltyProgramMilestone?.reward?.termsAndConditions
+                    ),
+                  }}
+                ></p>
               </IonLabel>
             </IonItem>
           )}
