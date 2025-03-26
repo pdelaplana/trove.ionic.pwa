@@ -16,7 +16,11 @@ import { useFetchLoyaltyProgramMilestoneById } from '@src/features/queries';
 import { useAppNotifications } from '@src/pages/components/hooks/useAppNotifications';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 import { usePrompt } from '@src/pages/components/hooks/usePrompt';
-import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
+import {
+  BasePageLayout,
+  CenterContainer,
+  Gap,
+} from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
 import { useEffect, useState } from 'react';
@@ -83,6 +87,7 @@ const DiscoverRewardsDetailsPage: React.FC = () => {
 
   const footer = (
     <CenterContainer>
+      <Gap size='30px' />
       <ActionButton
         isLoading={isPending}
         isDisabled={false}
