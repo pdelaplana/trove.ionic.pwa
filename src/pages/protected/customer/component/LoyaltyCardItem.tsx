@@ -6,10 +6,11 @@ import {
   IonCol,
   IonGrid,
   IonRow,
+  IonText,
 } from '@ionic/react';
 import { LoyaltyCard } from '@src/domain';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
-import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import ResponsiveImage2 from '@src/pages/components/ui/ResponsiveImage2';
 
 interface LoyaltyCardItemProps {
   loyaltyCard?: LoyaltyCard;
@@ -29,20 +30,16 @@ const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({
 
   return (
     <IonCard
+      style={{ margin: '0px 10px 40px' }}
       color='primary'
       button={true}
       {...(onClickUrl ? { routerLink: onClickUrl } : {})}
       {...(onClick ? { onClick } : {})}
     >
-      <ResponsiveImage
+      <ResponsiveImage2
         src={'/images/trove.business.png'}
         alt={loyaltyCard.businessName}
-        aspectRatio='LANDSCAPE'
-        containerHeights={{
-          default: '150px',
-          tablet: '200px',
-          desktop: '250px',
-        }}
+        aspectRatio='16/8'
       />
 
       <IonCardHeader>
@@ -61,13 +58,17 @@ const LoyaltyCardItem: React.FC<LoyaltyCardItemProps> = ({
             </IonCol>
           </IonRow>
           <IonRow>
-            <IonCol size='6' className='ion-text-start'>
+            <IonCol size='6' className='ion-text-start ion-padding-top'>
               <p>Points Balance</p>
               <h2>{formatNumber(loyaltyCard.rewardPoints)}</h2>
             </IonCol>
-            <IonCol size='6' className='ion-text-end'>
-              <p>Tier</p>
-              <h2>{loyaltyCard.tierName}</h2>
+            <IonCol size='6' className='ion-text-end ion-padding-top'>
+              {loyaltyCard?.tierId && (
+                <>
+                  <p>Tier</p>
+                  <h2>{loyaltyCard.tierName}</h2>
+                </>
+              )}
             </IonCol>
           </IonRow>
         </IonGrid>

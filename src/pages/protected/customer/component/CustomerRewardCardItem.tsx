@@ -9,21 +9,13 @@ import {
 } from '@ionic/react';
 import { CustomerReward } from '@src/domain';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
+import { Gap, PositionedDiv } from '@src/pages/components/layouts';
 import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import ResponsiveImage2 from '@src/pages/components/ui/ResponsiveImage2';
+
 import styled from 'styled-components';
 
-const StyledCard = styled(IonCard)`
-  margin-bottom: 0.5rem;
-  height: 190px;
-
-  @media (min-width: 768px) {
-    height: 190px;
-  }
-
-  @media (min-width: 1024px) {
-    height: 190px;
-  }
-`;
+const StyledCard = styled(IonCard)``;
 
 interface CustomerRewardCardItemProps {
   customerReward: CustomerReward & { businessName: string };
@@ -39,7 +31,6 @@ const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
   const { formatDate, formatDaysUntil } = useFormatters();
   return (
     <StyledCard
-      className='reward-card'
       button
       {...(onClickUrl ? { routerLink: onClickUrl } : {})}
       {...(onClick ? { onClick } : {})}
@@ -47,43 +38,35 @@ const CustomerRewardCardItem: React.FC<CustomerRewardCardItemProps> = ({
       <IonCardContent className='ion-no-padding'>
         <IonGrid className='ion-no-padding'>
           <IonRow>
-            <IonCol size='4'>
-              <div className='ion-flex ion-justify-content-center ion-align-items-center'>
-                <ResponsiveImage
+            <IonCol size='5'>
+              <div className='ion-margin'>
+                <ResponsiveImage2
                   src={
                     customerReward.imageUrl
                       ? customerReward.imageUrl
                       : '/images/trove.rewards.3.png'
                   }
                   alt={customerReward.name}
-                  aspectRatio='SQUARE'
-                  containerHeights={{
-                    default: '190px',
-                    tablet: '190px',
-                    desktop: '190px',
-                  }}
+                  aspectRatio='16/9'
                 />
               </div>
             </IonCol>
-            <IonCol size='8' className='ion-padding'>
-              <IonText className='text-base' color='dark'>
+            <IonCol size='7'>
+              <Gap size={'.75rem'} />
+              <IonText color='dark' className='text-clamp-2 text-weight-bold'>
                 <h2>{customerReward.businessName}</h2>
-                {customerReward.name}
+                <h4>{customerReward.name}</h4>
               </IonText>
-              <p>
-                <IonText color='medium' className='text-sm line-clamp-2'>
-                  {customerReward.description}
-                </IonText>
-              </p>
-              <IonNote
-                className='text-xs'
-                style={{ position: 'absolute', bottom: '.5rem', left: '1rem' }}
-                color='primary'
-              >
-                {customerReward.redeemedDate
-                  ? `Redeemed on ${formatDate(customerReward.redeemedDate)}`
-                  : `Ends in ${formatDaysUntil(customerReward.expiryDate)} days`}
-              </IonNote>
+
+              <PositionedDiv className='text-xs' color='primary' bottom='5px'>
+                <IonNote>
+                  <IonText color='medium'>
+                    {customerReward.redeemedDate
+                      ? `Redeemed on ${formatDate(customerReward.redeemedDate)}`
+                      : `Ends in ${formatDaysUntil(customerReward.expiryDate)} days`}
+                  </IonText>
+                </IonNote>
+              </PositionedDiv>
             </IonCol>
           </IonRow>
         </IonGrid>

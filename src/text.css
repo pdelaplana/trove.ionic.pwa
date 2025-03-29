@@ -1,11 +1,34 @@
 :root {
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-base: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: 1.875rem;
+  /* Base scale factor - can be adjusted */
+  --scale-factor: 1;
+
+  /* Base sizes scaled by the factor */
+  --text-xs: calc(0.75rem * var(--scale-factor));
+  --text-sm: calc(0.875rem * var(--scale-factor));
+  --text-base: calc(1rem * var(--scale-factor));
+  --text-lg: calc(1.125rem * var(--scale-factor));
+  --text-xl: calc(1.25rem * var(--scale-factor));
+  --text-2xl: calc(1.5rem * var(--scale-factor));
+  --text-3xl: calc(1.875rem * var(--scale-factor));
+}
+
+/* Scale factors for different screen sizes */
+@media (min-width: 576px) {
+  :root {
+    --scale-factor: 1.1;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --scale-factor: 1.2;
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --scale-factor: 1.3;
+  }
 }
 
 .text-xs {
@@ -111,13 +134,14 @@
 .line-clamp-1 {
   display: -webkit-box;
   -webkit-line-clamp: 1;
+  line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

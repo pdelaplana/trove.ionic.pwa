@@ -6,6 +6,7 @@ import FooterSection from './FooterSection';
 import { Gap } from './Gap';
 import ModalPageLayout from './ModalPageLayout';
 import ScrollableContainer from './ScrollableSection';
+import PositionedDiv from './PositionedDiv';
 
 export {
   BasePageLayout,
@@ -16,4 +17,5 @@ export {
   ScrollableContainer,
   FooterSection,
   Gap,
+  PositionedDiv,
 };

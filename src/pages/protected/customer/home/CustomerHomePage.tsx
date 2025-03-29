@@ -38,7 +38,7 @@ const CustomerHomePage: React.FC = () => {
       showHeader={true}
       showBackButton={false}
       showTitle={true}
-      showSecondaryHeader={true}
+      showSecondaryHeader={false}
     >
       <CenterContainer>
         <ContentSection>

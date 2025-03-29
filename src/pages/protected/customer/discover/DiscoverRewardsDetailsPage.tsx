@@ -22,7 +22,7 @@ import {
   Gap,
 } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
-import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import ResponsiveImage2 from '@src/pages/components/ui/ResponsiveImage2';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
@@ -87,7 +87,7 @@ const DiscoverRewardsDetailsPage: React.FC = () => {
 
   const footer = (
     <CenterContainer>
-      <Gap size='30px' />
+      <Gap size='5px' />
       <ActionButton
         isLoading={isPending}
         isDisabled={false}
@@ -109,16 +109,14 @@ const DiscoverRewardsDetailsPage: React.FC = () => {
       footer={footer}
     >
       <CenterContainer>
-        <ResponsiveImage
-          src={'/images/trove.rewards.3.png'}
-          alt={''}
-          aspectRatio='LANDSCAPE'
-          containerHeights={{
-            default: '420px',
-            tablet: '420px',
-            desktop: '45opx',
-          }}
-        />
+        <div>
+          <ResponsiveImage2
+            src={'/images/trove.rewards.3.png'}
+            alt={''}
+            aspectRatio='2/1'
+          />
+        </div>
+
         <IonList lines='none'>
           <IonItem lines='none'>
             <IonLabel className='ion-text-center'>

@@ -1,6 +1,6 @@
 import { IonCard, IonCardContent, IonText, IonNote } from '@ionic/react';
 import { LoyaltyProgramMilestone } from '@src/domain';
-import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import ResponsiveImage2 from '@src/pages/components/ui/ResponsiveImage2';
 import styled from 'styled-components';
 
 const StyledCard = styled(IonCard)`
@@ -26,19 +26,14 @@ const LoyaltyRewardCardSwiperItem: React.FC<LoyaltyRewardCardItemProps> = ({
       {...(onClick ? { onClick } : {})}
       {...(onClickUrl ? { routerLink: onClickUrl } : {})}
     >
-      <ResponsiveImage
+      <ResponsiveImage2
         src={
           loyaltyRewardMilestone.reward.imageUrl
             ? loyaltyRewardMilestone.reward.imageUrl
             : '/images/trove.rewards.3.png'
         }
         alt={loyaltyRewardMilestone.reward.name}
-        aspectRatio='LANDSCAPE'
-        containerHeights={{
-          default: '100px',
-          tablet: '150px',
-          desktop: '150px',
-        }}
+        aspectRatio='16/8'
       />
 
       <IonCardContent>

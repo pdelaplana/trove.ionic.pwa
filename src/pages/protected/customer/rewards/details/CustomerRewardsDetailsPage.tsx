@@ -14,7 +14,7 @@ import { useFetchCustomerRewardById } from '@src/features/queries';
 import useFormatters from '@src/pages/components/hooks/useFormatters';
 import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import ActionButton from '@src/pages/components/ui/ActionButton';
-import ResponsiveImage from '@src/pages/components/ui/ResponsiveImage';
+import ResponsiveImage2 from '@src/pages/components/ui/ResponsiveImage2';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useCustomerRewardQrCodeModal } from '../components/CustomerRewardQrCodeModal';
@@ -74,15 +74,10 @@ const CustomerRewardsDetailsPage: React.FC = () => {
       footer={footer}
     >
       <CenterContainer>
-        <ResponsiveImage
+        <ResponsiveImage2
           src={'/images/trove.rewards.3.png'}
           alt={''}
-          aspectRatio='LANDSCAPE'
-          containerHeights={{
-            default: '420px',
-            tablet: '420px',
-            desktop: '45opx',
-          }}
+          aspectRatio='2/1'
         />
         <IonList lines='none'>
           <IonItem lines='none'>

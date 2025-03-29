@@ -2,7 +2,6 @@ import { BasePageLayout, CenterContainer } from '@src/pages/components/layouts';
 import { useCustomerProvider } from '@src/features/customer/CustomerProvider';
 import { useFetchAvailableRewardsForCustomer } from '@src/features/queries';
 import LoyaltyRewardCardItem from '../component/LoyaltyRewardCardItem';
-import { useDiscoverRewardsDetailsModal } from './components/DiscoverRewardsDetailsModal';
 
 interface DiscoverRewardsPageProps {}
 const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
@@ -21,9 +20,7 @@ const DiscoverRewardsPage: React.FC<DiscoverRewardsPageProps> = ({}) => {
       showBackButton={false}
     >
       <CenterContainer>
-        <div className='ion-padding'>
-          <h2>Discover Rewards</h2>
-        </div>
+        <div className='ion-margin'>Discover Rewards</div>
         {milestoneRewards?.map((milestone) => (
           <LoyaltyRewardCardItem
             key={milestone.id}
