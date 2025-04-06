@@ -3,13 +3,7 @@ import {
   IonItem,
   IonLabel,
   useIonModal,
-  IonSelect,
-  IonSelectOption,
   IonCheckbox,
-  IonDatetime,
-  IonPicker,
-  IonPickerColumn,
-  IonPickerColumnOption,
   IonButton,
 } from '@ionic/react';
 import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
@@ -20,10 +14,7 @@ import {
 } from '@src/domain/valueTypes/operatingHours';
 import InputFormField from '@src/pages/components/form/InputFormField';
 import { usePrompt } from '@src/pages/components/hooks/usePrompt';
-import {
-  CenterContainer,
-  FixedBottomContainer,
-} from '@src/pages/components/layouts';
+import { CenterContainer } from '@src/pages/components/layouts';
 import NiceButton from '@src/pages/components/ui/NiceButton';
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';

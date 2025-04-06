@@ -15,31 +15,36 @@ import React, { PropsWithChildren } from 'react';
 interface ModalProps extends PropsWithChildren {
   title?: string;
   footer?: React.ReactNode;
+  showHeader?: boolean;
   onDismiss: () => void;
 }
 
 const ModalPageLayout: React.FC<ModalProps> = ({
   title = '',
+  showHeader = true,
   footer,
   children,
   onDismiss,
 }) => {
   return (
     <IonPage>
-      <IonHeader className='ion-no-border'>
-        <IonToolbar>
-          <IonButtons slot='end'>
-            <IonButton
-              onClick={() => onDismiss()}
-              slot='icon-only'
-              shape='round'
-            >
-              <IonIcon icon={closeOutline} />
-            </IonButton>
-          </IonButtons>
-          <IonTitle>{title}</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      {showHeader && (
+        <IonHeader className='ion-no-border'>
+          <IonToolbar>
+            <IonButtons slot='end'>
+              <IonButton
+                onClick={() => onDismiss()}
+                slot='icon-only'
+                shape='round'
+              >
+                <IonIcon icon={closeOutline} />
+              </IonButton>
+            </IonButtons>
+            <IonTitle>{title}</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+      )}
+
       <IonContent>{children}</IonContent>
       {footer && <IonFooter>{footer}</IonFooter>}
     </IonPage>

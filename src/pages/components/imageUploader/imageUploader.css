@@ -1,0 +1,53 @@
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+ion-segment {
+  margin-bottom: 16px;
+}
+
+ion-card {
+  margin-bottom: 16px;
+}
+
+.upload-progress {
+  height: 4px;
+  background-color: #3880ff;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* Editor container to make it full-width */
+.editor-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: #f4f5f8;
+}
+
+/* Fix for ensuring the image editor takes full height */
+.editor-container > div {
+  height: 100%;
+}
+
+/* Override some Filerobot styles to match Ionic */
+:root {
+  --primaryColor: #3880ff;
+  --primaryBgColor: #f4f5f8;
+  --secondaryBgColor: #ffffff;
+}

@@ -1,4 +1,6 @@
 import {
+  IonButton,
+  IonImg,
   IonItem,
   IonLabel,
   IonList,
@@ -34,7 +36,9 @@ import {
   LoyaltyProgramRewardType,
   useLoyaltyProgramMilestoneValidationRules,
 } from '@src/domain/entities/loyaltyProgramReward';
-import HtmlEditorForm from '@src/pages/components/editor/HtmlEditorForm';
+import HtmlEditorForm from '@src/pages/components/htmlEditor/HtmlEditorForm';
+import ImageEditor from '@src/pages/components/imageEditor/ImageEditor';
+import { business } from 'ionicons/icons';
 
 interface LoyaltyProgramMilestoneForm {
   id: string;
@@ -129,6 +133,11 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
 
   const validationRules = useLoyaltyProgramMilestoneValidationRules();
 
+  const handleUpdatedImage = (imageUrl: string) => {
+    setValue('imageUrl', imageUrl, { shouldDirty: true });
+    onSubmit(getValues());
+  };
+
   const onSubmit: SubmitHandler<LoyaltyProgramMilestoneForm> = async (
     formData
   ) => {
@@ -142,7 +151,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
         name: formData.name ?? '',
         rewardType: formData.rewardType,
         description: formData.description,
-        imageUrl: '',
+        imageUrl: formData.imageUrl,
         termsAndConditions: formData.termsAndConditions,
         expiryInDays: Number(formData.expiryInDays),
         validUntilDate: formData.validUntilDate
@@ -220,6 +229,7 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
             rewardType: foundMilestone.reward.rewardType,
             name: foundMilestone.reward.name,
             description: foundMilestone.reward.description,
+            imageUrl: foundMilestone.reward.imageUrl,
             termsAndConditions: foundMilestone.reward.termsAndConditions,
             discountFixedAmount: (
               foundMilestone.reward as LoyaltyProgramRewardDiscountFixedAmount
@@ -470,6 +480,19 @@ const LoyaltyProgramMilestonePage: React.FC = () => {
               </IonLabel>
               <IonLabel className='' slot='end'>
                 <IonToggle labelPlacement='end' alignment='center'></IonToggle>{' '}
+              </IonLabel>
+            </IonItem>
+
+            <IonItem lines='none'>
+              <IonLabel>Image</IonLabel>
+            </IonItem>
+            <IonItem lines='none'>
+              <IonLabel>
+                <ImageEditor
+                  businessId={loyaltyProgram?.businessId}
+                  imageUrl={getValues('imageUrl')}
+                  onUpdatedImage={handleUpdatedImage}
+                />
               </IonLabel>
             </IonItem>
 
